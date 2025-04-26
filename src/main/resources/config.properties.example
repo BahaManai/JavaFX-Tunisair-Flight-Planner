@@ -1,0 +1,4 @@
+# Template de configuration
+db.url=jdbc:mysql://localhost:3306/NOM_BD
+db.user=VOTRE_USER
+db.password=VOTRE_MDP
