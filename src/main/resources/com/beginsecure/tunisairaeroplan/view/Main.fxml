@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.beginsecure.tunisairaeroplan.Controller.MainController">
+
+    <children>
+        <VBox prefWidth="250.0" spacing="10" style="-fx-background-color: #007ACC;"
+              AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0">
+
+            <Button text="✈ Tunisair" style="-fx-font-size: 18px; -fx-text-fill: white; -fx-background-color: transparent; -fx-font-weight: bold;" />
+            <Button text="🏠 Tableau de bord" onAction="#showHome"
+                    style="-fx-font-size: 16px; -fx-text-fill: white; -fx-background-color: transparent;" />
+            <Button text="👨‍✈️ Gestion des Pilotes et Équipages" onAction="#showPilotesEquipages"
+                    style="-fx-font-size: 16px; -fx-text-fill: white; -fx-background-color: transparent;" />
+            <Button text="🛩 Gestion des Avions" onAction="#showAvions"
+                    style="-fx-font-size: 16px; -fx-text-fill: white; -fx-background-color: transparent;" />
+            <Button text="📅 Planification des Vols" onAction="#showPlanificationVols"
+                    style="-fx-font-size: 16px; -fx-text-fill: white; -fx-background-color: transparent;" />
+            <Button text="⚙️ Disponibilités et Paramètres" onAction="#showParametres"
+                    style="-fx-font-size: 16px; -fx-text-fill: white; -fx-background-color: transparent;" />
+            <Button text="🗂 Archives" onAction="#showArchives"
+                    style="-fx-font-size: 16px; -fx-text-fill: white; -fx-background-color: transparent;" />
+        </VBox>
+
+        <!-- Zone centrale dynamique -->
+        <StackPane fx:id="contentPane" style="-fx-padding: 20;"
+                   AnchorPane.leftAnchor="250" AnchorPane.topAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0"/>
+    </children>
+</AnchorPane>

@@ -11,11 +11,9 @@ public class TestAjouterVolApp extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            // Chargement du fichier FXML avec le chemin correct
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/beginsecure/tunisairaeroplan/view/ajouter-vol.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/beginsecure/tunisairaeroplan/view/Main.fxml"));
             Parent root = loader.load();
 
-            // Création de la scène et affichage
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.setTitle("Ajouter Vol");

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.beginsecure.tunisairaeroplan.Controller.AjoutAvionController"
+      spacing="10" alignment="CENTER" style="-fx-background-color: #f5f5f5;">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Ajouter un nouvel avion" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+    <GridPane hgap="10" vgap="10">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="30"/>
+            <ColumnConstraints percentWidth="70"/>
+        </columnConstraints>
+
+        <!-- Modèle -->
+        <Label text="Modèle:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="tfModele" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <!-- Capacité -->
+        <Label text="Capacité:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="tfCapacite" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <!-- Disponible -->
+        <Label text="Disponible:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <CheckBox fx:id="cbDisponible" selected="true" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <!-- Type Trajet -->
+        <Label text="Type Trajet:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="cbTypeTrajet" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button fx:id="btnAjouter" text="Ajouter"
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;"
+                onAction="#handleAjouter"/>
+        <Button fx:id="btnAnnuler" text="Annuler"
+                style="-fx-background-color: #f44336; -fx-text-fill: white;"
+                onAction="#handleAnnuler"/>
+    </HBox>
+
+</VBox>

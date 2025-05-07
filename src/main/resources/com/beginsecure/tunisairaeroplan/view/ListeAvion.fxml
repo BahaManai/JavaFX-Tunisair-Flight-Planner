@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.beginsecure.tunisairaeroplan.Controller.ListeAvionController">
+
+    <top>
+        <Label text="Liste des Avions"
+               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 15 15 15 15;" BorderPane.alignment="CENTER"/>
+    </top>
+
+    <center>
+        <VBox>
+            <TableView fx:id="avionTable" prefHeight="400" prefWidth="900">
+                <columns>
+                    <TableColumn fx:id="colId" text="ID" />
+                    <TableColumn fx:id="colModele" text="Modèle" />
+                    <TableColumn fx:id="colCapacite" text="Capacité" />
+                    <TableColumn fx:id="colDisponible" text="Disponible" />
+                    <TableColumn fx:id="colTypeTrajet" text="Type Trajet" />
+                    <TableColumn fx:id="colModifier" text="Modifier" />
+                    <TableColumn fx:id="colArchiver" text="Archiver" />
+                </columns>
+            </TableView>
+
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Button fx:id="btnAjouterAvion" text="Ajouter Avion"
+                        onAction="#ouvrirAjoutAvion"
+                        style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                <Button fx:id="btnVoirArchive" text="Voir archive Avions"
+                        onAction="#ouvrirArchiveAvion"
+                        style="-fx-background-color: #607D8B; -fx-text-fill: white;"/>
+            </HBox>
+        </VBox>
+    </center>
+
+</BorderPane>

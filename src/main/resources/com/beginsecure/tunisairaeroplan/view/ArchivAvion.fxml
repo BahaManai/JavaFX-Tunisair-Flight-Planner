@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.beginsecure.tunisairaeroplan.Controller.ArchiveAvionController">
+
+    <top>
+        <Label text="Archive des Avions"
+               style="-fx-font-size: 24px; -fx-font-weight: bold;">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+        </Label>
+    </top>
+
+    <center>
+        <TableView fx:id="archiveTable" prefHeight="400" prefWidth="900">
+            <columns>
+                <TableColumn fx:id="colId" text="ID"/>
+                <TableColumn fx:id="colModele" text="Modèle"/>
+                <TableColumn fx:id="colCapacite" text="Capacité"/>
+                <TableColumn fx:id="colDisponible" text="Disponible"/>
+                <TableColumn fx:id="colTypeTrajet" text="Type Trajet"/>
+            </columns>
+        </TableView>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER" spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Button text="Restaurer" onAction="#handleRestaurer" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+            <Button text="Supprimer définitivement" onAction="#handleSupprimer" style="-fx-background-color: #f44336; -fx-text-fill: white;"/>
+            <Button text="Fermer" onAction="#handleFermer"/>
+        </HBox>
+    </bottom>
+</BorderPane>

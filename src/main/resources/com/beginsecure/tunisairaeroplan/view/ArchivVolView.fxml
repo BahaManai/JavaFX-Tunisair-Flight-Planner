@@ -1,0 +1,19 @@
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.Button?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.beginsecure.tunisairaeroplan.Controller.ArchivVolController">
+    <TableView fx:id="tableVolsArchives" layoutX="20" layoutY="20" prefWidth="800" prefHeight="300">
+        <columns>
+            <TableColumn fx:id="colNumVol" text="Numéro Vol" />
+            <TableColumn fx:id="colDestination" text="Destination" />
+            <TableColumn fx:id="colDepart" text="Heure Départ" />
+            <TableColumn fx:id="colArrivee" text="Heure Arrivée" />
+            <TableColumn fx:id="colTypeTrajet" text="Type Trajet" />
+            <TableColumn fx:id="colStatut" text="Statut" />
+            <TableColumn fx:id="colRestaurer" text="Restaurer" />
+            <TableColumn fx:id="colSupprimer" text="Supprimer" />
+        </columns>
+    </TableView>
+</AnchorPane>

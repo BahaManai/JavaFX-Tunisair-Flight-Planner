@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Button?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.beginsecure.tunisairaeroplan.Controller.ModifierVolController" stylesheets="@style.css">
+    <children>
+        <ScrollPane fitToWidth="true" fitToHeight="true" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0">
+            <content>
+                <VBox alignment="CENTER" spacing="15" prefWidth="300" style="-fx-padding: 30;">
+                    <TextField fx:id="numVolField" promptText="Numéro du Vol" prefWidth="300" />
+                    <TextField fx:id="destinationField" promptText="Destination" prefWidth="300" />
+                    <DatePicker fx:id="dateDepartPicker" promptText="Date de départ" prefWidth="300" />
+                    <TextField fx:id="heureDepartField" promptText="Heure de départ (HH:mm)" prefWidth="300" />
+                    <DatePicker fx:id="dateArriveePicker" promptText="Date d'arrivée" prefWidth="300" />
+                    <TextField fx:id="heureArriveeField" promptText="Heure d'arrivée (HH:mm)" prefWidth="300" />
+                    <ComboBox fx:id="typeTrajetComboBox" promptText="Type de Trajet" prefWidth="300" />
+                    <ComboBox fx:id="statutComboBox" promptText="Statut du Vol" prefWidth="300" />
+                    <Button text="Modifier Vol" onAction="#saveVol" prefWidth="200" />
+                    <Button text="Annuler" onAction="#cancelModification" prefWidth="200" />
+                </VBox>
+            </content>
+        </ScrollPane>
+    </children>
+</AnchorPane>

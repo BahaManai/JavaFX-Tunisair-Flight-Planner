@@ -1,29 +1,15 @@
-
-.text-field {
-    -fx-background-color: #f4f4f4;
-    -fx-font-size: 14px;
-    -fx-prompt-text-fill: #888888;
-    -fx-padding: 10px;
-    -fx-border-radius: 5px;
-    -fx-border-color: #ccc;
-}
-
-.date-picker {
-    -fx-background-color: #f4f4f4;
-    -fx-font-size: 14px;
-    -fx-padding: 10px;
-    -fx-border-radius: 5px;
-    -fx-border-color: #ccc;
-}
-
 .button {
-    -fx-background-color: #4CAF50;
+    -fx-background-color: #3498db;
     -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-padding: 10px 20px;
-    -fx-border-radius: 5px;
+    -fx-font-weight: bold;
 }
 
-.button:hover {
-    -fx-background-color: #45a049;
+.text-field, .combo-box, .date-picker {
+    -fx-background-color: #f0f0f0;
+    -fx-padding: 10px;
+}
+
+.scroll-pane {
+    -fx-background-color: #ffffff;
+    -fx-padding: 10px;
 }

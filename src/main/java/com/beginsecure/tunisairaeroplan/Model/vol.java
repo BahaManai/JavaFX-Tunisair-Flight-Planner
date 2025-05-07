@@ -49,11 +49,11 @@ public class vol {
     }
 
     public void annuler() {
-        this.statut = StatutVol.ANNULE;
+        this.statut = StatutVol.Annulé;
     }
 
     public void terminer() {
-        this.statut = StatutVol.TERMINE;
+        this.statut = StatutVol.Terminé;
     }
 
     public int getIdVol() {
@@ -64,7 +64,7 @@ public class vol {
         this.idVol = idVol;
     }
 
-    public String getNumeroVol() {
+    public String getNumVol() {
         return numeroVol;
     }
 

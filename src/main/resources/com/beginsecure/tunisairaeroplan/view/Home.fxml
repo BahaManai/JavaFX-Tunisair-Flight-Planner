@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.Button?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.beginsecure.tunisairaeroplan.Controller.HomeController" stylesheets="@home.css" style="-fx-background-color: linear-gradient(to bottom, #0a1f44, #1e3c72);">
+    <children>
+
+            <ImageView fx:id="avionLogo" fitWidth="200" fitHeight="60" layoutX="0" layoutY="120" />
+            <VBox id="card" alignment="CENTER" spacing="20" layoutX="200" layoutY="100" prefWidth="400">
+                <children>
+                    <Label fx:id="bienvenueLabel" text="Système de Gestion des Vols" wrapText="true" />
+                    <Label fx:id="projetDescriptionLabel" text="Découvrez notre flotte aérienne" wrapText="true" />
+                    <VBox id="dev-container" spacing="10" alignment="CENTER">
+                        <Label text="Développé par :" />
+                        <Label fx:id="developpeursLabel" text="Ferchichi Molka et Baha Eddine Mannai" />
+                    </VBox>
+                </children>
+            </VBox>
+    </children>
+</AnchorPane>

@@ -51,3 +51,21 @@ CREATE TABLE Vol (
                      FOREIGN KEY (avion_id) REFERENCES Avion(id),
                      FOREIGN KEY (equipage_id) REFERENCES Equipage(id)
 );
+CREATE TABLE archiveVol (
+    idVol INT PRIMARY KEY,
+    numeroVol VARCHAR(50),
+    destination VARCHAR(100),
+    heureDepart TIMESTAMP,
+    heureArrivee TIMESTAMP,
+    typeTrajet VARCHAR(50),
+    statut VARCHAR(50),
+    dateArchivage TIMESTAMP
+);
+CREATE TABLE ArchiveAvion (
+    id INT PRIMARY KEY,
+    modele VARCHAR(255) NOT NULL,
+    capacite INT NOT NULL,
+    estDisponible BOOLEAN,
+    type_trajet ENUM('Court', 'Moyen', 'Long') NOT NULL,
+    date_archivage DATETIME DEFAULT CURRENT_TIMESTAMP
+);
