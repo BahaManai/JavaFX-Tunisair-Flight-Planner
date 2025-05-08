@@ -14,16 +14,20 @@
             <Button text="✈ Tunisair" style="-fx-font-size: 18px; -fx-text-fill: white; -fx-background-color: transparent; -fx-font-weight: bold;" />
             <Button text="🏠 Tableau de bord" onAction="#showHome"
                     style="-fx-font-size: 16px; -fx-text-fill: white; -fx-background-color: transparent;" />
-            <Button text="👨‍✈️ Gestion des Pilotes et Équipages" onAction="#showPilotesEquipages"
-                    style="-fx-font-size: 16px; -fx-text-fill: white; -fx-background-color: transparent;" />
             <Button text="🛩 Gestion des Avions" onAction="#showAvions"
                     style="-fx-font-size: 16px; -fx-text-fill: white; -fx-background-color: transparent;" />
             <Button text="📅 Planification des Vols" onAction="#showPlanificationVols"
                     style="-fx-font-size: 16px; -fx-text-fill: white; -fx-background-color: transparent;" />
-            <Button text="⚙️ Disponibilités et Paramètres" onAction="#showParametres"
+            <Button text="👤 Gestion des Membres" onAction="#showMembres"
+                    style="-fx-font-size: 16px; -fx-text-fill: white; -fx-background-color: transparent;" />
+
+            <Button text="👥 Gestion des Équipages" onAction="#showEquipages"
                     style="-fx-font-size: 16px; -fx-text-fill: white; -fx-background-color: transparent;" />
             <Button text="🗂 Archives" onAction="#showArchives"
                     style="-fx-font-size: 16px; -fx-text-fill: white; -fx-background-color: transparent;" />
+            <Button text="⚙️ Disponibilités et Paramètres" onAction="#showParametres"
+                    style="-fx-font-size: 16px; -fx-text-fill: white; -fx-background-color: transparent;" />
+
         </VBox>
 
         <!-- Zone centrale dynamique -->

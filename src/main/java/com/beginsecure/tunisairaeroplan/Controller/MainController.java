@@ -42,6 +42,17 @@ public class MainController {
     }
 
     @FXML
+    private void showMembres() {
+        loadPage("FXMLMembre.fxml");
+    }
+
+    @FXML
+    private void showEquipages() {
+        loadPage("FXMLEquipage.fxml");
+    }
+
+
+    @FXML
     public void showParametres() {
         System.out.println("Section paramètres en cours de développement.");
     }
