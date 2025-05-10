@@ -1,0 +1,73 @@
+/* Fond global */
+.root {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-base: #f4f7fa; /* Couleur de fond neutre pour toute l'application */
+    -fx-font-size: 14px; /* Taille de police globale plus confortable */
+}
+
+/* Barre de navigation gauche */
+.vbox {
+    -fx-background-color: #1e3a8a; /* Bleu plus profond et élégant */
+    -fx-padding: 20 0 20 0;
+    -fx-spacing: 15;
+    -fx-pref-width: 240; /* Largeur légèrement plus large pour plus de contenu */
+    -fx-alignment: TOP_CENTER;
+}
+
+/* Style des boutons */
+.button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 12 25; /* Padding plus équilibré */
+    -fx-cursor: hand;
+    -fx-border-radius: 5;
+    -fx-font-weight: normal; /* Moins de poids pour une apparence plus légère */
+    -fx-border-color: transparent;
+    -fx-pref-width: 200px; /* Largeur de bouton plus uniforme */
+}
+
+/* Bouton titre (ex: ✈ Tunisair) */
+.button:first-child {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-padding: 20 25;
+    -fx-border-color: transparent;
+    -fx-border-width: 0 0 2px 0;
+    -fx-text-fill: #ffd700; /* Couleur dorée pour attirer l'attention */
+}
+
+/* Effet au survol */
+.button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.15); /* Effet de survol doux et moderne */
+    -fx-text-fill: #ffd700; /* Changer la couleur du texte lors du survol */
+}
+
+/* Zone centrale (contentPane) */
+.stack-pane {
+    -fx-background-color: #ffffff; /* Fond blanc pour plus de clarté */
+    -fx-padding: 30;
+    -fx-border-radius: 10; /* Coins arrondis pour une touche plus moderne */
+    -fx-border-color: #e5e5e5;
+    -fx-border-width: 1px;
+}
+
+/* Définition des espaces autour du contenu */
+.stack-pane .content {
+    -fx-spacing: 15;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .vbox {
+        -fx-pref-width: 180px;
+    }
+    .button {
+        -fx-font-size: 14px;
+        -fx-padding: 10 20;
+    }
+    .root {
+        -fx-font-size: 12px;
+    }
+}

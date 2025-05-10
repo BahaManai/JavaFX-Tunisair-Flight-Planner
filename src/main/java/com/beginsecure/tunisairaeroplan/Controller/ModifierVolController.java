@@ -30,11 +30,21 @@ public class ModifierVolController {
     @FXML private Button cancelButton;
 
     private vol selectedVol;
+    private volDao dao;
+    private Connection connection;
 
     @FXML
     public void initialize() {
         typeTrajetComboBox.getItems().setAll(TypeTrajet.values());
         statutComboBox.getItems().setAll(StatutVol.values());
+
+        try {
+            connection = LaConnexion.seConnecter();
+            dao = new volDao(connection);
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de connexion", "Impossible de se connecter à la base de données", null);
+            closeStage();
+        }
     }
 
     public void initData(vol selectedVol) {
@@ -73,12 +83,7 @@ public class ModifierVolController {
                 return;
             }
 
-            Connection conn = null;
-            volDao dao = null;
             try {
-                conn = LaConnexion.seConnecter();
-                dao = new volDao(conn);
-
                 LocalDateTime heureDepartDateTime = LocalDateTime.of(dateDepart, heureDepart);
                 LocalDateTime heureArriveeDateTime = LocalDateTime.of(dateArrivee, heureArrivee);
 
@@ -97,14 +102,6 @@ public class ModifierVolController {
                 closeStage();
             } catch (SQLException e) {
                 showAlert(Alert.AlertType.ERROR, "Erreur de base de données", "Erreur lors de la mise à jour du vol : " + e.getMessage(), null);
-            } finally {
-                if (conn != null) {
-                    try {
-                        conn.close();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
             }
         } catch (DateTimeParseException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur de format", "Veuillez entrer un horaire valide : " + e.getMessage(), null);

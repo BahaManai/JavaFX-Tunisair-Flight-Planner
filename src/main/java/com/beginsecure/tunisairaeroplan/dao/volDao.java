@@ -56,7 +56,6 @@ public class volDao{
         try (PreparedStatement selectStmt = connection.prepareStatement(selectQuery)) {
             selectStmt.setInt(1, idVol);
             ResultSet rs = selectStmt.executeQuery();
-
             if (rs.next()) {
                 volToArchive = new vol();
                 volToArchive.setIdVol(rs.getInt("id"));

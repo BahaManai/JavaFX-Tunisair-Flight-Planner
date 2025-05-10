@@ -35,7 +35,11 @@ public class MainController {
     public void showArchives() {
         loadPage("ArchivVolView.fxml");
     }
+    @FXML
+    public void showListeAttente() {
+        loadPage("PendingApprovals.fxml");
 
+    }
     @FXML
     public void showPilotesEquipages() {
         System.out.println("Gestion des pilotes et équipages en cours de développement.");
@@ -48,7 +52,6 @@ public class MainController {
 
     private void loadPage(String fxmlFile) {
         try {
-            // Vérifie si le fichier FXML existe dans le répertoire spécifié
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/beginsecure/tunisairaeroplan/View/" + fxmlFile));
             if (loader.getLocation() == null) {
                 throw new IOException("Le fichier FXML n'a pas été trouvé : " + fxmlFile);

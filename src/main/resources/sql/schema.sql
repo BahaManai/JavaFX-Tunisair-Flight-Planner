@@ -69,3 +69,23 @@ CREATE TABLE ArchiveAvion (
     type_trajet ENUM('Court', 'Moyen', 'Long') NOT NULL,
     date_archivage DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(100) NOT NULL,
+    prenom VARCHAR(100) NOT NULL,
+    cin VARCHAR(20) NOT NULL UNIQUE,
+    matricule VARCHAR(20) NOT NULL UNIQUE,
+    date_naissance DATE NOT NULL,
+    nationalite VARCHAR(50) NOT NULL,
+    departement VARCHAR(100) NOT NULL,
+    poste VARCHAR(100) NOT NULL,
+    base_affectation VARCHAR(100) NOT NULL,
+    aeroport VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE CHECK (email LIKE '%@tunisair.com'),
+    telephone VARCHAR(20) NOT NULL,
+    encrypted_password VARCHAR(255) NOT NULL,
+    salt VARCHAR(255) NOT NULL,
+    is_approved BOOLEAN DEFAULT FALSE,
+    is_admin BOOLEAN DEFAULT FALSE,
+    date_inscription TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
