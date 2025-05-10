@@ -22,7 +22,7 @@ public class ArchiveAvionDao {
     }
 
     public boolean restaurerAvion(Avion avion) {
-        String insertQuery = "INSERT INTO Avion (id, modele, capacite, estDisponible, type_trajet) VALUES (?, ?, ?, ?, ?)";
+        String insertQuery = "INSERT INTO Avion (id, modele, capacite, estDisponible, type_trajet, marque) VALUES (?, ?, ?, ?, ?, ?)";
         String deleteQuery = "DELETE FROM ArchiveAvion WHERE id = ?";
 
         try {
@@ -33,6 +33,7 @@ public class ArchiveAvionDao {
                 insertStmt.setInt(3, avion.getCapacite());
                 insertStmt.setBoolean(4, avion.isEstDisponible());
                 insertStmt.setString(5, avion.getTypeTrajet().name());
+                insertStmt.setString(6, avion.getMarque());
                 insertStmt.executeUpdate();
             }
 
@@ -73,6 +74,7 @@ public class ArchiveAvionDao {
             while (rs.next()) {
                 Avion avion = new Avion();
                 avion.setId(rs.getInt("id"));
+                avion.setMarque(rs.getString("marque"));
                 avion.setModele(rs.getString("modele"));
                 avion.setCapacite(rs.getInt("capacite"));
                 avion.setEstDisponible(rs.getBoolean("estDisponible"));

@@ -7,20 +7,26 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ModifierAvionController {
 
-    @FXML private TextField tfModele;
+    @FXML private ComboBox<String> cbMarque;
+    @FXML private ComboBox<String> cbModele;
     @FXML private TextField tfCapacite;
     @FXML private CheckBox cbDisponible;
     @FXML private ComboBox<TypeTrajet> cbTypeTrajet;
     @FXML private Button btnValider;
+    private Map<String, Map<String, Integer>> avionsDisponibles = new HashMap<>();
 
     private Avion avionToEdit;
     private DAOAvion daoAvion = new DAOAvion();
 
     public void setAvionData(Avion avion) {
         this.avionToEdit = avion;
-        tfModele.setText(avion.getModele());
+        cbMarque.setValue(avion.getMarque());
+        cbModele.setValue(avion.getModele());
         tfCapacite.setText(String.valueOf(avion.getCapacite()));
         cbDisponible.setSelected(avion.isEstDisponible());
         cbTypeTrajet.setValue(avion.getTypeTrajet());
@@ -29,12 +35,41 @@ public class ModifierAvionController {
     @FXML
     public void initialize() {
         cbTypeTrajet.getItems().setAll(TypeTrajet.values());
+        Map<String, Integer> airbus = new HashMap<>();
+        airbus.put("A320", 180);
+        airbus.put("A330", 277);
+
+        Map<String, Integer> boeing = new HashMap<>();
+        boeing.put("737", 160);
+        boeing.put("787", 242);
+
+        avionsDisponibles.put("Airbus", airbus);
+        avionsDisponibles.put("Boeing", boeing);
+
+        cbMarque.getItems().addAll(avionsDisponibles.keySet());
+
+        cbMarque.setOnAction(e -> {
+            String selectedMarque = cbMarque.getValue();
+            if (selectedMarque != null) {
+                cbModele.getItems().setAll(avionsDisponibles.get(selectedMarque).keySet());
+            }
+        });
+
+        cbModele.setOnAction(e -> {
+            String selectedMarque = cbMarque.getValue();
+            String selectedModele = cbModele.getValue();
+            if (selectedMarque != null && selectedModele != null) {
+                Integer capacite = avionsDisponibles.get(selectedMarque).get(selectedModele);
+                tfCapacite.setText(capacite.toString());
+            }
+        });
     }
 
     @FXML
     private void handleValider() {
         try {
-            avionToEdit.setModele(tfModele.getText());
+            avionToEdit.setMarque(cbMarque.getValue());
+            avionToEdit.setModele(cbModele.getValue());
             avionToEdit.setCapacite(Integer.parseInt(tfCapacite.getText()));
             avionToEdit.setEstDisponible(cbDisponible.isSelected());
             avionToEdit.setTypeTrajet(cbTypeTrajet.getValue());

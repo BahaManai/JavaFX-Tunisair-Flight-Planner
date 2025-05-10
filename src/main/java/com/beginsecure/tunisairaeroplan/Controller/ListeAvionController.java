@@ -18,6 +18,7 @@ public class ListeAvionController {
 
     @FXML private TableView<Avion> avionTable;
     @FXML private TableColumn<Avion, Integer> colId;
+    @FXML private TableColumn<Avion, String> colMarque;
     @FXML private TableColumn<Avion, String> colModele;
     @FXML private TableColumn<Avion, Integer> colCapacite;
     @FXML private TableColumn<Avion, Boolean> colDisponible;
@@ -38,6 +39,7 @@ public class ListeAvionController {
 
     private void setupTableColumns() {
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colMarque.setCellValueFactory(new PropertyValueFactory<>("marque"));
         colModele.setCellValueFactory(new PropertyValueFactory<>("modele"));
         colCapacite.setCellValueFactory(new PropertyValueFactory<>("capacite"));
         colDisponible.setCellValueFactory(new PropertyValueFactory<>("estDisponible"));

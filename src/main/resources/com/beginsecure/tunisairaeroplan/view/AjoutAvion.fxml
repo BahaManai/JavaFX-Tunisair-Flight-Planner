@@ -18,22 +18,24 @@
             <ColumnConstraints percentWidth="30"/>
             <ColumnConstraints percentWidth="70"/>
         </columnConstraints>
+        <!-- Marque -->
+        <Label text="Marque:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="cbMarque" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-        <!-- Modèle -->
-        <Label text="Modèle:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-        <TextField fx:id="tfModele" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        <Label text="Modèle:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="cbModele" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
         <!-- Capacité -->
-        <Label text="Capacité:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-        <TextField fx:id="tfCapacite" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        <Label text="Capacité:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="tfCapacite" GridPane.rowIndex="2" GridPane.columnIndex="1" editable="false"/>
 
         <!-- Disponible -->
-        <Label text="Disponible:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-        <CheckBox fx:id="cbDisponible" selected="true" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        <Label text="Disponible:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <CheckBox fx:id="cbDisponible" selected="true" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 
         <!-- Type Trajet -->
-        <Label text="Type Trajet:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-        <ComboBox fx:id="cbTypeTrajet" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+        <Label text="Type Trajet:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="cbTypeTrajet" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
     </GridPane>
 
     <HBox spacing="10" alignment="CENTER">

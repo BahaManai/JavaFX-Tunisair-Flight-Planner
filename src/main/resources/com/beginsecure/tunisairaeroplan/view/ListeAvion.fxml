@@ -17,6 +17,7 @@
             <TableView fx:id="avionTable" prefHeight="400" prefWidth="900">
                 <columns>
                     <TableColumn fx:id="colId" text="ID" />
+                    <TableColumn fx:id="colMarque" text="Marque" />
                     <TableColumn fx:id="colModele" text="Modèle" />
                     <TableColumn fx:id="colCapacite" text="Capacité" />
                     <TableColumn fx:id="colDisponible" text="Disponible" />

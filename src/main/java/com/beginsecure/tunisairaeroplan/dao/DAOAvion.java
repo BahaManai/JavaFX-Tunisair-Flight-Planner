@@ -27,6 +27,7 @@ public class DAOAvion {
             while (rs.next()) {
                 Avion avion = new Avion();
                 avion.setId(rs.getInt("id"));
+                avion.setMarque(rs.getString("marque"));
                 avion.setModele(rs.getString("modele"));
                 avion.setCapacite(rs.getInt("capacite"));
                 avion.setEstDisponible(rs.getBoolean("estDisponible"));
@@ -40,13 +41,14 @@ public class DAOAvion {
     }
 
     public boolean addAvion(Avion avion) {
-        String query = "INSERT INTO Avion (modele, capacite, estDisponible, type_trajet) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO Avion (modele, capacite, estDisponible, type_trajet, marque) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, avion.getModele());
             pstmt.setInt(2, avion.getCapacite());
             pstmt.setBoolean(3, avion.isEstDisponible());
             pstmt.setString(4, avion.getTypeTrajet().name());
+            pstmt.setString(5, avion.getMarque());
 
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -56,14 +58,15 @@ public class DAOAvion {
     }
 
     public boolean updateAvion(Avion avion) {
-        String query = "UPDATE Avion SET modele = ?, capacite = ?, estDisponible = ?, type_trajet = ? WHERE id = ?";
+        String query = "UPDATE Avion SET modele = ?, capacite = ?, estDisponible = ?, type_trajet = ?, marque = ? WHERE id = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, avion.getModele());
             pstmt.setInt(2, avion.getCapacite());
             pstmt.setBoolean(3, avion.isEstDisponible());
             pstmt.setString(4, avion.getTypeTrajet().name());
-            pstmt.setInt(5, avion.getId());
+            pstmt.setString(5, avion.getMarque());
+            pstmt.setInt(6, avion.getId());
 
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -73,7 +76,7 @@ public class DAOAvion {
     }
 
     public boolean archiverAvion(Avion avion) {
-        String archiveQuery = "INSERT INTO ArchiveAvion (id, modele, capacite, estDisponible, type_trajet) VALUES (?, ?, ?, ?, ?)";
+        String archiveQuery = "INSERT INTO ArchiveAvion (id, modele, capacite, estDisponible, type_trajet, marque) VALUES (?, ?, ?, ?, ?, ?)";
         String deleteQuery = "DELETE FROM Avion WHERE id = ?";
 
         try {
@@ -86,6 +89,7 @@ public class DAOAvion {
                 pstmt.setInt(3, avion.getCapacite());
                 pstmt.setBoolean(4, avion.isEstDisponible());
                 pstmt.setString(5, avion.getTypeTrajet().name());
+                pstmt.setString(6, avion.getMarque());
                 pstmt.executeUpdate();
             }
 
@@ -122,6 +126,7 @@ public class DAOAvion {
             while (rs.next()) {
                 Avion avion = new Avion();
                 avion.setId(rs.getInt("id"));
+                avion.setMarque(rs.getString("marque"));
                 avion.setModele(rs.getString("modele"));
                 avion.setCapacite(rs.getInt("capacite"));
                 avion.setEstDisponible(rs.getBoolean("estDisponible"));

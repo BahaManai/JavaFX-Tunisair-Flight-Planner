@@ -89,3 +89,6 @@ CREATE TABLE users (
     is_admin BOOLEAN DEFAULT FALSE,
     date_inscription TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- à exécuter
+ALTER TABLE Avion ADD COLUMN marque VARCHAR(100);
