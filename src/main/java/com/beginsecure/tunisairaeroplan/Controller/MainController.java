@@ -40,10 +40,6 @@ public class MainController {
         loadPage("PendingApprovals.fxml");
 
     }
-    @FXML
-    public void showPilotesEquipages() {
-        System.out.println("Gestion des pilotes et équipages en cours de développement.");
-    }
 
     @FXML
     private void showMembres() {

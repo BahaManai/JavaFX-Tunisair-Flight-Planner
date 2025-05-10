@@ -37,7 +37,7 @@ public class MainApp extends Application {
     }
 
     public static void showUserDashboard() throws IOException {
-        Parent root = FXMLLoader.load(MainApp.class.getResource("/com/beginsecure/tunisairaeroplan/view/UserDashboard.fxml"));
+        Parent root = FXMLLoader.load(MainApp.class.getResource("/com/beginsecure/tunisairaeroplan/view/Home.fxml"));
         primaryStage.setTitle("Tableau de bord Utilisateur - Tunisair Aeroplan");
         primaryStage.setScene(new Scene(root, 1000, 700));
     }

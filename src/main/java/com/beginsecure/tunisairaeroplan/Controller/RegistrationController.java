@@ -194,7 +194,7 @@ public class RegistrationController {
         user.setPoste(posteCombo.getValue());
         user.setAeroport(baseAffectationCombo.getValue());
         user.setBaseAffectation(baseAffectationCombo.getValue());
-        user.setEmail(emailField.getText() + "@tunisair.com");
+        user.setEmail(emailField.getText());
         user.setTelephone(telephoneField.getText());
         return user;
     }
