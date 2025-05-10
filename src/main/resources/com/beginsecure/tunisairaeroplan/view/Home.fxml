@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.AnchorPane?>
+
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.image.ImageView?>
+<<<<<<< HEAD
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.beginsecure.tunisairaeroplan.Controller.HomeController"
             stylesheets="@home.css"
@@ -20,6 +20,22 @@
                     <VBox spacing="10" alignment="CENTER" styleClass="dev-container">
                         <Label text="Développé par :" styleClass="dev-title"/>
                         <Label fx:id="developpeursLabel" text="Ferchichi Molka et Baha Eddine Mannai" styleClass="dev-name"/>
+=======
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane style="-fx-background-color: linear-gradient(to bottom, #0a1f44, #1e3c72);" stylesheets="@home.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.beginsecure.tunisairaeroplan.Controller.HomeController">
+    <children>
+
+            <ImageView fx:id="avionLogo" fitHeight="60" fitWidth="200" layoutX="0" layoutY="120" />
+            <VBox id="card" alignment="CENTER" layoutX="200" layoutY="100" prefHeight="434.0" prefWidth="498.0" spacing="20">
+                <children>
+                    <Label fx:id="bienvenueLabel" text="Système de Gestion des Vols" wrapText="true" />
+                    <Label fx:id="projetDescriptionLabel" text="Découvrez notre flotte aérienne" wrapText="true" />
+                    <VBox id="dev-container" alignment="CENTER" spacing="10">
+                        <Label text="Développé par :" />
+                        <Label fx:id="developpeursLabel" text="Ferchichi Molka et Baha Eddine Manai" />
+>>>>>>> 0f4f114005fbdd24511ce26a1abb765cd38c1953
                     </VBox>
                 </VBox>
             </children>

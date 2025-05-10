@@ -19,6 +19,7 @@
     <left>
         <VBox fx:id="sidebar" prefWidth="250.0" spacing="0" styleClass="bg-primary min-vh-100">
 
+<<<<<<< HEAD
             <!-- En-tête avec logo -->
             <HBox alignment="CENTER_LEFT" spacing="10" styleClass="bg-primary-dark p-3">
                 <FontIcon iconLiteral="fas-plane-departure" iconSize="18" styleClass="text-light"/>
@@ -88,6 +89,25 @@
                     </HBox>
                 </VBox>
             </ScrollPane>
+=======
+            <Button text="✈ Tunisair" style="-fx-font-size: 18px; -fx-text-fill: white; -fx-background-color: transparent; -fx-font-weight: bold;" />
+            <Button text="🏠 Tableau de bord" onAction="#showHome"
+                    style="-fx-font-size: 16px; -fx-text-fill: white; -fx-background-color: transparent;" />
+            <Button text="🛩 Gestion des Avions" onAction="#showAvions"
+                    style="-fx-font-size: 16px; -fx-text-fill: white; -fx-background-color: transparent;" />
+            <Button text="📅 Planification des Vols" onAction="#showPlanificationVols"
+                    style="-fx-font-size: 16px; -fx-text-fill: white; -fx-background-color: transparent;" />
+            <Button text="👤 Gestion des Membres" onAction="#showMembres"
+                    style="-fx-font-size: 16px; -fx-text-fill: white; -fx-background-color: transparent;" />
+
+            <Button text="👥 Gestion des Équipages" onAction="#showEquipages"
+                    style="-fx-font-size: 16px; -fx-text-fill: white; -fx-background-color: transparent;" />
+            <Button text="🗂 Archives" onAction="#showArchives"
+                    style="-fx-font-size: 16px; -fx-text-fill: white; -fx-background-color: transparent;" />
+            <Button text="⚙️ Disponibilités et Paramètres" onAction="#showParametres"
+                    style="-fx-font-size: 16px; -fx-text-fill: white; -fx-background-color: transparent;" />
+
+>>>>>>> 0f4f114005fbdd24511ce26a1abb765cd38c1953
         </VBox>
     </left>
 
