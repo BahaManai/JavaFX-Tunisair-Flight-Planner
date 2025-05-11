@@ -7,12 +7,17 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.beginsecure.tunisairaeroplan.Controller.AjouterVolController" stylesheets="@style.css">
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.beginsecure.tunisairaeroplan.Controller.AjouterVolController"
+            stylesheets="@style.css">
     <children>
         <ScrollPane fitToWidth="true" fitToHeight="true" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0">
             <content>
                 <VBox alignment="CENTER" spacing="15" prefWidth="300" style="-fx-padding: 30;">
+
+                    <!-- Informations du vol -->
                     <TextField fx:id="numVolField" promptText="Numéro du Vol" prefWidth="300" />
                     <TextField fx:id="destinationField" promptText="Destination" prefWidth="300" />
                     <DatePicker fx:id="heureDepartField" promptText="Date de départ" prefWidth="300" />
@@ -22,7 +27,16 @@
                     <ComboBox fx:id="typeTrajetCombo" promptText="Type de Trajet" prefWidth="300" />
                     <ComboBox fx:id="statutCombo" promptText="Statut du Vol" prefWidth="300" />
                     <ComboBox fx:id="avionCombo" promptText="Avion" prefWidth="300" />
-                    <ComboBox fx:id="equipageCombo" promptText="Équipage" prefWidth="300" />
+
+                    <!-- Sélection dynamique des membres de l'équipage -->
+                    <Label text="Sélectionner les membres de l'équipage :" style="-fx-font-weight: bold;" />
+
+                    <ComboBox fx:id="piloteCombo" promptText="Pilote" prefWidth="300" />
+                    <ComboBox fx:id="copiloteCombo" promptText="Copilote" prefWidth="300" />
+                    <ComboBox fx:id="chefCabineCombo" promptText="Chef de cabine" prefWidth="300" />
+                    <ComboBox fx:id="hotesseCombo" promptText="Hôtesse" prefWidth="300" />
+                    <ComboBox fx:id="mecanicienCombo" promptText="Mécanicien" prefWidth="300" />
+
                     <Button text="Ajouter Vol" onAction="#ajouterVol" prefWidth="200" />
                 </VBox>
             </content>

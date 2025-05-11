@@ -14,17 +14,21 @@ public class ArchivVolDao {
             ResultSet rs = selectStmt.executeQuery();
 
             if (rs.next()) {
-                String insertSql = "INSERT INTO Vol (numVol, destination, heure_depart, heure_arrivee, type_trajet, statutVol) " +
-                        "VALUES (?, ?, ?, ?, ?, ?)";
+                String insertSql = "INSERT INTO Vol (id, numVol, destination, heure_depart, heure_arrivee, type_trajet, statutVol, avion_id, equipage_id) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 try (PreparedStatement insertStmt = connection.prepareStatement(insertSql)) {
-                    insertStmt.setString(1, rs.getString("numeroVol"));
-                    insertStmt.setString(2, rs.getString("destination"));
-                    insertStmt.setTimestamp(3, rs.getTimestamp("heureDepart"));
-                    insertStmt.setTimestamp(4, rs.getTimestamp("heureArrivee"));
-                    insertStmt.setString(5, rs.getString("typeTrajet"));
-                    insertStmt.setString(6, rs.getString("statut"));
+                    insertStmt.setInt(1, rs.getInt("idVol"));
+                    insertStmt.setString(2, rs.getString("numeroVol"));
+                    insertStmt.setString(3, rs.getString("destination"));
+                    insertStmt.setTimestamp(4, rs.getTimestamp("heureDepart"));
+                    insertStmt.setTimestamp(5, rs.getTimestamp("heureArrivee"));
+                    insertStmt.setString(6, rs.getString("typeTrajet"));
+                    insertStmt.setString(7, rs.getString("statut"));
+                    insertStmt.setInt(8, rs.getInt("avion_id"));
+                    insertStmt.setInt(9, rs.getInt("equipage_id"));
                     insertStmt.executeUpdate();
                 }
+
                 String deleteSql = "DELETE FROM archiveVol WHERE idVol = ?";
                 try (PreparedStatement deleteStmt = connection.prepareStatement(deleteSql)) {
                     deleteStmt.setInt(1, idVol);
@@ -33,6 +37,7 @@ public class ArchivVolDao {
             }
         }
     }
+
 
     public void supprimerArchive(int idVol) throws SQLException {
         String deleteSql = "DELETE FROM archiveVol WHERE idVol = ?";
@@ -85,14 +90,26 @@ public class ArchivVolDao {
         this.connection = connection;
     }
     public void archiverVol(vol vol) throws SQLException {
-        String sql = "INSERT INTO archiveVol (idVol, dateArchivage) VALUES (?, ?)";
-        PreparedStatement stmt = connection.prepareStatement(sql);
-        stmt.setInt(1, vol.getIdVol());
-        stmt.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-        stmt.executeUpdate();
+        String sql = "INSERT INTO archiveVol (idVol, numeroVol, destination, heureDepart, heureArrivee, typeTrajet, statut, avion_id, equipage_id, dateArchivage) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, vol.getIdVol());
+            stmt.setString(2, vol.getNumVol());
+            stmt.setString(3, vol.getDestination());
+            stmt.setTimestamp(4, new Timestamp(vol.getHeureDepart().getTime()));
+            stmt.setTimestamp(5, new Timestamp(vol.getHeureArrivee().getTime()));
+            stmt.setString(6, vol.getTypeTrajet().name());
+            stmt.setString(7, vol.getStatut().name());
+            stmt.setInt(8, vol.getAvionId());
+            stmt.setInt(9, vol.getEquipageId());
+            stmt.executeUpdate();
+        }
+
         String deleteSql = "DELETE FROM Vol WHERE id = ?";
-        PreparedStatement deleteStmt = connection.prepareStatement(deleteSql);
-        deleteStmt.setInt(1, vol.getIdVol());
-        deleteStmt.executeUpdate();
+        try (PreparedStatement deleteStmt = connection.prepareStatement(deleteSql)) {
+            deleteStmt.setInt(1, vol.getIdVol());
+            deleteStmt.executeUpdate();
+        }
     }
+
 }

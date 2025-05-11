@@ -22,6 +22,8 @@
                     <TableColumn fx:id="colArrivee" text="Arrivée" />
                     <TableColumn fx:id="colTypeTrajet" text="Type Trajet" />
                     <TableColumn fx:id="colStatut" text="Statut" />
+                    <TableColumn fx:id="colAvion" text="Avion" />
+                    <TableColumn fx:id="colEquipage" text="Équipage" />
                     <TableColumn fx:id="colModifier" text="Modifier" />
                     <TableColumn fx:id="colArchiver" text="Archiver" />
                 </columns>

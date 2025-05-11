@@ -3,6 +3,7 @@ package com.beginsecure.tunisairaeroplan.Controller;
 import com.beginsecure.tunisairaeroplan.Model.vol;
 import com.beginsecure.tunisairaeroplan.Model.enums.StatutVol;
 import com.beginsecure.tunisairaeroplan.Model.enums.TypeTrajet;
+import com.beginsecure.tunisairaeroplan.dao.DAOAvion;
 import com.beginsecure.tunisairaeroplan.dao.volDao;
 import com.beginsecure.tunisairaeroplan.utilites.LaConnexion;
 
@@ -28,6 +29,8 @@ public class ModifierVolController {
     @FXML private ComboBox<StatutVol> statutComboBox;
     @FXML private Button saveButton;
     @FXML private Button cancelButton;
+    @FXML private ComboBox<com.beginsecure.tunisairaeroplan.Model.Avion> avionCombo;
+    @FXML private ComboBox<com.beginsecure.tunisairaeroplan.Model.Equipage> equipageCombo;
 
     private vol selectedVol;
     private volDao dao;
@@ -41,11 +44,15 @@ public class ModifierVolController {
         try {
             connection = LaConnexion.seConnecter();
             dao = new volDao(connection);
+
+            DAOAvion daoAvion = new DAOAvion();
+            avionCombo.getItems().addAll(daoAvion.getAllAvions()); // tous les avions
+
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Erreur de connexion", "Impossible de se connecter à la base de données", null);
-            closeStage();
         }
     }
+
 
     public void initData(vol selectedVol) {
         this.selectedVol = selectedVol;
@@ -64,6 +71,10 @@ public class ModifierVolController {
         heureArriveeField.setText(heureArrivee.toLocalTime().toString());
         typeTrajetComboBox.setValue(selectedVol.getTypeTrajet());
         statutComboBox.setValue(selectedVol.getStatut());
+        avionCombo.setValue(selectedVol.getAvion());
+        equipageCombo.setValue(selectedVol.getEquipage());
+        equipageCombo.setDisable(true); // désactiver modification si nécessaire
+
     }
 
     @FXML
@@ -96,6 +107,7 @@ public class ModifierVolController {
                 selectedVol.setHeureArrivee(heureArriveeDateFinal);
                 selectedVol.setTypeTrajet(typeTrajet);
                 selectedVol.setStatut(statut);
+                selectedVol.setAvion(avionCombo.getValue());
 
                 dao.updateVol(selectedVol);
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Vol modifié avec succès.", null);

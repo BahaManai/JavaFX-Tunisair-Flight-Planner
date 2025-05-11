@@ -21,6 +21,8 @@
                     <TextField fx:id="heureArriveeField" promptText="Heure d'arrivée (HH:mm)" prefWidth="300" />
                     <ComboBox fx:id="typeTrajetComboBox" promptText="Type de Trajet" prefWidth="300" />
                     <ComboBox fx:id="statutComboBox" promptText="Statut du Vol" prefWidth="300" />
+                    <ComboBox fx:id="avionCombo" promptText="Avion" prefWidth="300" />
+                    <ComboBox fx:id="equipageCombo" promptText="Équipage" prefWidth="300" disable="true" />
                     <Button fx:id="saveButton" text="Modifier Vol" onAction="#saveVol" prefWidth="200" />
                     <Button fx:id="cancelButton" text="Annuler" onAction="#cancelModification" prefWidth="200" />
                 </VBox>

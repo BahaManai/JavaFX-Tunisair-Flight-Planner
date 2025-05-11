@@ -5,6 +5,7 @@ import com.beginsecure.tunisairaeroplan.Model.enums.TypeTrajet;
 import com.beginsecure.tunisairaeroplan.Model.vol;
 import com.beginsecure.tunisairaeroplan.dao.volDao;
 import com.beginsecure.tunisairaeroplan.utilites.LaConnexion;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -30,6 +31,8 @@ public class ListeVolController {
     @FXML private TableColumn<vol, StatutVol> colStatut;
     @FXML private TableColumn<vol, Void> colModifier;
     @FXML private TableColumn<vol, Void> colArchiver;
+    @FXML private TableColumn<vol, String> colAvion;
+    @FXML private TableColumn<vol, String> colEquipage;
 
     private volDao dao;
     private Connection con;
@@ -53,6 +56,13 @@ public class ListeVolController {
         colArrivee.setCellValueFactory(new PropertyValueFactory<>("heureArrivee"));
         colTypeTrajet.setCellValueFactory(new PropertyValueFactory<>("typeTrajet"));
         colStatut.setCellValueFactory(new PropertyValueFactory<>("statut"));
+        colAvion.setCellValueFactory(data ->
+                new SimpleStringProperty(data.getValue().getAvion() != null ? data.getValue().getAvion().getModele() : "N/A")
+        );
+        colEquipage.setCellValueFactory(data ->
+                new SimpleStringProperty(data.getValue().getEquipage() != null ? data.getValue().getEquipage().getNomEquipage() : "N/A")
+        );
+
     }
     private void loadVols() {
         try {

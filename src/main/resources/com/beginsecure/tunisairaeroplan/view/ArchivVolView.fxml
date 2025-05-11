@@ -12,6 +12,8 @@
             <TableColumn fx:id="colArrivee" text="Heure Arrivée" />
             <TableColumn fx:id="colTypeTrajet" text="Type Trajet" />
             <TableColumn fx:id="colStatut" text="Statut" />
+            <TableColumn fx:id="colAvion" text="ID Avion" />
+            <TableColumn fx:id="colEquipage" text="ID Équipage" />
             <TableColumn fx:id="colRestaurer" text="Restaurer" />
             <TableColumn fx:id="colSupprimer" text="Supprimer" />
         </columns>

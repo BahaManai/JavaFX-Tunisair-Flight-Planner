@@ -1,7 +1,9 @@
 package com.beginsecure.tunisairaeroplan.Controller;
 
 import com.beginsecure.tunisairaeroplan.Model.Membre;
+import com.beginsecure.tunisairaeroplan.Model.enums.RoleMembre;
 import com.beginsecure.tunisairaeroplan.dao.membreDao;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -9,7 +11,8 @@ import javafx.scene.control.*;
 
 public class MembreController {
 
-    @FXML private TextField txtCin, txtNom, txtPrenom, txtRole;
+    @FXML private TextField txtCin, txtNom, txtPrenom;
+    @FXML private ComboBox<RoleMembre> cbRole;
     @FXML private CheckBox chkDisponible;
     @FXML private TableView<Membre> tvMembre;
     @FXML private TableColumn<Membre, String> colCin, colNom, colPrenom, colRole;
@@ -23,16 +26,16 @@ public class MembreController {
 
         colCin.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getCin()));
         colNom.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getNom()));
+        colRole.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getRole().toString()));
         colPrenom.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getPrenom()));
-        colRole.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getRole()));
         colDisponible.setCellValueFactory(data -> new javafx.beans.property.SimpleBooleanProperty(data.getValue().isDisponible()));
-
+        cbRole.getItems().setAll(RoleMembre.values());
         tvMembre.setItems(observableList);
     }
 
     @FXML
     private void ajouterMembre() {
-        Membre m = new Membre(0, txtCin.getText(), txtNom.getText(), txtPrenom.getText(), txtRole.getText(), chkDisponible.isSelected());
+        Membre m = new Membre(0, txtCin.getText(), txtNom.getText(), txtPrenom.getText(), cbRole.getValue(), chkDisponible.isSelected());
         membreDao.ajouter(m);
         rafraichirListe();
         clearChamps();
@@ -40,7 +43,7 @@ public class MembreController {
 
     @FXML
     private void modifierMembre() {
-        Membre m = new Membre(0, txtCin.getText(), txtNom.getText(), txtPrenom.getText(), txtRole.getText(), chkDisponible.isSelected());
+        Membre m = new Membre(0, txtCin.getText(), txtNom.getText(), txtPrenom.getText(), cbRole.getValue(), chkDisponible.isSelected());
         membreDao.modifier(m);
         rafraichirListe();
         clearChamps();
@@ -63,7 +66,7 @@ public class MembreController {
             txtCin.setText(m.getCin());
             txtNom.setText(m.getNom());
             txtPrenom.setText(m.getPrenom());
-            txtRole.setText(m.getRole());
+            cbRole.setValue(m.getRole());
             chkDisponible.setSelected(m.isDisponible());
         }
     }
@@ -72,7 +75,6 @@ public class MembreController {
         txtCin.clear();
         txtNom.clear();
         txtPrenom.clear();
-        txtRole.clear();
         chkDisponible.setSelected(false);
     }
 

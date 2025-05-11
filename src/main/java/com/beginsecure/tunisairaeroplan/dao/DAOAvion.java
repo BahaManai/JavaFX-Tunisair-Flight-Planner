@@ -138,4 +138,25 @@ public class DAOAvion {
         }
         return avions;
     }
+    public Avion getAvionById(int id) {
+        String sql = "SELECT * FROM Avion WHERE id = ?";
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                Avion a = new Avion();
+                a.setId(rs.getInt("id"));
+                a.setModele(rs.getString("modele"));
+                a.setMarque(rs.getString("marque"));
+                a.setCapacite(rs.getInt("capacite"));
+                a.setEstDisponible(rs.getBoolean("estDisponible"));
+                a.setTypeTrajet(TypeTrajet.valueOf(rs.getString("type_trajet")));
+                return a;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

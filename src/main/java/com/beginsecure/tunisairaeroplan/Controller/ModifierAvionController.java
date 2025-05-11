@@ -38,13 +38,37 @@ public class ModifierAvionController {
         Map<String, Integer> airbus = new HashMap<>();
         airbus.put("A320", 180);
         airbus.put("A330", 277);
+        airbus.put("A350", 300);
 
+// 2. Boeing
         Map<String, Integer> boeing = new HashMap<>();
         boeing.put("737", 160);
         boeing.put("787", 242);
+        boeing.put("777", 396);
+
+// 3. Embraer
+        Map<String, Integer> embraer = new HashMap<>();
+        embraer.put("E170", 76);
+        embraer.put("E190", 100);
+        embraer.put("E195", 124);
+
+// 4. Bombardier
+        Map<String, Integer> bombardier = new HashMap<>();
+        bombardier.put("CRJ700", 78);
+        bombardier.put("CRJ900", 90);
+        bombardier.put("CS300", 130); // aujourd’hui appelé Airbus A220-300
+
+// 5. ATR
+        Map<String, Integer> atr = new HashMap<>();
+        atr.put("ATR 42", 50);
+        atr.put("ATR 72", 70);
+        atr.put("ATR 72-600", 78);
 
         avionsDisponibles.put("Airbus", airbus);
         avionsDisponibles.put("Boeing", boeing);
+        avionsDisponibles.put("Embraer", embraer);
+        avionsDisponibles.put("Bombardier", bombardier);
+        avionsDisponibles.put("ATR", atr);
 
         cbMarque.getItems().addAll(avionsDisponibles.keySet());
 

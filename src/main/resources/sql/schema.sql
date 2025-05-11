@@ -92,3 +92,7 @@ CREATE TABLE users (
 
 -- à exécuter
 ALTER TABLE Avion ADD COLUMN marque VARCHAR(100);
+ALTER TABLE Membre MODIFY role ENUM('Pilote', 'Copilote', 'Chef_de_cabine', 'Hôtesse', 'Mécanicien');
+ALTER TABLE archiveVol
+ADD COLUMN avion_id INT,
+ADD COLUMN equipage_id INT;

@@ -1,5 +1,7 @@
 package com.beginsecure.tunisairaeroplan.Model;
 
+import com.beginsecure.tunisairaeroplan.Model.enums.RoleMembre;
+
 import java.util.Objects;
 
 public class Membre {
@@ -7,10 +9,10 @@ public class Membre {
     private String cin;
     private String nom;
     private String prenom;
-    private String role;
+    private RoleMembre role;
     private boolean estDisponible;
 
-    public Membre(int id, String cin, String nom, String prenom, String role, boolean estDisponible) {
+    public Membre(int id, String cin, String nom, String prenom, RoleMembre role, boolean estDisponible) {
         this.id = id;
         this.cin = cin;
         this.nom = nom;
@@ -59,11 +61,11 @@ public class Membre {
         this.prenom = prenom;
     }
 
-    public String getRole() {
+    public RoleMembre getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(RoleMembre role) {
         this.role = role;
     }
 

@@ -33,6 +33,9 @@ public class ArchivVolController {
     private TableColumn<vol, Void> colRestaurer;
     @FXML
     private TableColumn<vol, Void> colSupprimer;
+    @FXML private TableColumn<vol, Integer> colAvion;
+    @FXML private TableColumn<vol, Integer> colEquipage;
+
 
     private volDao dao;
 
@@ -55,6 +58,9 @@ public class ArchivVolController {
             colArrivee.setCellValueFactory(new PropertyValueFactory<>("heureArrivee"));
             colTypeTrajet.setCellValueFactory(new PropertyValueFactory<>("typeTrajet"));
             colStatut.setCellValueFactory(new PropertyValueFactory<>("statut"));
+            colAvion.setCellValueFactory(new PropertyValueFactory<>("avionId"));
+            colEquipage.setCellValueFactory(new PropertyValueFactory<>("equipageId"));
+
 
             configurerColonneRestaurer();
             configurerColonneSupprimer();

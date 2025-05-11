@@ -8,6 +8,10 @@ public class Equipage {
     private String nomEquipage;
     private HashSet<Membre> membres;
 
+    public Equipage() {
+        this.membres = new HashSet<>();
+    }
+
     public Equipage(int id, String nomEquipage) {
         this.id = id;
         this.nomEquipage = nomEquipage;
@@ -64,5 +68,14 @@ public class Equipage {
     public String toString() {
         return "Equipage " + nomEquipage + " (membres: " + membres.size() + ")";
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setNomEquipage(String nomEquipage) {
+        this.nomEquipage = nomEquipage;
+    }
+
 }
 

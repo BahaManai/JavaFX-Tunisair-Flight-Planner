@@ -46,11 +46,6 @@ public class MainController {
         loadPage("FXMLMembre.fxml");
     }
 
-    @FXML
-    private void showEquipages() {
-        loadPage("FXMLEquipage.fxml");
-    }
-
 
     @FXML
     public void showParametres() {

@@ -1,10 +1,12 @@
 package com.beginsecure.tunisairaeroplan.dao;
 
 import com.beginsecure.tunisairaeroplan.Model.Membre;
+import com.beginsecure.tunisairaeroplan.Model.enums.RoleMembre;
 import com.beginsecure.tunisairaeroplan.utilites.LaConnexion;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class membreDao {
 
@@ -16,7 +18,7 @@ public class membreDao {
             pst.setString(1, m.getCin());
             pst.setString(2, m.getNom());
             pst.setString(3, m.getPrenom());
-            pst.setString(4, m.getRole());
+            pst.setString(4, m.getRole().name());
             pst.setBoolean(5, m.isDisponible());
             int n = pst.executeUpdate();
             if (n >= 1) {
@@ -33,7 +35,6 @@ public class membreDao {
         return -1;
     }
 
-
     public static ArrayList<Membre> lister() {
         ArrayList<Membre> membres = new ArrayList<>();
         Connection cn = LaConnexion.seConnecter();
@@ -47,7 +48,7 @@ public class membreDao {
                         rs.getString("cin"),
                         rs.getString("nom"),
                         rs.getString("prenom"),
-                        rs.getString("role"),
+                        RoleMembre.valueOf(rs.getString("role")),
                         rs.getBoolean("estDisponible")
                 );
                 membres.add(m);
@@ -66,7 +67,7 @@ public class membreDao {
             PreparedStatement pst = cn.prepareStatement(requete);
             pst.setString(1, m.getNom());
             pst.setString(2, m.getPrenom());
-            pst.setString(3, m.getRole());
+            pst.setString(3, m.getRole().name());
             pst.setBoolean(4, m.isDisponible());
             pst.setString(5, m.getCin());
             int n = pst.executeUpdate();
@@ -96,5 +97,43 @@ public class membreDao {
         }
         return false;
     }
-}
 
+    public static ArrayList<Membre> getMembresDisponiblesParRole(RoleMembre role) {
+        ArrayList<Membre> membres = new ArrayList<>();
+        Connection cn = LaConnexion.seConnecter();
+        String requete = "SELECT * FROM membre WHERE estDisponible = TRUE AND role = ?";
+        try (PreparedStatement pst = cn.prepareStatement(requete)) {
+            pst.setString(1, role.name());
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Membre m = new Membre(
+                        rs.getInt("id"),
+                        rs.getString("cin"),
+                        rs.getString("nom"),
+                        rs.getString("prenom"),
+                        RoleMembre.valueOf(rs.getString("role")),
+                        rs.getBoolean("estDisponible")
+                );
+                membres.add(m);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Erreur lors de la récupération des membres par rôle : " + ex.getMessage());
+        }
+        return membres;
+    }
+
+    public static void mettreIndisponible(List<Membre> membres) {
+        String requete = "UPDATE membre SET estDisponible = false WHERE id = ?";
+        try (Connection cn = LaConnexion.seConnecter();
+             PreparedStatement pst = cn.prepareStatement(requete)) {
+            for (Membre m : membres) {
+                pst.setInt(1, m.getId());
+                pst.addBatch();
+            }
+            pst.executeBatch();
+        } catch (SQLException ex) {
+            System.out.println("Erreur mise à jour disponibilité membres : " + ex.getMessage());
+        }
+    }
+
+}

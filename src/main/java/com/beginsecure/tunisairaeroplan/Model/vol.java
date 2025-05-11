@@ -127,4 +127,13 @@ public class vol {
     public void setEquipage(Equipage equipage) {
         this.equipage = equipage;
     }
+
+    public int getAvionId() {
+        return avion != null ? avion.getId() : 0;
+    }
+
+    public int getEquipageId() {
+        return equipage != null ? equipage.getId() : 0;
+    }
+
 }
