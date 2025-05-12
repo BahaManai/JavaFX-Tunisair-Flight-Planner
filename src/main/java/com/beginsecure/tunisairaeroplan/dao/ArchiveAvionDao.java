@@ -2,14 +2,20 @@ package com.beginsecure.tunisairaeroplan.dao;
 
 import com.beginsecure.tunisairaeroplan.Model.Avion;
 import com.beginsecure.tunisairaeroplan.Model.enums.TypeTrajet;
-import com.beginsecure.tunisairaeroplan.utilites.LaConnexion;
 
 import java.sql.*;
-        import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ArchiveAvionDao {
+
     private Connection connection;
+
+    // Constructeur avec connexion obligatoire
+    public ArchiveAvionDao(Connection connection) {
+        this.connection = connection;
+    }
+
     public boolean supprimerDefinitivement(int idAvion) {
         String query = "DELETE FROM ArchiveAvion WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -27,6 +33,7 @@ public class ArchiveAvionDao {
 
         try {
             connection.setAutoCommit(false);
+
             try (PreparedStatement insertStmt = connection.prepareStatement(insertQuery)) {
                 insertStmt.setInt(1, avion.getId());
                 insertStmt.setString(2, avion.getModele());
@@ -44,6 +51,7 @@ public class ArchiveAvionDao {
 
             connection.commit();
             return true;
+
         } catch (SQLException e) {
             try {
                 connection.rollback();
@@ -59,9 +67,6 @@ public class ArchiveAvionDao {
                 e.printStackTrace();
             }
         }
-    }
-    public ArchiveAvionDao() {
-        this.connection = LaConnexion.seConnecter();
     }
 
     public List<Avion> getAllArchivedAvions() {

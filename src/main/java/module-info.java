@@ -4,6 +4,7 @@ module com.beginsecure.tunisairaeroplan {
     requires org.controlsfx.controls;
     requires java.sql;
     requires jdk.jdi;
+    requires mysql.connector.java;
 
     opens com.beginsecure.tunisairaeroplan to javafx.fxml;
     opens com.beginsecure.tunisairaeroplan.Controller to javafx.fxml;

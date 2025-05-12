@@ -1,21 +1,28 @@
 package com.beginsecure.tunisairaeroplan.dao;
 
+import com.beginsecure.tunisairaeroplan.Model.Avion;
+import com.beginsecure.tunisairaeroplan.Model.enums.TypeTrajet;
+import com.beginsecure.tunisairaeroplan.utilites.LaConnexion;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.beginsecure.tunisairaeroplan.Model.Avion;
-import com.beginsecure.tunisairaeroplan.Model.enums.TypeTrajet;
-import com.beginsecure.tunisairaeroplan.utilites.LaConnexion;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 public class DAOAvion {
     private Connection connection;
 
-    public DAOAvion() {
-        this.connection = LaConnexion.seConnecter();
+    public DAOAvion(Connection connection) {
+        this.connection = connection;
     }
+
+    public DAOAvion() {
+        try {
+            this.connection = LaConnexion.seConnecter();
+        } catch (SQLException e) {
+            throw new RuntimeException("Erreur lors de la connexion à la base de données dans DAOAvion", e);
+        }
+    }
+
 
     public List<Avion> getAllAvions() {
         List<Avion> avions = new ArrayList<>();
@@ -82,7 +89,6 @@ public class DAOAvion {
         try {
             connection.setAutoCommit(false);
 
-            // Archiver
             try (PreparedStatement pstmt = connection.prepareStatement(archiveQuery)) {
                 pstmt.setInt(1, avion.getId());
                 pstmt.setString(2, avion.getModele());
@@ -116,6 +122,7 @@ public class DAOAvion {
             }
         }
     }
+
     public List<Avion> getAvionsDisponibles() {
         List<Avion> avions = new ArrayList<>();
         String query = "SELECT * FROM Avion WHERE estDisponible = true";
@@ -138,6 +145,7 @@ public class DAOAvion {
         }
         return avions;
     }
+
     public Avion getAvionById(int id) {
         String sql = "SELECT * FROM Avion WHERE id = ?";
         try (PreparedStatement pst = connection.prepareStatement(sql)) {
@@ -158,5 +166,4 @@ public class DAOAvion {
         }
         return null;
     }
-
 }

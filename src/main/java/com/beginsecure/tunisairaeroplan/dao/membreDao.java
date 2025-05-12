@@ -11,10 +11,10 @@ import java.util.List;
 public class membreDao {
 
     public static int ajouter(Membre m) {
-        Connection cn = LaConnexion.seConnecter();
         String requete = "INSERT INTO membre (cin, nom, prenom, role, estDisponible) VALUES (?, ?, ?, ?, ?)";
-        try {
-            PreparedStatement pst = cn.prepareStatement(requete, Statement.RETURN_GENERATED_KEYS);
+        try (Connection cn = LaConnexion.seConnecter();
+             PreparedStatement pst = cn.prepareStatement(requete, Statement.RETURN_GENERATED_KEYS)) {
+
             pst.setString(1, m.getCin());
             pst.setString(2, m.getNom());
             pst.setString(3, m.getPrenom());
@@ -37,11 +37,11 @@ public class membreDao {
 
     public static ArrayList<Membre> lister() {
         ArrayList<Membre> membres = new ArrayList<>();
-        Connection cn = LaConnexion.seConnecter();
         String requete = "SELECT * FROM membre";
-        try {
-            Statement st = cn.createStatement();
-            ResultSet rs = st.executeQuery(requete);
+        try (Connection cn = LaConnexion.seConnecter();
+             Statement st = cn.createStatement();
+             ResultSet rs = st.executeQuery(requete)) {
+
             while (rs.next()) {
                 Membre m = new Membre(
                         rs.getInt("id"),
@@ -61,10 +61,10 @@ public class membreDao {
     }
 
     public static boolean modifier(Membre m) {
-        Connection cn = LaConnexion.seConnecter();
         String requete = "UPDATE membre SET nom = ?, prenom = ?, role = ?, estDisponible = ? WHERE cin = ?";
-        try {
-            PreparedStatement pst = cn.prepareStatement(requete);
+        try (Connection cn = LaConnexion.seConnecter();
+             PreparedStatement pst = cn.prepareStatement(requete)) {
+
             pst.setString(1, m.getNom());
             pst.setString(2, m.getPrenom());
             pst.setString(3, m.getRole().name());
@@ -82,10 +82,10 @@ public class membreDao {
     }
 
     public static boolean supprimer(Membre m) {
-        Connection cn = LaConnexion.seConnecter();
         String requete = "DELETE FROM membre WHERE cin = ?";
-        try {
-            PreparedStatement pst = cn.prepareStatement(requete);
+        try (Connection cn = LaConnexion.seConnecter();
+             PreparedStatement pst = cn.prepareStatement(requete)) {
+
             pst.setString(1, m.getCin());
             int n = pst.executeUpdate();
             if (n >= 1) {
@@ -100,9 +100,10 @@ public class membreDao {
 
     public static ArrayList<Membre> getMembresDisponiblesParRole(RoleMembre role) {
         ArrayList<Membre> membres = new ArrayList<>();
-        Connection cn = LaConnexion.seConnecter();
         String requete = "SELECT * FROM membre WHERE estDisponible = TRUE AND role = ?";
-        try (PreparedStatement pst = cn.prepareStatement(requete)) {
+        try (Connection cn = LaConnexion.seConnecter();
+             PreparedStatement pst = cn.prepareStatement(requete)) {
+
             pst.setString(1, role.name());
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
@@ -135,5 +136,4 @@ public class membreDao {
             System.out.println("Erreur mise à jour disponibilité membres : " + ex.getMessage());
         }
     }
-
 }

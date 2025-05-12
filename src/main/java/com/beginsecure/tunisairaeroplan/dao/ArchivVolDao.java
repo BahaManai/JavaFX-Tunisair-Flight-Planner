@@ -2,11 +2,17 @@ package com.beginsecure.tunisairaeroplan.dao;
 
 import com.beginsecure.tunisairaeroplan.Model.Avion;
 import com.beginsecure.tunisairaeroplan.Model.vol;
+
 import java.sql.*;
 
 public class ArchivVolDao {
 
     private Connection connection;
+
+    public ArchivVolDao(Connection connection) {
+        this.connection = connection;
+    }
+
     public void restaurerVol(int idVol) throws SQLException {
         String selectSql = "SELECT * FROM archiveVol WHERE idVol = ?";
         try (PreparedStatement selectStmt = connection.prepareStatement(selectSql)) {
@@ -38,7 +44,6 @@ public class ArchivVolDao {
         }
     }
 
-
     public void supprimerArchive(int idVol) throws SQLException {
         String deleteSql = "DELETE FROM archiveVol WHERE idVol = ?";
         try (PreparedStatement deleteStmt = connection.prepareStatement(deleteSql)) {
@@ -46,12 +51,36 @@ public class ArchivVolDao {
             deleteStmt.executeUpdate();
         }
     }
+
+    public void archiverVol(vol vol) throws SQLException {
+        String sql = "INSERT INTO archiveVol (idVol, numeroVol, destination, heureDepart, heureArrivee, typeTrajet, statut, avion_id, equipage_id, dateArchivage) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, vol.getIdVol());
+            stmt.setString(2, vol.getNumVol());
+            stmt.setString(3, vol.getDestination());
+            stmt.setTimestamp(4, new Timestamp(vol.getHeureDepart().getTime()));
+            stmt.setTimestamp(5, new Timestamp(vol.getHeureArrivee().getTime()));
+            stmt.setString(6, vol.getTypeTrajet().name());
+            stmt.setString(7, vol.getStatut().name());
+            stmt.setInt(8, vol.getAvionId());
+            stmt.setInt(9, vol.getEquipageId());
+            stmt.executeUpdate();
+        }
+
+        String deleteSql = "DELETE FROM Vol WHERE id = ?";
+        try (PreparedStatement deleteStmt = connection.prepareStatement(deleteSql)) {
+            deleteStmt.setInt(1, vol.getIdVol());
+            deleteStmt.executeUpdate();
+        }
+    }
+
     public boolean archiverAvion(Avion avion) {
         String archiveQuery = "INSERT INTO ArchiveAvion (id, modele, capacite, estDisponible, type_trajet) VALUES (?, ?, ?, ?, ?)";
         String deleteQuery = "DELETE FROM Avion WHERE id = ?";
 
         try {
-            connection.setAutoCommit(false); // Démarrer une transaction
+            connection.setAutoCommit(false); // début transaction
 
             try (PreparedStatement archiveStmt = connection.prepareStatement(archiveQuery)) {
                 archiveStmt.setInt(1, avion.getId());
@@ -86,30 +115,4 @@ public class ArchivVolDao {
             }
         }
     }
-    public ArchivVolDao(Connection connection) {
-        this.connection = connection;
-    }
-    public void archiverVol(vol vol) throws SQLException {
-        String sql = "INSERT INTO archiveVol (idVol, numeroVol, destination, heureDepart, heureArrivee, typeTrajet, statut, avion_id, equipage_id, dateArchivage) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, vol.getIdVol());
-            stmt.setString(2, vol.getNumVol());
-            stmt.setString(3, vol.getDestination());
-            stmt.setTimestamp(4, new Timestamp(vol.getHeureDepart().getTime()));
-            stmt.setTimestamp(5, new Timestamp(vol.getHeureArrivee().getTime()));
-            stmt.setString(6, vol.getTypeTrajet().name());
-            stmt.setString(7, vol.getStatut().name());
-            stmt.setInt(8, vol.getAvionId());
-            stmt.setInt(9, vol.getEquipageId());
-            stmt.executeUpdate();
-        }
-
-        String deleteSql = "DELETE FROM Vol WHERE id = ?";
-        try (PreparedStatement deleteStmt = connection.prepareStatement(deleteSql)) {
-            deleteStmt.setInt(1, vol.getIdVol());
-            deleteStmt.executeUpdate();
-        }
-    }
-
 }

@@ -3,10 +3,12 @@ package com.beginsecure.tunisairaeroplan.Controller;
 import com.beginsecure.tunisairaeroplan.dao.DAOAvion;
 import com.beginsecure.tunisairaeroplan.Model.Avion;
 import com.beginsecure.tunisairaeroplan.Model.enums.TypeTrajet;
+import com.beginsecure.tunisairaeroplan.utilites.LaConnexion;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,41 +19,27 @@ public class AjoutAvionController {
     @FXML private ComboBox<String> cbMarque;
     @FXML private ComboBox<String> cbModele;
     @FXML private ComboBox<TypeTrajet> cbTypeTrajet;
-    private Map<String, Map<String, Integer>> avionsDisponibles = new HashMap<>();
 
-    private DAOAvion daoAvion = new DAOAvion();
+    private Map<String, Map<String, Integer>> avionsDisponibles = new HashMap<>();
+    private DAOAvion daoAvion;
 
     @FXML
     public void initialize() {
+        try {
+            Connection connection = LaConnexion.seConnecter();
+            daoAvion = new DAOAvion(connection);
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de se connecter à la base de données.");
+            return;
+        }
+
         cbTypeTrajet.getItems().setAll(TypeTrajet.values());
-        Map<String, Integer> airbus = new HashMap<>();
-        airbus.put("A320", 180);
-        airbus.put("A330", 277);
-        airbus.put("A350", 300);
 
-// 2. Boeing
-        Map<String, Integer> boeing = new HashMap<>();
-        boeing.put("737", 160);
-        boeing.put("787", 242);
-        boeing.put("777", 396);
-
-// 3. Embraer
-        Map<String, Integer> embraer = new HashMap<>();
-        embraer.put("E170", 76);
-        embraer.put("E190", 100);
-        embraer.put("E195", 124);
-
-// 4. Bombardier
-        Map<String, Integer> bombardier = new HashMap<>();
-        bombardier.put("CRJ700", 78);
-        bombardier.put("CRJ900", 90);
-        bombardier.put("CS300", 130); // aujourd’hui appelé Airbus A220-300
-
-// 5. ATR
-        Map<String, Integer> atr = new HashMap<>();
-        atr.put("ATR 42", 50);
-        atr.put("ATR 72", 70);
-        atr.put("ATR 72-600", 78);
+        Map<String, Integer> airbus = Map.of("A320", 180, "A330", 277, "A350", 300);
+        Map<String, Integer> boeing = Map.of("737", 160, "787", 242, "777", 396);
+        Map<String, Integer> embraer = Map.of("E170", 76, "E190", 100, "E195", 124);
+        Map<String, Integer> bombardier = Map.of("CRJ700", 78, "CRJ900", 90, "CS300", 130);
+        Map<String, Integer> atr = Map.of("ATR 42", 50, "ATR 72", 70, "ATR 72-600", 78);
 
         avionsDisponibles.put("Airbus", airbus);
         avionsDisponibles.put("Boeing", boeing);

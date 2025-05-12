@@ -35,14 +35,11 @@ public class ListeVolController {
     @FXML private TableColumn<vol, String> colEquipage;
 
     private volDao dao;
-    private Connection con;
     private ObservableList<vol> volList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        con = LaConnexion.seConnecter();
-        dao = new volDao(con);
-
+        dao = new volDao();
         setupTableColumns();
         loadVols();
         addModifyButtons();

@@ -50,8 +50,7 @@ public class ArchivVolController {
     @FXML
     public void initialize() {
         try {
-            Connection con = LaConnexion.seConnecter();
-            dao = new volDao(con);
+            dao = new volDao(); // sans connexion
             colNumVol.setCellValueFactory(new PropertyValueFactory<>("numVol"));
             colDestination.setCellValueFactory(new PropertyValueFactory<>("destination"));
             colDepart.setCellValueFactory(new PropertyValueFactory<>("heureDepart"));

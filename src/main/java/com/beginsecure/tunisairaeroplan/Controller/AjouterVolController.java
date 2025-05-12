@@ -30,12 +30,27 @@ public class AjouterVolController {
     @FXML private ComboBox<Avion> avionCombo;
     @FXML private ComboBox<Membre> piloteCombo, copiloteCombo, chefCabineCombo, hotesseCombo, mecanicienCombo;
 
+    private Connection connection;
+    private DAOAvion daoAvion;
+    private volDao daoVol;
+    private EquipageDao equipageDao;
+
     @FXML
     public void initialize() {
-        typeTrajetCombo.setItems(FXCollections.observableArrayList(TypeTrajet.values()));
-        statutCombo.setItems(FXCollections.observableArrayList(StatutVol.values()));
-        chargerAvionsDisponibles();
-        chargerMembresParRole();
+        try {
+            connection = LaConnexion.seConnecter();
+            daoAvion = new DAOAvion(connection);
+            daoVol = new volDao(connection);
+            equipageDao = new EquipageDao(connection);
+
+            typeTrajetCombo.setItems(FXCollections.observableArrayList(TypeTrajet.values()));
+            statutCombo.setItems(FXCollections.observableArrayList(StatutVol.values()));
+            chargerAvionsDisponibles();
+            chargerMembresParRole();
+
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Connexion", "Impossible d'établir la connexion à la base de données : " + e.getMessage());
+        }
     }
 
     private void chargerMembresParRole() {
@@ -49,46 +64,37 @@ public class AjouterVolController {
     @FXML
     public void ajouterVol() {
         try {
-            if (!validerChamps()) return;
-            if (!validerMembresEquipage()) return;
+            if (!validerChamps() || !validerMembresEquipage()) return;
 
             String nomEquipage = "AutoGen" + System.currentTimeMillis();
-            EquipageDao equipageDao = new EquipageDao(LaConnexion.seConnecter());
-
-            int idEquipage = equipageDao.creerEquipageAvecMembres(
-                    nomEquipage,
-                    List.of(
-                            piloteCombo.getValue(),
-                            copiloteCombo.getValue(),
-                            chefCabineCombo.getValue(),
-                            hotesseCombo.getValue(),
-                            mecanicienCombo.getValue()
-                    )
-            );
+            int idEquipage = equipageDao.creerEquipageAvecMembres(nomEquipage, List.of(
+                    piloteCombo.getValue(),
+                    copiloteCombo.getValue(),
+                    chefCabineCombo.getValue(),
+                    hotesseCombo.getValue(),
+                    mecanicienCombo.getValue()
+            ));
 
             Equipage nouvelEquipage = new Equipage(idEquipage, nomEquipage);
             vol vol = creerVol(nouvelEquipage);
-            new volDao(LaConnexion.seConnecter()).insertVol(vol);
+            daoVol.insertVol(vol);
 
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Vol ajouté", "Le vol a été ajouté avec succès.");
 
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Exception", "Une erreur est survenue : " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     private boolean validerChamps() {
-        if (numVolField.getText().isEmpty() || destinationField.getText().isEmpty()
+        return !(numVolField.getText().isEmpty() || destinationField.getText().isEmpty()
                 || heureDepartField.getValue() == null || heureArriveeField.getValue() == null
                 || typeTrajetCombo.getValue() == null || statutCombo.getValue() == null
                 || avionCombo.getValue() == null || piloteCombo.getValue() == null
                 || copiloteCombo.getValue() == null || chefCabineCombo.getValue() == null
-                || hotesseCombo.getValue() == null || mecanicienCombo.getValue() == null) {
-
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Champs manquants", "Veuillez remplir tous les champs.");
-            return false;
-        }
-        return true;
+                || hotesseCombo.getValue() == null || mecanicienCombo.getValue() == null)
+                || showAlertError("Champs manquants", "Veuillez remplir tous les champs.");
     }
 
     private vol creerVol(Equipage equipage) throws Exception {
@@ -114,11 +120,16 @@ public class AjouterVolController {
 
     private void chargerAvionsDisponibles() {
         try {
-            List<Avion> avions = new DAOAvion().getAvionsDisponibles();
+            List<Avion> avions = daoAvion.getAvionsDisponibles();
             Platform.runLater(() -> avionCombo.setItems(FXCollections.observableArrayList(avions)));
         } catch (Exception e) {
             Platform.runLater(() -> showAlert(Alert.AlertType.ERROR, "Erreur", "Chargement avions", e.getMessage()));
         }
+    }
+
+    private boolean showAlertError(String header, String content) {
+        showAlert(Alert.AlertType.ERROR, "Erreur", header, content);
+        return false;
     }
 
     private void showAlert(Alert.AlertType type, String title, String header, String content) {
@@ -138,34 +149,11 @@ public class AjouterVolController {
                 mecanicienCombo.getValue()
         );
 
-        // Vérifier qu’aucun n’est null
-        if (membres.stream().anyMatch(m -> m == null)) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Sélection incomplète", "Veuillez sélectionner tous les membres de l’équipage.");
-            return false;
-        }
+        if (membres.stream().anyMatch(m -> m == null)) return showAlertError("Sélection incomplète", "Veuillez sélectionner tous les membres.");
+        if (membres.stream().map(Membre::getId).distinct().count() < membres.size()) return showAlertError("Membres dupliqués", "Chaque membre doit être unique.");
+        if (membres.stream().anyMatch(m -> !m.isDisponible())) return showAlertError("Disponibilité", "Tous les membres doivent être disponibles.");
 
-        // Vérifier qu’ils sont tous différents
-        long distinctCount = membres.stream().map(Membre::getId).distinct().count();
-        if (distinctCount < membres.size()) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Membres dupliqués", "Chaque membre de l’équipage doit être unique.");
-            return false;
-        }
-
-        // Vérifier disponibilité
-        boolean indisponible = membres.stream().anyMatch(m -> !m.isDisponible());
-        if (indisponible) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Disponibilité", "Tous les membres doivent être disponibles.");
-            return false;
-        }
-        // Marquer les membres comme indisponibles
-        membreDao.mettreIndisponible(List.of(
-                piloteCombo.getValue(),
-                copiloteCombo.getValue(),
-                chefCabineCombo.getValue(),
-                hotesseCombo.getValue(),
-                mecanicienCombo.getValue()
-        ));
+        membreDao.mettreIndisponible(membres);
         return true;
     }
-
 }

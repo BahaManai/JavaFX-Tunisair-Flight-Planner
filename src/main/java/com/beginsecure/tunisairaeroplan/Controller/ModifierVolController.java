@@ -34,7 +34,6 @@ public class ModifierVolController {
 
     private vol selectedVol;
     private volDao dao;
-    private Connection connection;
 
     @FXML
     public void initialize() {
@@ -42,16 +41,14 @@ public class ModifierVolController {
         statutComboBox.getItems().setAll(StatutVol.values());
 
         try {
-            connection = LaConnexion.seConnecter();
-            dao = new volDao(connection);
-
+            dao = new volDao();
             DAOAvion daoAvion = new DAOAvion();
-            avionCombo.getItems().addAll(daoAvion.getAllAvions()); // tous les avions
-
+            avionCombo.getItems().addAll(daoAvion.getAllAvions());
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de connexion", "Impossible de se connecter à la base de données", null);
+            showAlert(Alert.AlertType.ERROR, "Erreur de connexion", "Impossible de charger les avions", null);
         }
     }
+
 
 
     public void initData(vol selectedVol) {
