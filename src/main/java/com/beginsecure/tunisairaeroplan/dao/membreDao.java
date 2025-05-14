@@ -5,6 +5,7 @@ import com.beginsecure.tunisairaeroplan.Model.enums.RoleMembre;
 import com.beginsecure.tunisairaeroplan.utilites.LaConnexion;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -123,17 +124,43 @@ public class membreDao {
         return membres;
     }
 
-    public static void mettreIndisponible(List<Membre> membres) {
-        String requete = "UPDATE membre SET estDisponible = false WHERE id = ?";
+    public static List<Membre> getMembresDisponiblesParRolePourPeriode(RoleMembre role, LocalDateTime debut, LocalDateTime fin) {
+        List<Membre> membres = new ArrayList<>();
+        String requete = "SELECT m.* FROM membre m " +
+                "WHERE m.estDisponible = TRUE AND m.role = ? " +
+                "AND m.id NOT IN (" +
+                "    SELECT em.membre_id FROM equipage_membre em " +
+                "    JOIN vol v ON v.equipage_id = em.equipage_id " +
+                "    WHERE v.statutVol != 'Annulé' " +
+                "    AND (? BETWEEN v.heure_depart AND v.heure_arrivee " +
+                "         OR ? BETWEEN v.heure_depart AND v.heure_arrivee " +
+                "         OR v.heure_depart BETWEEN ? AND ? " +
+                "         OR v.heure_arrivee BETWEEN ? AND ?)" +
+                ")";
         try (Connection cn = LaConnexion.seConnecter();
              PreparedStatement pst = cn.prepareStatement(requete)) {
-            for (Membre m : membres) {
-                pst.setInt(1, m.getId());
-                pst.addBatch();
+            pst.setString(1, role.name());
+            pst.setTimestamp(2, Timestamp.valueOf(debut));
+            pst.setTimestamp(3, Timestamp.valueOf(fin));
+            pst.setTimestamp(4, Timestamp.valueOf(debut));
+            pst.setTimestamp(5, Timestamp.valueOf(fin));
+            pst.setTimestamp(6, Timestamp.valueOf(debut));
+            pst.setTimestamp(7, Timestamp.valueOf(fin));
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Membre m = new Membre(
+                        rs.getInt("id"),
+                        rs.getString("cin"),
+                        rs.getString("nom"),
+                        rs.getString("prenom"),
+                        RoleMembre.valueOf(rs.getString("role")),
+                        rs.getBoolean("estDisponible")
+                );
+                membres.add(m);
             }
-            pst.executeBatch();
         } catch (SQLException ex) {
-            System.out.println("Erreur mise à jour disponibilité membres : " + ex.getMessage());
+            System.out.println("Erreur lors de la récupération des membres disponibles : " + ex.getMessage());
         }
+        return membres;
     }
 }

@@ -15,13 +15,13 @@
         <Button fx:id="btnSupprimer" layoutX="220" layoutY="20" onAction="#supprimerMembre" text="Supprimer" />
         <Button fx:id="btnConsulter" layoutX="340" layoutY="20" onAction="#consulterMembre" text="Consulter" />
 
-        <TextField fx:id="txtCin" layoutX="30" layoutY="70" promptText="CIN" />
-        <TextField fx:id="txtNom" layoutX="150" layoutY="70" promptText="Nom" />
-        <TextField fx:id="txtPrenom" layoutX="270" layoutY="70" promptText="Prénom" />
-        <ComboBox fx:id="cbRole" layoutX="390" layoutY="70" promptText="Rôle" />
-        <CheckBox fx:id="chkDisponible" layoutX="556.0" layoutY="74.0" text="Disponible" />
+        <TextField fx:id="txtCin" layoutX="51.0" layoutY="70.0" promptText="CIN" />
+        <TextField fx:id="txtNom" layoutX="171.0" layoutY="70.0" promptText="Nom" />
+        <TextField fx:id="txtPrenom" layoutX="291.0" layoutY="70.0" promptText="Prénom" />
+        <ComboBox fx:id="cbRole" layoutX="411.0" layoutY="70.0" promptText="Rôle" />
+        <CheckBox fx:id="chkDisponible" layoutX="493.0" layoutY="74.0" text="Disponible" />
 
-        <TableView fx:id="tvMembre" layoutX="30" layoutY="120" prefHeight="250" prefWidth="580">
+        <TableView fx:id="tvMembre" layoutX="75.0" layoutY="114.0" prefHeight="250" prefWidth="498.0">
             <columns>
                 <TableColumn fx:id="colCin" prefWidth="100" text="CIN" />
                 <TableColumn fx:id="colNom" prefWidth="100" text="Nom" />

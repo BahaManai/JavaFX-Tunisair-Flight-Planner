@@ -13,12 +13,12 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-
 import java.sql.Connection;
-import java.sql.Date;
-import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 public class AjouterVolController {
@@ -46,19 +46,54 @@ public class AjouterVolController {
             typeTrajetCombo.setItems(FXCollections.observableArrayList(TypeTrajet.values()));
             statutCombo.setItems(FXCollections.observableArrayList(StatutVol.values()));
             chargerAvionsDisponibles();
-            chargerMembresParRole();
+            // Charger les membres par défaut (sans période spécifiée)
+            chargerMembresParRole(null, null);
+
+            // Ajouter des écouteurs pour rafraîchir les membres lorsque les horaires changent
+            heureDepartField.valueProperty().addListener((obs, oldVal, newVal) -> updateMembresDisponibles());
+            heureArriveeField.valueProperty().addListener((obs, oldVal, newVal) -> updateMembresDisponibles());
+            heureDepartTimeField.textProperty().addListener((obs, oldVal, newVal) -> updateMembresDisponibles());
+            heureArriveeTimeField.textProperty().addListener((obs, oldVal, newVal) -> updateMembresDisponibles());
 
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Connexion", "Impossible d'établir la connexion à la base de données : " + e.getMessage());
         }
     }
 
-    private void chargerMembresParRole() {
-        piloteCombo.setItems(FXCollections.observableArrayList(membreDao.getMembresDisponiblesParRole(RoleMembre.Pilote)));
-        copiloteCombo.setItems(FXCollections.observableArrayList(membreDao.getMembresDisponiblesParRole(RoleMembre.Copilote)));
-        chefCabineCombo.setItems(FXCollections.observableArrayList(membreDao.getMembresDisponiblesParRole(RoleMembre.Chef_de_cabine)));
-        hotesseCombo.setItems(FXCollections.observableArrayList(membreDao.getMembresDisponiblesParRole(RoleMembre.Hôtesse)));
-        mecanicienCombo.setItems(FXCollections.observableArrayList(membreDao.getMembresDisponiblesParRole(RoleMembre.Mécanicien)));
+    private void updateMembresDisponibles() {
+        try {
+            LocalDateTime heureDepart = getHeureDepart();
+            LocalDateTime heureArrivee = getHeureArrivee();
+            if (heureDepart != null && heureArrivee != null) {
+                if (heureArrivee.isBefore(heureDepart)) {
+                    showAlert(Alert.AlertType.WARNING, "Avertissement", "Horaires invalides", "L'heure d'arrivée doit être postérieure à l'heure de départ.");
+                    return;
+                }
+                chargerMembresParRole(heureDepart, heureArrivee);
+            } else {
+                chargerMembresParRole(null, null); // Charger tous les membres si les horaires ne sont pas encore saisis
+            }
+        } catch (DateTimeParseException e) {
+            // Ignorer les erreurs de format d'heure temporairement
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Mise à jour des membres", "Erreur lors de la mise à jour des membres : " + e.getMessage());
+        }
+    }
+
+    private void chargerMembresParRole(LocalDateTime debut, LocalDateTime fin) {
+        if (debut != null && fin != null) {
+            piloteCombo.setItems(FXCollections.observableArrayList(membreDao.getMembresDisponiblesParRolePourPeriode(RoleMembre.Pilote, debut, fin)));
+            copiloteCombo.setItems(FXCollections.observableArrayList(membreDao.getMembresDisponiblesParRolePourPeriode(RoleMembre.Copilote, debut, fin)));
+            chefCabineCombo.setItems(FXCollections.observableArrayList(membreDao.getMembresDisponiblesParRolePourPeriode(RoleMembre.Chef_de_cabine, debut, fin)));
+            hotesseCombo.setItems(FXCollections.observableArrayList(membreDao.getMembresDisponiblesParRolePourPeriode(RoleMembre.Hôtesse, debut, fin)));
+            mecanicienCombo.setItems(FXCollections.observableArrayList(membreDao.getMembresDisponiblesParRolePourPeriode(RoleMembre.Mécanicien, debut, fin)));
+        } else {
+            piloteCombo.setItems(FXCollections.observableArrayList(membreDao.getMembresDisponiblesParRole(RoleMembre.Pilote)));
+            copiloteCombo.setItems(FXCollections.observableArrayList(membreDao.getMembresDisponiblesParRole(RoleMembre.Copilote)));
+            chefCabineCombo.setItems(FXCollections.observableArrayList(membreDao.getMembresDisponiblesParRole(RoleMembre.Chef_de_cabine)));
+            hotesseCombo.setItems(FXCollections.observableArrayList(membreDao.getMembresDisponiblesParRole(RoleMembre.Hôtesse)));
+            mecanicienCombo.setItems(FXCollections.observableArrayList(membreDao.getMembresDisponiblesParRole(RoleMembre.Mécanicien)));
+        }
     }
 
     @FXML
@@ -75,11 +110,29 @@ public class AjouterVolController {
                     mecanicienCombo.getValue()
             ));
 
+            // Vérifier la disponibilité des membres pour la période
+            LocalDateTime heureDepart = getHeureDepart();
+            LocalDateTime heureArrivee = getHeureArrivee();
+            if (heureDepart == null || heureArrivee == null) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Horaires manquants", "Veuillez spécifier les horaires de départ et d'arrivée.");
+                return;
+            }
+            if (heureArrivee.isBefore(heureDepart)) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Horaires invalides", "L'heure d'arrivée doit être postérieure à l'heure de départ.");
+                return;
+            }
+            if (!daoVol.canAddVolForMembres(idEquipage, heureDepart, heureArrivee)) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Conflit", "Un ou plusieurs membres ne sont pas disponibles pour cette période.");
+                return;
+            }
+
             Equipage nouvelEquipage = new Equipage(idEquipage, nomEquipage);
             vol vol = creerVol(nouvelEquipage);
             daoVol.insertVol(vol);
 
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Vol ajouté", "Le vol a été ajouté avec succès.");
+            // Rafraîchir les ComboBox après ajout
+            updateMembresDisponibles();
 
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Exception", "Une erreur est survenue : " + e.getMessage());
@@ -87,30 +140,53 @@ public class AjouterVolController {
         }
     }
 
+    private LocalDateTime getHeureDepart() {
+        if (heureDepartField.getValue() == null || heureDepartTimeField.getText().isEmpty()) return null;
+        try {
+            LocalDate dateDep = heureDepartField.getValue();
+            LocalTime timeDep = LocalTime.parse(heureDepartTimeField.getText());
+            return dateDep.atTime(timeDep);
+        } catch (DateTimeParseException e) {
+            return null; // Retourner null en cas de format invalide
+        }
+    }
+
+    private LocalDateTime getHeureArrivee() {
+        if (heureArriveeField.getValue() == null || heureArriveeTimeField.getText().isEmpty()) return null;
+        try {
+            LocalDate dateArr = heureArriveeField.getValue();
+            LocalTime timeArr = LocalTime.parse(heureArriveeTimeField.getText());
+            return dateArr.atTime(timeArr);
+        } catch (DateTimeParseException e) {
+            return null; // Retourner null en cas de format invalide
+        }
+    }
+
     private boolean validerChamps() {
-        return !(numVolField.getText().isEmpty() || destinationField.getText().isEmpty()
+        if (numVolField.getText().isEmpty() || destinationField.getText().isEmpty()
                 || heureDepartField.getValue() == null || heureArriveeField.getValue() == null
+                || heureDepartTimeField.getText().isEmpty() || heureArriveeTimeField.getText().isEmpty()
                 || typeTrajetCombo.getValue() == null || statutCombo.getValue() == null
                 || avionCombo.getValue() == null || piloteCombo.getValue() == null
                 || copiloteCombo.getValue() == null || chefCabineCombo.getValue() == null
-                || hotesseCombo.getValue() == null || mecanicienCombo.getValue() == null)
-                || showAlertError("Champs manquants", "Veuillez remplir tous les champs.");
+                || hotesseCombo.getValue() == null || mecanicienCombo.getValue() == null) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Champs manquants", "Veuillez remplir tous les champs.");
+            return false;
+        }
+        return true;
     }
 
     private vol creerVol(Equipage equipage) throws Exception {
-        LocalDate dateDep = heureDepartField.getValue();
-        LocalDate dateArr = heureArriveeField.getValue();
-        LocalTime timeDep = LocalTime.parse(heureDepartTimeField.getText());
-        LocalTime timeArr = LocalTime.parse(heureArriveeTimeField.getText());
-
-        java.util.Date fullDep = new java.util.Date(Date.valueOf(dateDep).getTime() + Time.valueOf(timeDep).getTime());
-        java.util.Date fullArr = new java.util.Date(Date.valueOf(dateArr).getTime() + Time.valueOf(timeArr).getTime());
-
+        LocalDateTime heureDepart = getHeureDepart();
+        LocalDateTime heureArrivee = getHeureArrivee();
+        if (heureDepart == null || heureArrivee == null) {
+            throw new IllegalArgumentException("Horaires de départ ou d'arrivée invalides");
+        }
         return new vol(
                 numVolField.getText(),
                 destinationField.getText(),
-                fullDep,
-                fullArr,
+                Timestamp.valueOf(heureDepart),
+                Timestamp.valueOf(heureArrivee),
                 typeTrajetCombo.getValue(),
                 statutCombo.getValue(),
                 avionCombo.getValue(),
@@ -149,11 +225,14 @@ public class AjouterVolController {
                 mecanicienCombo.getValue()
         );
 
-        if (membres.stream().anyMatch(m -> m == null)) return showAlertError("Sélection incomplète", "Veuillez sélectionner tous les membres.");
-        if (membres.stream().map(Membre::getId).distinct().count() < membres.size()) return showAlertError("Membres dupliqués", "Chaque membre doit être unique.");
-        if (membres.stream().anyMatch(m -> !m.isDisponible())) return showAlertError("Disponibilité", "Tous les membres doivent être disponibles.");
-
-        membreDao.mettreIndisponible(membres);
+        if (membres.stream().anyMatch(m -> m == null)) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Sélection incomplète", "Veuillez sélectionner tous les membres.");
+            return false;
+        }
+        if (membres.stream().map(Membre::getId).distinct().count() < membres.size()) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Membres dupliqués", "Chaque membre doit être unique.");
+            return false;
+        }
         return true;
     }
 }
