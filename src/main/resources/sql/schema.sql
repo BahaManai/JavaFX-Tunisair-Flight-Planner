@@ -96,3 +96,4 @@ ALTER TABLE Membre MODIFY role ENUM('Pilote', 'Copilote', 'Chef_de_cabine', 'Hô
 ALTER TABLE archiveVol
 ADD COLUMN avion_id INT,
 ADD COLUMN equipage_id INT;
+ALTER TABLE archiveAvion ADD COLUMN marque VARCHAR(100);

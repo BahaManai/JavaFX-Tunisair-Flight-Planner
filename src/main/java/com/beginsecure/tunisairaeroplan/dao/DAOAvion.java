@@ -5,6 +5,7 @@ import com.beginsecure.tunisairaeroplan.Model.enums.TypeTrajet;
 import com.beginsecure.tunisairaeroplan.utilites.LaConnexion;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -165,5 +166,41 @@ public class DAOAvion {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List<Avion> getAvionsDisponiblesPourPeriode(LocalDateTime debut, LocalDateTime fin) {
+        List<Avion> avions = new ArrayList<>();
+        String query = "SELECT a.* FROM Avion a " +
+                "WHERE a.estDisponible = TRUE " +
+                "AND a.id NOT IN (" +
+                "    SELECT v.avion_id FROM Vol v " +
+                "    WHERE v.statutVol != 'Annulé' " +
+                "    AND (? BETWEEN v.heure_depart AND v.heure_arrivee " +
+                "         OR ? BETWEEN v.heure_depart AND v.heure_arrivee " +
+                "         OR v.heure_depart BETWEEN ? AND ? " +
+                "         OR v.heure_arrivee BETWEEN ? AND ?)" +
+                ")";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setTimestamp(1, Timestamp.valueOf(debut));
+            pstmt.setTimestamp(2, Timestamp.valueOf(fin));
+            pstmt.setTimestamp(3, Timestamp.valueOf(debut));
+            pstmt.setTimestamp(4, Timestamp.valueOf(fin));
+            pstmt.setTimestamp(5, Timestamp.valueOf(debut));
+            pstmt.setTimestamp(6, Timestamp.valueOf(fin));
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Avion avion = new Avion();
+                avion.setId(rs.getInt("id"));
+                avion.setMarque(rs.getString("marque"));
+                avion.setModele(rs.getString("modele"));
+                avion.setCapacite(rs.getInt("capacite"));
+                avion.setEstDisponible(rs.getBoolean("estDisponible"));
+                avion.setTypeTrajet(TypeTrajet.valueOf(rs.getString("type_trajet")));
+                avions.add(avion);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return avions;
     }
 }

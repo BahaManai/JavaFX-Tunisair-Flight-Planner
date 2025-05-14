@@ -45,22 +45,21 @@ public class AjouterVolController {
 
             typeTrajetCombo.setItems(FXCollections.observableArrayList(TypeTrajet.values()));
             statutCombo.setItems(FXCollections.observableArrayList(StatutVol.values()));
-            chargerAvionsDisponibles();
-            // Charger les membres par défaut (sans période spécifiée)
-            chargerMembresParRole(null, null);
+            chargerAvionsDisponibles(null, null); // Charger tous les avions disponibles par défaut
+            chargerMembresParRole(null, null); // Charger les membres par défaut
 
-            // Ajouter des écouteurs pour rafraîchir les membres lorsque les horaires changent
-            heureDepartField.valueProperty().addListener((obs, oldVal, newVal) -> updateMembresDisponibles());
-            heureArriveeField.valueProperty().addListener((obs, oldVal, newVal) -> updateMembresDisponibles());
-            heureDepartTimeField.textProperty().addListener((obs, oldVal, newVal) -> updateMembresDisponibles());
-            heureArriveeTimeField.textProperty().addListener((obs, oldVal, newVal) -> updateMembresDisponibles());
+            // Ajouter des écouteurs pour rafraîchir les avions et membres lorsque les horaires changent
+            heureDepartField.valueProperty().addListener((obs, oldVal, newVal) -> updateDisponibilites());
+            heureArriveeField.valueProperty().addListener((obs, oldVal, newVal) -> updateDisponibilites());
+            heureDepartTimeField.textProperty().addListener((obs, oldVal, newVal) -> updateDisponibilites());
+            heureArriveeTimeField.textProperty().addListener((obs, oldVal, newVal) -> updateDisponibilites());
 
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Connexion", "Impossible d'établir la connexion à la base de données : " + e.getMessage());
         }
     }
 
-    private void updateMembresDisponibles() {
+    private void updateDisponibilites() {
         try {
             LocalDateTime heureDepart = getHeureDepart();
             LocalDateTime heureArrivee = getHeureArrivee();
@@ -69,14 +68,16 @@ public class AjouterVolController {
                     showAlert(Alert.AlertType.WARNING, "Avertissement", "Horaires invalides", "L'heure d'arrivée doit être postérieure à l'heure de départ.");
                     return;
                 }
+                chargerAvionsDisponibles(heureDepart, heureArrivee);
                 chargerMembresParRole(heureDepart, heureArrivee);
             } else {
-                chargerMembresParRole(null, null); // Charger tous les membres si les horaires ne sont pas encore saisis
+                chargerAvionsDisponibles(null, null);
+                chargerMembresParRole(null, null);
             }
         } catch (DateTimeParseException e) {
             // Ignorer les erreurs de format d'heure temporairement
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Mise à jour des membres", "Erreur lors de la mise à jour des membres : " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Mise à jour des disponibilités", "Erreur lors de la mise à jour des disponibilités : " + e.getMessage());
         }
     }
 
@@ -96,6 +97,20 @@ public class AjouterVolController {
         }
     }
 
+    private void chargerAvionsDisponibles(LocalDateTime debut, LocalDateTime fin) {
+        try {
+            List<Avion> avions;
+            if (debut != null && fin != null) {
+                avions = daoAvion.getAvionsDisponiblesPourPeriode(debut, fin);
+            } else {
+                avions = daoAvion.getAvionsDisponibles();
+            }
+            Platform.runLater(() -> avionCombo.setItems(FXCollections.observableArrayList(avions)));
+        } catch (Exception e) {
+            Platform.runLater(() -> showAlert(Alert.AlertType.ERROR, "Erreur", "Chargement avions", e.getMessage()));
+        }
+    }
+
     @FXML
     public void ajouterVol() {
         try {
@@ -110,7 +125,7 @@ public class AjouterVolController {
                     mecanicienCombo.getValue()
             ));
 
-            // Vérifier la disponibilité des membres pour la période
+            // Vérifier la disponibilité des membres et de l'avion
             LocalDateTime heureDepart = getHeureDepart();
             LocalDateTime heureArrivee = getHeureArrivee();
             if (heureDepart == null || heureArrivee == null) {
@@ -122,7 +137,11 @@ public class AjouterVolController {
                 return;
             }
             if (!daoVol.canAddVolForMembres(idEquipage, heureDepart, heureArrivee)) {
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Conflit", "Un ou plusieurs membres ne sont pas disponibles pour cette période.");
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Conflit membres", "Un ou plusieurs membres ne sont pas disponibles pour cette période.");
+                return;
+            }
+            if (!daoVol.canAddVolForAvion(avionCombo.getValue().getId(), heureDepart, heureArrivee)) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Conflit avion", "L'avion sélectionné n'est pas disponible pour cette période.");
                 return;
             }
 
@@ -132,7 +151,7 @@ public class AjouterVolController {
 
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Vol ajouté", "Le vol a été ajouté avec succès.");
             // Rafraîchir les ComboBox après ajout
-            updateMembresDisponibles();
+            updateDisponibilites();
 
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Exception", "Une erreur est survenue : " + e.getMessage());
@@ -192,15 +211,6 @@ public class AjouterVolController {
                 avionCombo.getValue(),
                 equipage
         );
-    }
-
-    private void chargerAvionsDisponibles() {
-        try {
-            List<Avion> avions = daoAvion.getAvionsDisponibles();
-            Platform.runLater(() -> avionCombo.setItems(FXCollections.observableArrayList(avions)));
-        } catch (Exception e) {
-            Platform.runLater(() -> showAlert(Alert.AlertType.ERROR, "Erreur", "Chargement avions", e.getMessage()));
-        }
     }
 
     private boolean showAlertError(String header, String content) {

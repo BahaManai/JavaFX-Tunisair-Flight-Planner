@@ -212,13 +212,41 @@ public class volDao {
         String sql = "SELECT COUNT(*) FROM vol v " +
                 "JOIN equipage_membre em ON v.equipage_id = em.equipage_id " +
                 "JOIN membre m ON em.membre_id = m.id " +
-                "WHERE em.equipage_id = ? AND (m.estDisponible = FALSE OR v.statutVol != 'Annulé' " +
+                "WHERE em.equipage_id = ? AND v.statutVol != 'Annulé' " +
+                "AND m.estDisponible = TRUE " +
                 "AND (? BETWEEN v.heure_depart AND v.heure_arrivee " +
                 "     OR ? BETWEEN v.heure_depart AND v.heure_arrivee " +
                 "     OR v.heure_depart BETWEEN ? AND ? " +
-                "     OR v.heure_arrivee BETWEEN ? AND ?))";
+                "     OR v.heure_arrivee BETWEEN ? AND ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, equipageId);
+            stmt.setTimestamp(2, Timestamp.valueOf(heureDepart));
+            stmt.setTimestamp(3, Timestamp.valueOf(heureArrivee));
+            stmt.setTimestamp(4, Timestamp.valueOf(heureDepart));
+            stmt.setTimestamp(5, Timestamp.valueOf(heureArrivee));
+            stmt.setTimestamp(6, Timestamp.valueOf(heureDepart));
+            stmt.setTimestamp(7, Timestamp.valueOf(heureArrivee));
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) == 0; // Retourne true si aucun conflit
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean canAddVolForAvion(int avionId, LocalDateTime heureDepart, LocalDateTime heureArrivee) {
+        String sql = "SELECT COUNT(*) FROM Vol v " +
+                "JOIN Avion a ON v.avion_id = a.id " +
+                "WHERE v.avion_id = ? AND v.statutVol != 'Annulé' " +
+                "AND a.estDisponible = TRUE " +
+                "AND (? BETWEEN v.heure_depart AND v.heure_arrivee " +
+                "     OR ? BETWEEN v.heure_depart AND v.heure_arrivee " +
+                "     OR v.heure_depart BETWEEN ? AND ? " +
+                "     OR v.heure_arrivee BETWEEN ? AND ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, avionId);
             stmt.setTimestamp(2, Timestamp.valueOf(heureDepart));
             stmt.setTimestamp(3, Timestamp.valueOf(heureArrivee));
             stmt.setTimestamp(4, Timestamp.valueOf(heureDepart));
