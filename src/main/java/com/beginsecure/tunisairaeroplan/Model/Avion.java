@@ -38,6 +38,6 @@ public class Avion {
 
     @Override
     public String toString() {
-        return modele + " (" + capacite + " places)";
+        return marque + " "+ modele + " (" + capacite + " places)";
     }
 }
