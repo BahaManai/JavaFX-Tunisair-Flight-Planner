@@ -6,11 +6,12 @@
 
 <?import javafx.scene.control.Button?>
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.beginsecure.tunisairaeroplan.HelloController">
+      fx:controller="com.beginsecure.tunisairaeroplan.HelloController"
+      styleClass="bootstrapfx">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
+    <Label fx:id="welcomeText" text="Bienvenue !" styleClass="label label-success"/>
+    <Button text="Hello!" onAction="#onHelloButtonClick" styleClass="btn btn-primary"/>
 </VBox>

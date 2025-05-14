@@ -42,6 +42,12 @@ public class MainController {
     }
 
     @FXML
+    public void showEquipages() {
+        loadPage("ListeEquipages.fxml");
+    }
+
+
+    @FXML
     private void showMembres() {
         loadPage("FXMLMembre.fxml");
     }

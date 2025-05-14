@@ -34,7 +34,21 @@
                         </graphic>
                     </Button>
 
-                    <Button text="Pilotes - Equipages" onAction="#showMembres"
+                    <Button text="Planification des Vols" onAction="#showPlanificationVols"
+                            styleClass="btn btn-outline-light text-start w-100 mb-2">
+                        <graphic>
+                            <FontIcon iconLiteral="fas-calendar-alt" styleClass="me-2"/>
+                        </graphic>
+                    </Button>
+
+                    <Button text="Équipages" onAction="#showEquipages"
+                            styleClass="btn btn-outline-light text-start w-100 mb-2">
+                        <graphic>
+                            <FontIcon iconLiteral="fas-users-cog" styleClass="me-2"/>
+                        </graphic>
+                    </Button>
+
+                    <Button text="Pilotes - Membres" onAction="#showMembres"
                             styleClass="btn btn-outline-light text-start w-100 mb-2">
                         <graphic>
                             <FontIcon iconLiteral="fas-users" styleClass="me-2"/>
@@ -48,27 +62,13 @@
                         </graphic>
                     </Button>
 
-                    <Button text="Planification des Vols" onAction="#showPlanificationVols"
-                            styleClass="btn btn-outline-light text-start w-100 mb-2">
-                        <graphic>
-                            <FontIcon iconLiteral="fas-calendar-alt" styleClass="me-2"/>
-                        </graphic>
-                    </Button>
-
-                    <Button text="Disponibilités" onAction="#showParametres"
-                            styleClass="btn btn-outline-light text-start w-100 mb-2">
-                        <graphic>
-                            <FontIcon iconLiteral="fas-sliders-h" styleClass="me-2"/>
-                        </graphic>
-                    </Button>
-
-                    <Button text="Archives" onAction="#showArchives"
+                    <Button text="Vols archivés" onAction="#showArchives"
                             styleClass="btn btn-outline-light text-start w-100 mb-2">
                         <graphic>
                             <FontIcon iconLiteral="fas-archive" styleClass="me-2"/>
                         </graphic>
                     </Button>
-                    <Button text="Liste Attente" onAction="#showListeAttente"
+                    <Button text="Liste d'attente" onAction="#showListeAttente"
                             styleClass="btn btn-outline-light text-start w-100 mb-2">
                         <graphic>
                             <FontIcon iconLiteral="fas-archive" styleClass="me-2"/>

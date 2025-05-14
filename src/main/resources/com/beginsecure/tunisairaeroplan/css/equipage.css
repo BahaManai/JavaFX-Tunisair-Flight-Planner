@@ -1,0 +1,17 @@
+.title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0d47a1;
+}
+
+.table-view {
+    -fx-border-color: #ccc;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px;
+}
+
+.message {
+    -fx-text-fill: #666;
+    -fx-font-style: italic;
+}

@@ -1,15 +1,29 @@
+// AuthController.java
 package com.beginsecure.tunisairaeroplan.Controller;
 
 import com.beginsecure.tunisairaeroplan.Model.User;
 import com.beginsecure.tunisairaeroplan.Services.AuthService;
 import com.beginsecure.tunisairaeroplan.utilites.MainApp;
 import com.beginsecure.tunisairaeroplan.utilites.testRegistration;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
+import javafx.scene.shape.Circle;
+import javafx.util.Duration;
+
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class AuthController implements Initializable {
@@ -21,12 +35,35 @@ public class AuthController implements Initializable {
     @FXML private Button loginButton;
     @FXML private Button registerButton;
     @FXML private Button forgotPasswordBtn;
+    @FXML private StackPane rootVBox;
+    @FXML private Pane particlePane;
+
+    private final List<Stop[]> gradientPhases = List.of(
+            new Stop[]{new Stop(0, Color.web("#3498db")), new Stop(1, Color.web("#8e44ad"))},
+            new Stop[]{new Stop(0, Color.web("#8e44ad")), new Stop(1, Color.web("#1abc9c"))},
+            new Stop[]{new Stop(0, Color.web("#1abc9c")), new Stop(1, Color.web("#f39c12"))},
+            new Stop[]{new Stop(0, Color.web("#f39c12")), new Stop(1, Color.web("#3498db"))}
+    );
+
+    private int currentIndex = 0;
     private AuthService authService;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         authService = new AuthService();
         setupEventHandlers();
+
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.seconds(0), e -> updateBackground()),
+                new KeyFrame(Duration.seconds(5))
+        );
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+
+        particlePane.layoutBoundsProperty().addListener((obs, oldVal, newVal) -> {
+            particlePane.getChildren().clear();
+            generateParticles(40);
+        });
     }
 
     private void handleLogin() {
@@ -56,9 +93,7 @@ public class AuthController implements Initializable {
     }
 
     private void setupEventHandlers() {
-        loginButton.setOnAction(event -> {
-            handleLogin();
-        });
+        loginButton.setOnAction(event -> handleLogin());
         registerButton.setOnAction(event -> {
             try {
                 testRegistration.showRegistrationForm();
@@ -67,13 +102,39 @@ public class AuthController implements Initializable {
                 e.printStackTrace();
             }
         });
-        forgotPasswordBtn.setOnAction(event -> {
-            showError("Fonctionnalité non implémentée");
-        });
+        forgotPasswordBtn.setOnAction(event -> showError("Fonctionnalité non implémentée"));
     }
 
     private void showError(String message) {
         errorLabel.setText(message);
         errorLabel.setVisible(true);
+    }
+
+    private void updateBackground() {
+        Stop[] stops = gradientPhases.get(currentIndex);
+        BackgroundFill bgFill = new BackgroundFill(
+                new LinearGradient(0, 0, 1, 1, true, CycleMethod.NO_CYCLE, stops),
+                CornerRadii.EMPTY,
+                Insets.EMPTY
+        );
+        rootVBox.setBackground(new Background(bgFill));
+        currentIndex = (currentIndex + 1) % gradientPhases.size();
+    }
+
+    private void generateParticles(int count) {
+        for (int i = 0; i < count; i++) {
+            Circle circle = new Circle(Math.random() * 3 + 1, Color.rgb(255, 255, 255, 0.2));
+            circle.setLayoutX(Math.random() * particlePane.getWidth());
+            circle.setLayoutY(particlePane.getHeight() + Math.random() * 100);
+
+            particlePane.getChildren().add(circle);
+
+            TranslateTransition animation = new TranslateTransition(Duration.seconds(10 + Math.random() * 10), circle);
+            animation.setFromY(0);
+            animation.setToY(-particlePane.getHeight() - 100);
+            animation.setCycleCount(Animation.INDEFINITE);
+            animation.setDelay(Duration.seconds(Math.random() * 5));
+            animation.play();
+        }
     }
 }

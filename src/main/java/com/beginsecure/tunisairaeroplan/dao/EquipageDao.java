@@ -2,8 +2,10 @@ package com.beginsecure.tunisairaeroplan.dao;
 
 import com.beginsecure.tunisairaeroplan.Model.Equipage;
 import com.beginsecure.tunisairaeroplan.Model.Membre;
+import com.beginsecure.tunisairaeroplan.Model.enums.RoleMembre;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EquipageDao {
@@ -80,4 +82,66 @@ public class EquipageDao {
         }
         return null;
     }
+
+    public List<Equipage> getAllEquipagesAvecVol() {
+        List<Equipage> equipages = new ArrayList<>();
+        String sql = """
+        SELECT e.id AS equipage_id, e.nomEquipage,
+               v.numVol, v.heure_depart, v.heure_arrivee
+        FROM equipage e
+        JOIN vol v ON v.equipage_id = e.id
+    """;
+
+        try (PreparedStatement pst = connection.prepareStatement(sql);
+             ResultSet rs = pst.executeQuery()) {
+
+            while (rs.next()) {
+                Equipage e = new Equipage(
+                        rs.getInt("equipage_id"),
+                        rs.getString("nomEquipage")
+                );
+                e.setNumeroVol(rs.getString("numVol"));
+                e.setHeureDepart(rs.getTimestamp("heure_depart").toLocalDateTime());
+                e.setHeureArrivee(rs.getTimestamp("heure_arrivee").toLocalDateTime());
+                equipages.add(e);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erreur getAllEquipagesAvecVol : " + e.getMessage());
+        }
+
+        return equipages;
+    }
+
+    public List<Membre> getMembresByEquipageId(int equipageId) {
+        List<Membre> membres = new ArrayList<>();
+        String sql = """
+        SELECT m.* FROM membre m
+        JOIN equipage_membre em ON m.id = em.membre_id
+        WHERE em.equipage_id = ?
+    """;
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {
+            pst.setInt(1, equipageId);
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                RoleMembre role = RoleMembre.valueOf(rs.getString("role"));
+                Membre m = new Membre(
+                        rs.getInt("id"),
+                        rs.getString("cin"),
+                        rs.getString("nom"),
+                        rs.getString("prenom"),
+                        role,
+                        rs.getBoolean("estDisponible")
+                );
+                membres.add(m);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erreur getMembresByEquipageId : " + e.getMessage());
+        }
+
+        return membres;
+    }
+
 }

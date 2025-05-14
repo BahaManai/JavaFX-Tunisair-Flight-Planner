@@ -14,6 +14,8 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         MainApp.primaryStage = primaryStage;
+        primaryStage.setMinWidth(800); // Largeur minimale pour éviter les problèmes de responsivité
+        primaryStage.setMinHeight(600); // Hauteur minimale
         showAccueil();
         primaryStage.show();
     }

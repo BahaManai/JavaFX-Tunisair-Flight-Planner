@@ -1,5 +1,6 @@
 package com.beginsecure.tunisairaeroplan.Model;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Scanner;
 
@@ -7,6 +8,9 @@ public class Equipage {
     private int id;
     private String nomEquipage;
     private HashSet<Membre> membres;
+    private String numeroVol;
+    private LocalDateTime heureDepart;
+    private LocalDateTime heureArrivee;
 
     public Equipage() {
         this.membres = new HashSet<>();
@@ -77,5 +81,28 @@ public class Equipage {
         this.nomEquipage = nomEquipage;
     }
 
+    public LocalDateTime getHeureDepart() {
+        return heureDepart;
+    }
+
+    public void setHeureDepart(LocalDateTime heureDepart) {
+        this.heureDepart = heureDepart;
+    }
+
+    public LocalDateTime getHeureArrivee() {
+        return heureArrivee;
+    }
+
+    public void setHeureArrivee(LocalDateTime heureArrivee) {
+        this.heureArrivee = heureArrivee;
+    }
+
+    public String getNumeroVol() {
+        return numeroVol;
+    }
+
+    public void setNumeroVol(String numeroVol) {
+        this.numeroVol = numeroVol;
+    }
 }
 

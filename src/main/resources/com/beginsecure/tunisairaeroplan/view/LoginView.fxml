@@ -2,40 +2,60 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.*?>
 
-<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
-      spacing="20" alignment="CENTER" style="-fx-padding: 30; -fx-background-color: #f5f5f5;"    fx:controller="com.beginsecure.tunisairaeroplan.Controller.AuthController">
+<StackPane fx:id="rootVBox"
+           xmlns="http://javafx.com/javafx/8.0.171"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.beginsecure.tunisairaeroplan.Controller.AuthController"
+           style="-fx-background-color: linear-gradient(to bottom right, #3498db, #8e44ad); -fx-padding: 50;">
 
+    <!-- Pane pour les particules -->
+    <Pane fx:id="particlePane" pickOnBounds="false" style="-fx-background-color: transparent;" />
 
+    <!-- Container avec fond blanc -->
+    <VBox fx:id="loginCard"
+          alignment="CENTER"
+          spacing="20"
+          StackPane.alignment="CENTER"
+          prefWidth="450"
+          maxWidth="450"
+          prefHeight="500"
+          maxHeight="500"
+          style="-fx-background-color: white; -fx-padding: 30; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 15, 0, 0, 5);">
 
-    <Text text="Connexion Tunisair" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-fill: #0066cc;"/>
+        <Text text="Connexion Tunisair" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-fill: #0066cc;" />
 
-    <GridPane hgap="10" vgap="15" style="-fx-padding: 20;">
-        <Label text="Email professionnel:" style="-fx-font-weight: bold;" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-        <TextField fx:id="emailField" promptText="votre@email.tunisair.com" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        <GridPane hgap="10" vgap="15">
+            <Label text="Email professionnel:" style="-fx-font-weight: bold;" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="emailField" promptText="votre@email.tunisair.com" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-        <Label text="Mot de passe:" style="-fx-font-weight: bold;" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-        <PasswordField fx:id="passwordField" promptText="Entrez votre mot de passe" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+            <Label text="Mot de passe:" style="-fx-font-weight: bold;" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <PasswordField fx:id="passwordField" promptText="Entrez votre mot de passe" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-        <HBox spacing="10" alignment="CENTER_RIGHT" GridPane.rowIndex="2" GridPane.columnIndex="1">
-            <CheckBox fx:id="rememberMeCheck" text="Se souvenir de moi" style="-fx-font-size: 12px;"/>
-            <Button fx:id="forgotPasswordBtn" text="Mot de passe oublié?" style="-fx-font-size: 12px; -fx-background-color: transparent; -fx-text-fill: #0066cc; -fx-underline: true; -fx-padding: 0;"/>
+            <HBox spacing="10" alignment="CENTER_RIGHT" GridPane.rowIndex="2" GridPane.columnIndex="1">
+                <CheckBox fx:id="rememberMeCheck" text="Se souvenir de moi" style="-fx-font-size: 12px;"/>
+                <Button fx:id="forgotPasswordBtn" text="Mot de passe oublié?" style="-fx-font-size: 12px; -fx-background-color: transparent; -fx-text-fill: #0066cc; -fx-underline: true; -fx-padding: 0;"/>
+            </HBox>
+        </GridPane>
+
+        <Button fx:id="loginButton" text="Se connecter"
+                style="-fx-background-color: #0066cc; -fx-text-fill: white; -fx-font-weight: bold; -fx-pref-width: 200; -fx-pref-height: 35;"/>
+
+        <Label fx:id="errorLabel" style="-fx-text-fill: red; -fx-font-weight: bold;" visible="false" wrapText="true" maxWidth="300"/>
+
+        <Separator />
+
+        <HBox spacing="5" alignment="CENTER">
+            <Label text="Nouveau employé?" style="-fx-text-fill: #666;"/>
+            <Button fx:id="registerButton" text="Créer un compte"
+                    style="-fx-background-color: transparent; -fx-text-fill: #0066cc; -fx-underline: true; -fx-padding: 0;"/>
         </HBox>
-    </GridPane>
 
-    <Button fx:id="loginButton" text="Se connecter" style="-fx-background-color: #0066cc; -fx-text-fill: white; -fx-font-weight: bold; -fx-pref-width: 200; -fx-pref-height: 35;"/>
-
-    <Label fx:id="errorLabel" style="-fx-text-fill: red; -fx-font-weight: bold;" visible="false" wrapText="true" maxWidth="300"/>
-
-    <Separator style="-fx-padding: 10 0 10 0;"/>
-
-    <HBox spacing="5" alignment="CENTER">
-        <Label text="Nouveau employé?" style="-fx-text-fill: #666;"/>
-        <Button fx:id="registerButton" text="Créer un compte" style="-fx-background-color: transparent; -fx-text-fill: #0066cc; -fx-underline: true; -fx-padding: 0;"/>
-    </HBox>
-
-    <Label text="Développé par Ferchichi Molka et Mannai Baha Eddine" style="-fx-text-fill: #999; -fx-font-size: 10px;"/>
-    <Label text="Version 1.0.0 © Tunisair 2025" style="-fx-text-fill: #999; -fx-font-size: 10px;"/>
-
-</VBox>
+        <Label text="Développé par Ferchichi Molka et Mannai Baha Eddine"
+               style="-fx-text-fill: #999; -fx-font-size: 10px;"/>
+        <Label text="Version 1.0.0 © Tunisair 2025"
+               style="-fx-text-fill: #999; -fx-font-size: 10px;"/>
+    </VBox>
+</StackPane>
