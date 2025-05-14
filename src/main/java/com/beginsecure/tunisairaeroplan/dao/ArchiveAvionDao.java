@@ -11,7 +11,6 @@ public class ArchiveAvionDao {
 
     private Connection connection;
 
-    // Constructeur avec connexion obligatoire
     public ArchiveAvionDao(Connection connection) {
         this.connection = connection;
     }
@@ -28,7 +27,7 @@ public class ArchiveAvionDao {
     }
 
     public boolean restaurerAvion(Avion avion) {
-        String insertQuery = "INSERT INTO Avion (id, modele, capacite, estDisponible, type_trajet, marque) VALUES (?, ?, ?, ?, ?, ?)";
+        String insertQuery = "INSERT INTO Avion (id, modele, capacite, estDisponible, marque) VALUES (?, ?,  ?, ?, ?)";
         String deleteQuery = "DELETE FROM ArchiveAvion WHERE id = ?";
 
         try {
@@ -39,8 +38,7 @@ public class ArchiveAvionDao {
                 insertStmt.setString(2, avion.getModele());
                 insertStmt.setInt(3, avion.getCapacite());
                 insertStmt.setBoolean(4, avion.isEstDisponible());
-                insertStmt.setString(5, avion.getTypeTrajet().name());
-                insertStmt.setString(6, avion.getMarque());
+                insertStmt.setString(5, avion.getMarque());
                 insertStmt.executeUpdate();
             }
 
@@ -83,7 +81,6 @@ public class ArchiveAvionDao {
                 avion.setModele(rs.getString("modele"));
                 avion.setCapacite(rs.getInt("capacite"));
                 avion.setEstDisponible(rs.getBoolean("estDisponible"));
-                avion.setTypeTrajet(TypeTrajet.valueOf(rs.getString("type_trajet")));
                 avions.add(avion);
             }
         } catch (SQLException e) {

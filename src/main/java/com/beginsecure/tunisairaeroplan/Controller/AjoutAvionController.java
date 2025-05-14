@@ -18,7 +18,6 @@ public class AjoutAvionController {
     @FXML private CheckBox cbDisponible;
     @FXML private ComboBox<String> cbMarque;
     @FXML private ComboBox<String> cbModele;
-    @FXML private ComboBox<TypeTrajet> cbTypeTrajet;
 
     private Map<String, Map<String, Integer>> avionsDisponibles = new HashMap<>();
     private DAOAvion daoAvion;
@@ -32,8 +31,6 @@ public class AjoutAvionController {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de se connecter à la base de données.");
             return;
         }
-
-        cbTypeTrajet.getItems().setAll(TypeTrajet.values());
 
         Map<String, Integer> airbus = Map.of("A320", 180, "A330", 277, "A350", 300);
         Map<String, Integer> boeing = Map.of("737", 160, "787", 242, "777", 396);
@@ -68,13 +65,35 @@ public class AjoutAvionController {
 
     @FXML
     private void handleAjouter() {
+        // Vérification des champs vides
+        if (cbMarque.getValue() == null || cbMarque.getValue().isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez sélectionner une marque");
+            return;
+        }
+
+        if (cbModele.getValue() == null || cbModele.getValue().isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez sélectionner un modèle");
+            return;
+        }
+
+        if (tfCapacite.getText() == null || tfCapacite.getText().trim().isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez entrer une capacité");
+            return;
+        }
+
         try {
+            // Vérification que la capacité est un nombre valide
+            int capacite = Integer.parseInt(tfCapacite.getText());
+            if (capacite <= 0) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "La capacité doit être un nombre positif");
+                return;
+            }
+
             Avion avion = new Avion();
             avion.setMarque(cbMarque.getValue());
             avion.setModele(cbModele.getValue());
-            avion.setCapacite(Integer.parseInt(tfCapacite.getText()));
+            avion.setCapacite(capacite);
             avion.setEstDisponible(cbDisponible.isSelected());
-            avion.setTypeTrajet(cbTypeTrajet.getValue());
 
             if (daoAvion.addAvion(avion)) {
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Avion ajouté avec succès");
@@ -98,7 +117,6 @@ public class AjoutAvionController {
         cbModele.getItems().clear();
         tfCapacite.clear();
         cbDisponible.setSelected(true);
-        cbTypeTrajet.getSelectionModel().clearSelection();
     }
 
     private void showAlert(Alert.AlertType type, String title, String message) {

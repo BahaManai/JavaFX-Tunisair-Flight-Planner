@@ -12,8 +12,14 @@ import com.beginsecure.tunisairaeroplan.utilites.LaConnexion;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
+
+import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -29,12 +35,26 @@ public class AjouterVolController {
     @FXML private ComboBox<StatutVol> statutCombo;
     @FXML private ComboBox<Avion> avionCombo;
     @FXML private ComboBox<Membre> piloteCombo, copiloteCombo, chefCabineCombo, hotesseCombo, mecanicienCombo;
-
+    @FXML private ComboBox<String> paysOrigineCombo;
+    @FXML private ComboBox<String> aeroportOrigineCombo;
+    @FXML private ComboBox<String> paysDestinationCombo;
+    @FXML private ComboBox<String> aeroportDestinationCombo;
     private Connection connection;
     private DAOAvion daoAvion;
     private volDao daoVol;
     private EquipageDao equipageDao;
-
+    private void genererNumeroVol() {
+        try {
+            int dernierNumero = daoVol.getDernierNumeroVol();
+            int nouveauNumero = dernierNumero + 1;
+            numVolField.setText("vol " + nouveauNumero);
+            numVolField.setEditable(false);
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Numéro de vol", "Impossible de générer le numéro de vol : " + e.getMessage());
+            numVolField.setText("vol 1");
+            numVolField.setEditable(false);
+        }
+    }
     @FXML
     public void initialize() {
         try {
@@ -42,19 +62,33 @@ public class AjouterVolController {
             daoAvion = new DAOAvion(connection);
             daoVol = new volDao(connection);
             equipageDao = new EquipageDao(connection);
-
+            genererNumeroVol();
             typeTrajetCombo.setItems(FXCollections.observableArrayList(TypeTrajet.values()));
             statutCombo.setItems(FXCollections.observableArrayList(StatutVol.values()));
             chargerAvionsDisponibles();
-            // Charger les membres par défaut (sans période spécifiée)
             chargerMembresParRole(null, null);
-
-            // Ajouter des écouteurs pour rafraîchir les membres lorsque les horaires changent
             heureDepartField.valueProperty().addListener((obs, oldVal, newVal) -> updateMembresDisponibles());
             heureArriveeField.valueProperty().addListener((obs, oldVal, newVal) -> updateMembresDisponibles());
             heureDepartTimeField.textProperty().addListener((obs, oldVal, newVal) -> updateMembresDisponibles());
             heureArriveeTimeField.textProperty().addListener((obs, oldVal, newVal) -> updateMembresDisponibles());
-
+            paysOrigineCombo.setItems(FXCollections.observableArrayList(LocationData.getCountries()));
+            paysDestinationCombo.setItems(FXCollections.observableArrayList(LocationData.getCountries()));
+            paysOrigineCombo.valueProperty().addListener((obs, oldVal, newVal) -> {
+                aeroportOrigineCombo.getItems().clear();
+                if (newVal != null) {
+                    aeroportOrigineCombo.setItems(FXCollections.observableArrayList(
+                            LocationData.getAirportsForCountry(newVal))
+                    );
+                }
+            });
+            paysDestinationCombo.valueProperty().addListener((obs, oldVal, newVal) -> {
+                aeroportDestinationCombo.getItems().clear();
+                if (newVal != null) {
+                    aeroportDestinationCombo.setItems(FXCollections.observableArrayList(
+                            LocationData.getAirportsForCountry(newVal))
+                    );
+                }
+            });
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Connexion", "Impossible d'établir la connexion à la base de données : " + e.getMessage());
         }
@@ -71,10 +105,9 @@ public class AjouterVolController {
                 }
                 chargerMembresParRole(heureDepart, heureArrivee);
             } else {
-                chargerMembresParRole(null, null); // Charger tous les membres si les horaires ne sont pas encore saisis
+                chargerMembresParRole(null, null);
             }
         } catch (DateTimeParseException e) {
-            // Ignorer les erreurs de format d'heure temporairement
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Mise à jour des membres", "Erreur lors de la mise à jour des membres : " + e.getMessage());
         }
@@ -158,7 +191,7 @@ public class AjouterVolController {
             LocalTime timeArr = LocalTime.parse(heureArriveeTimeField.getText());
             return dateArr.atTime(timeArr);
         } catch (DateTimeParseException e) {
-            return null; // Retourner null en cas de format invalide
+            return null;
         }
     }
 
@@ -167,7 +200,8 @@ public class AjouterVolController {
                 || heureDepartField.getValue() == null || heureArriveeField.getValue() == null
                 || heureDepartTimeField.getText().isEmpty() || heureArriveeTimeField.getText().isEmpty()
                 || typeTrajetCombo.getValue() == null || statutCombo.getValue() == null
-                || avionCombo.getValue() == null || piloteCombo.getValue() == null
+                || avionCombo.getValue() == null || piloteCombo.getValue() == null  || aeroportOrigineCombo.getValue() == null
+                || aeroportDestinationCombo.getValue() == null
                 || copiloteCombo.getValue() == null || chefCabineCombo.getValue() == null
                 || hotesseCombo.getValue() == null || mecanicienCombo.getValue() == null) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Champs manquants", "Veuillez remplir tous les champs.");
@@ -175,16 +209,17 @@ public class AjouterVolController {
         }
         return true;
     }
-
     private vol creerVol(Equipage equipage) throws Exception {
         LocalDateTime heureDepart = getHeureDepart();
         LocalDateTime heureArrivee = getHeureArrivee();
         if (heureDepart == null || heureArrivee == null) {
             throw new IllegalArgumentException("Horaires de départ ou d'arrivée invalides");
         }
+
         return new vol(
                 numVolField.getText(),
-                destinationField.getText(),
+                aeroportOrigineCombo.getValue(),  // Origine
+                aeroportDestinationCombo.getValue(),  // Destination
                 Timestamp.valueOf(heureDepart),
                 Timestamp.valueOf(heureArrivee),
                 typeTrajetCombo.getValue(),
@@ -202,8 +237,31 @@ public class AjouterVolController {
             Platform.runLater(() -> showAlert(Alert.AlertType.ERROR, "Erreur", "Chargement avions", e.getMessage()));
         }
     }
+    private boolean validerDates(LocalDateTime depart, LocalDateTime arrivee) {
+        if (depart == null || arrivee == null) {
+            return false;
+        }
+        if (arrivee.isBefore(depart)) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de date", "Validation des dates",
+                    "La date d'arrivée doit être postérieure à la date de départ");
+            return false;
+        }
+        if (depart.isBefore(LocalDateTime.now())) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de date", "Validation des dates",
+                    "La date de départ ne peut pas être dans le passé");
+            return false;
+        }
+        long dureeHeures = java.time.Duration.between(depart, arrivee).toHours();
+        if (dureeHeures > 24) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de durée", "Validation de la durée",
+                    "La durée du vol ne peut pas dépasser 24 heures");
+            return false;
+        }
 
-    private boolean showAlertError(String header, String content) {
+        return true;
+    }
+
+  private boolean showAlertError(String header, String content) {
         showAlert(Alert.AlertType.ERROR, "Erreur", header, content);
         return false;
     }
@@ -215,7 +273,20 @@ public class AjouterVolController {
         alert.setContentText(content);
         alert.showAndWait();
     }
+    @FXML
+    private void retourListeVols() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/beginsecure/tunisairaeroplan/View/liste_vol.fxml"));
+            Node listeVolView = loader.load();
 
+            StackPane contentPane = (StackPane) numVolField.getScene().lookup("#contentPane");
+            if (contentPane != null) {
+                contentPane.getChildren().setAll(listeVolView);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     private boolean validerMembresEquipage() {
         List<Membre> membres = List.of(
                 piloteCombo.getValue(),
@@ -235,4 +306,5 @@ public class AjouterVolController {
         }
         return true;
     }
+
 }

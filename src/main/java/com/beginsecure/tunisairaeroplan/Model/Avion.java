@@ -8,16 +8,14 @@ public class Avion {
     private String modele;
     private int capacite;
     private boolean estDisponible;
-    private TypeTrajet typeTrajet;
 
     public Avion() {}
 
-    public Avion(String marque, String modele, int capacite, boolean estDisponible, TypeTrajet typeTrajet) {
+    public Avion(String marque, String modele, int capacite, boolean estDisponible) {
         this.marque = marque;
         this.modele = modele;
         this.capacite = capacite;
         this.estDisponible = estDisponible;
-        this.typeTrajet = typeTrajet;
     }
 
     // Getters et Setters
@@ -37,8 +35,6 @@ public class Avion {
     public boolean isEstDisponible() { return estDisponible; }
     public void setEstDisponible(boolean estDisponible) { this.estDisponible = estDisponible; }
 
-    public TypeTrajet getTypeTrajet() { return typeTrajet; }
-    public void setTypeTrajet(TypeTrajet typeTrajet) { this.typeTrajet = typeTrajet; }
 
     @Override
     public String toString() {

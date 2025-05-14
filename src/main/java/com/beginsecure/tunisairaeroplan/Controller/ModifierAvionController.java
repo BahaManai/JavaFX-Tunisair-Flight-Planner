@@ -16,7 +16,6 @@ public class ModifierAvionController {
     @FXML private ComboBox<String> cbModele;
     @FXML private TextField tfCapacite;
     @FXML private CheckBox cbDisponible;
-    @FXML private ComboBox<TypeTrajet> cbTypeTrajet;
     @FXML private Button btnValider;
     private Map<String, Map<String, Integer>> avionsDisponibles = new HashMap<>();
 
@@ -29,12 +28,10 @@ public class ModifierAvionController {
         cbModele.setValue(avion.getModele());
         tfCapacite.setText(String.valueOf(avion.getCapacite()));
         cbDisponible.setSelected(avion.isEstDisponible());
-        cbTypeTrajet.setValue(avion.getTypeTrajet());
     }
 
     @FXML
     public void initialize() {
-        cbTypeTrajet.getItems().setAll(TypeTrajet.values());
         Map<String, Integer> airbus = new HashMap<>();
         airbus.put("A320", 180);
         airbus.put("A330", 277);
@@ -96,7 +93,6 @@ public class ModifierAvionController {
             avionToEdit.setModele(cbModele.getValue());
             avionToEdit.setCapacite(Integer.parseInt(tfCapacite.getText()));
             avionToEdit.setEstDisponible(cbDisponible.isSelected());
-            avionToEdit.setTypeTrajet(cbTypeTrajet.getValue());
 
             if (daoAvion.updateAvion(avionToEdit)) {
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Avion modifié avec succès");

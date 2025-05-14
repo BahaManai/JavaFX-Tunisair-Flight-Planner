@@ -1,45 +1,139 @@
-
+/* Fond général avec un dégradé ciel/ciel nocturne */
 .home-root {
-    -fx-background-color: linear-gradient(to bottom right, #e0f2f1, #ffffff);
+    -fx-background-color: linear-gradient(to bottom right, #87CEEB, #1E90FF, #0F52BA);
 }
 
-/* Conteneur central */
+/* Conteneur central aéré comme un ciel ouvert */
 .center-container {
     -fx-alignment: center;
     -fx-padding: 40;
+    -fx-spacing: 30;
+    -fx-background-color: transparent;
 }
 
-/* Carte centrale allégée */
+/* Carte centrale style tableau de bord d'avion */
 .card {
-    -fx-background-color: white;
-    -fx-padding: 25;
-    -fx-spacing: 15;
+    -fx-background-color: rgba(255, 255, 255, 0.95);
+    -fx-padding: 40 50;
+    -fx-spacing: 25;
     -fx-border-radius: 15;
     -fx-background-radius: 15;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 4);
-    -fx-pref-width: 350;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 10);
+    -fx-pref-width: 500;
+    -fx-border-color: linear-gradient(to right, #4682B4, #1E90FF);
+    -fx-border-width: 2;
+    -fx-cursor: hand;
 }
 
-/* Titre */
+.card:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(30, 144, 255, 0.4), 25, 0, 0, 15);
+    -fx-translate-y: -3;
+    -fx-border-color: #FF8C00; /* Orange comme un coucher de soleil */
+}
+
+/* Titre principal style compagnie aérienne */
 .title-label {
-    -fx-font-size: 20px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #004d66;
+    -fx-font-size: 32px;
+    -fx-font-weight: 800;
+    -fx-text-fill: linear-gradient(to right, #003366, #0066CC);
+    -fx-padding: 0 0 15 0;
+    -fx-font-family: "Arial Rounded MT Bold", "Segoe UI", sans-serif;
+    -fx-effect: dropshadow(one-pass-box, rgba(255, 255, 255, 0.5), 0, 0, 1, 1);
 }
 
-/* Sous-titre */
+/* Sous-titre style information de vol */
 .subtitle-label {
-    -fx-font-size: 14px;
-    -fx-text-fill: #555555;
+    -fx-font-size: 16px;
+    -fx-text-fill: #2F4F4F;
+    -fx-padding: 0 0 25 0;
+    -fx-font-family: "Segoe UI", "Roboto", sans-serif;
+    -fx-line-spacing: 3px;
+    -fx-font-style: italic;
 }
 
-/* Développeurs */
+/* Section équipage/équipe */
+.dev-container {
+    -fx-padding: 20;
+    -fx-alignment: center;
+    -fx-background-color: #F0F8FF;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #B0E0E6;
+    -fx-border-width: 1.5;
+    -fx-effect: innershadow(one-pass-box, rgba(0, 0, 0, 0.05), 5, 0.5, 0, 3);
+}
+
 .dev-title {
+    -fx-font-size: 16px;
     -fx-font-weight: bold;
-    -fx-text-fill: #007ACC;
+    -fx-text-fill: #4682B4;
+    -fx-font-family: "Segoe UI Semibold", "Roboto", sans-serif;
 }
 
 .dev-name {
-    -fx-font-style: italic;
-    -fx-text-fill: #333;
+    -fx-font-size: 14px;
+    -fx-text-fill: #2F4F4F;
+    -fx-font-family: "Segoe UI", "Roboto", sans-serif;
+    -fx-font-weight: 600;
+}
+
+/* Logo avec effet avion */
+.logo-img {
+    -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, 0.2), 15, 0.5, 0, 5);
+    -fx-transition: all 0.3s;
+}
+
+.logo-img:hover {
+    -fx-opacity: 0.9;
+    -fx-rotate: 1;
+    -fx-effect: dropshadow(one-pass-box, rgba(30, 144, 255, 0.6), 20, 0.5, 0, 8);
+}
+
+/* Style supplémentaire pour les boutons (optionnel) */
+.button {
+    -fx-background-color: linear-gradient(to bottom, #1E90FF, #0066CC);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-padding: 8 15;
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(to bottom, #FF8C00, #FF4500);
+    -fx-cursor: hand;
+}
+.home-root {
+    -fx-background-color: linear-gradient(to bottom,
+        #a1c4fd 0%,
+        #c2e9fb 50%,
+        #f6d365 100%);
+    -fx-background-size: 400% 400%;
+    -fx-animation: SkyAnimation 15s ease infinite;
+}
+
+@keyframes SkyAnimation {
+    0% { -fx-background-position: 0% 50% }
+    50% { -fx-background-position: 100% 50% }
+    100% { -fx-background-position: 0% 50% }
+}
+
+
+/* Overlay pour améliorer la lisibilité */
+.home-root:before {
+    -fx-content: "";
+    -fx-position: absolute;
+    -fx-background: rgba(255,255,255,0.3);
+    -fx-insets: 0;
+}
+.home-root {
+    -fx-background-color: #f0f8ff;
+    -fx-background-repeat: repeat;
+    -fx-background-opacity: 0.05;
+}
+.home-root {
+    -fx-background-color: radial-gradient(center 50% 50%, radius 100%,
+        #0a1128 0%,
+        #001f3f 70%,
+        #034078 100%);
+    -fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.2), 100, 0, 0, 0);
 }

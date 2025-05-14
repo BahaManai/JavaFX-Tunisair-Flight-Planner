@@ -1,73 +1,200 @@
-/* Fond global */
+/* ================= Variables CSS ================= */
 .root {
-    -fx-font-family: "Segoe UI", sans-serif;
-    -fx-base: #f4f7fa; /* Couleur de fond neutre pour toute l'application */
-    -fx-font-size: 14px; /* Taille de police globale plus confortable */
+    -fx-primary-color: #003366;
+    -fx-primary-dark: #002244;
+    -fx-dark-color: #1c1c1c;
+    -fx-accent-color: #0055aa;
+    -fx-light-text: #f1f1f1;
+    -fx-muted-text: #cccccc;
+    -fx-success-color: #28a745;
 }
 
-/* Barre de navigation gauche */
-.vbox {
-    -fx-background-color: #1e3a8a; /* Bleu plus profond et élégant */
-    -fx-padding: 20 0 20 0;
-    -fx-spacing: 15;
-    -fx-pref-width: 240; /* Largeur légèrement plus large pour plus de contenu */
-    -fx-alignment: TOP_CENTER;
+/* ================= Structure Générale ================= */
+.root {
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-size: 13px;
+    -fx-background-color: #f9f9f9;
 }
 
-/* Style des boutons */
+.main-root {
+    -fx-background-color: linear-gradient(to bottom right, #0a1128, #001f3f, #034078);
+    -fx-background-insets: 0;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
+}
+
+/* ================= Arrière-plans ================= */
+.bg-primary {
+    -fx-background-color: -fx-primary-color;
+}
+
+.bg-primary-dark {
+    -fx-background-color: -fx-primary-dark;
+}
+
+.bg-dark {
+    -fx-background-color: -fx-dark-color;
+}
+
+/* ================= Mise en Page ================= */
+.full-height {
+    -fx-min-height: 100%;
+    -fx-pref-height: 100%;
+}
+
+.full-width {
+    -fx-max-width: Infinity;
+    -fx-pref-width: 100%;
+}
+
+/* ================= Espacement ================= */
+.spacing-xs {
+    -fx-padding: 4px;
+}
+
+.spacing-sm {
+    -fx-padding: 8px;
+}
+
+.spacing-md {
+    -fx-padding: 16px;
+}
+
+.spacing-lg {
+    -fx-padding: 24px;
+}
+
+.spacing-xl {
+    -fx-padding: 32px;
+}
+
+.margin-bottom-sm {
+    -fx-margin-bottom: 8px;
+}
+
+/* ================= Boutons ================= */
 .button {
-    -fx-background-color: transparent;
-    -fx-text-fill: white;
-    -fx-font-size: 16px;
-    -fx-alignment: CENTER_LEFT;
-    -fx-padding: 12 25; /* Padding plus équilibré */
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 16px;
+    -fx-font-size: 13px;
     -fx-cursor: hand;
-    -fx-border-radius: 5;
-    -fx-font-weight: normal; /* Moins de poids pour une apparence plus légère */
-    -fx-border-color: transparent;
-    -fx-pref-width: 200px; /* Largeur de bouton plus uniforme */
+    -fx-text-fill: white;
+    -fx-background-color: -fx-accent-color;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);
+    -fx-transition: all 0.2s ease;
 }
 
-/* Bouton titre (ex: ✈ Tunisair) */
-.button:first-child {
-    -fx-font-size: 22px;
-    -fx-font-weight: bold;
-    -fx-padding: 20 25;
-    -fx-border-color: transparent;
-    -fx-border-width: 0 0 2px 0;
-    -fx-text-fill: #ffd700; /* Couleur dorée pour attirer l'attention */
-}
-
-/* Effet au survol */
 .button:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.15); /* Effet de survol doux et moderne */
-    -fx-text-fill: #ffd700; /* Changer la couleur du texte lors du survol */
+    -fx-background-color: derive(-fx-accent-color, 20%);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 1);
 }
 
-/* Zone centrale (contentPane) */
-.stack-pane {
-    -fx-background-color: #ffffff; /* Fond blanc pour plus de clarté */
-    -fx-padding: 30;
-    -fx-border-radius: 10; /* Coins arrondis pour une touche plus moderne */
-    -fx-border-color: #e5e5e5;
+.button:pressed {
+    -fx-background-color: derive(-fx-accent-color, -10%);
+}
+
+/* Boutons secondaires */
+.btn-outline {
+    -fx-background-color: transparent;
+    -fx-border-color: rgba(255,255,255,0.8);
+    -fx-border-radius: 4px;
+    -fx-text-fill: -fx-light-text;
     -fx-border-width: 1px;
 }
 
-/* Définition des espaces autour du contenu */
-.stack-pane .content {
-    -fx-spacing: 15;
+.btn-outline:hover {
+    -fx-background-color: rgba(255,255,255,0.1);
+    -fx-border-color: white;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .vbox {
-        -fx-pref-width: 180px;
-    }
-    .button {
-        -fx-font-size: 14px;
-        -fx-padding: 10 20;
-    }
-    .root {
-        -fx-font-size: 12px;
-    }
+/* ================= Icônes ================= */
+.icon {
+    -fx-fill: white;
+    -fx-opacity: 0.9;
+    -fx-padding: 0 8px 0 0;
+}
+
+.icon:hover {
+    -fx-opacity: 1;
+}
+
+/* ================= Typographie ================= */
+.text-light {
+    -fx-text-fill: -fx-light-text;
+}
+
+.text-muted {
+    -fx-text-fill: -fx-muted-text;
+}
+
+.text-success {
+    -fx-text-fill: -fx-success-color;
+}
+
+.text-bold {
+    -fx-font-weight: bold;
+}
+
+.text-sm {
+    -fx-font-size: 11px;
+}
+
+.text-xs {
+    -fx-font-size: 10px;
+}
+
+/* ================= Formes ================= */
+.rounded-sm {
+    -fx-background-radius: 4px;
+}
+
+.rounded-md {
+    -fx-background-radius: 8px;
+}
+
+.rounded-lg {
+    -fx-background-radius: 12px;
+}
+
+/* ================= Séparateurs ================= */
+.divider {
+    -fx-border-color: rgba(255,255,255,0.2);
+    -fx-border-width: 0 0 1px 0;
+}
+
+/* ================= ScrollPane ================= */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* ================= Effets ================= */
+.shadow-sm {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 1);
+}
+
+.shadow-md {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 0, 2);
+}
+
+/* ================= Tableaux ================= */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: rgba(255,255,255,0.1);
+}
+
+.table-row-cell {
+    -fx-background-color: rgba(255,255,255,0.05);
+}
+
+.table-row-cell:odd {
+    -fx-background-color: rgba(255,255,255,0.1);
+}
+
+.table-row-cell:selected {
+    -fx-background-color: rgba(0,85,170,0.3);
 }
