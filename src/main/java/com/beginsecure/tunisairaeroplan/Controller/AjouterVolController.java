@@ -29,7 +29,7 @@ import java.util.List;
 
 public class AjouterVolController {
 
-    @FXML private TextField numVolField, destinationField, heureDepartTimeField, heureArriveeTimeField;
+    @FXML private TextField numVolField, heureDepartTimeField, heureArriveeTimeField;
     @FXML private DatePicker heureDepartField, heureArriveeField;
     @FXML private ComboBox<TypeTrajet> typeTrajetCombo;
     @FXML private ComboBox<StatutVol> statutCombo;
@@ -224,7 +224,7 @@ public class AjouterVolController {
     }
 
     private boolean validerChamps() {
-        if (numVolField.getText().isEmpty() || destinationField.getText().isEmpty()
+        if (numVolField.getText().isEmpty()
                 || heureDepartField.getValue() == null || heureArriveeField.getValue() == null
                 || heureDepartTimeField.getText().isEmpty() || heureArriveeTimeField.getText().isEmpty()
                 || typeTrajetCombo.getValue() == null || statutCombo.getValue() == null
