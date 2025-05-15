@@ -262,4 +262,28 @@ public class volDao {
         }
         return false;
     }
+    public String getNomEquipageParId(int id) throws SQLException {
+        String sql = "SELECT nomEquipage FROM equipage WHERE id = ?";
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                return rs.getString("nomEquipage");
+            }
+        }
+        return "Équipage inconnu";
+    }
+
+    public String getNomAvionParId(int id) throws SQLException {
+        String sql = "SELECT marque, modele FROM avion WHERE id = ?";
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                return rs.getString("marque") + " " + rs.getString("modele");
+            }
+        }
+        return "Avion inconnu";
+    }
+
 }

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Calendrier des Vols</title>
+    <!-- FullCalendar JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/locales/fr.global.min.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #e3f2fd;
+        }
+        #calendar {
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+<div id="calendar"></div>
+<div id="volModal" style="display:none; position:fixed; top:20%; left:50%; transform:translateX(-50%);
+                         background:#ffffff; padding:20px; border-radius:10px; box-shadow:0 0 15px rgba(0,0,0,0.3);
+                         z-index:9999; min-width:300px; max-width:500px;">
+    <h3 id="modalTitle">Détails du Vol</h3>
+    <p id="modalContent"></p>
+    <button onclick="document.getElementById('volModal').style.display='none'"
+            style="margin-top:10px; padding:8px 16px; background:#2196f3; color:white; border:none; border-radius:5px;">
+        Fermer
+    </button>
+</div>
+
+<script>
+    console.log('Loading calendar.html');
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM loaded, initializing FullCalendar');
+        try {
+            var calendarEl = document.getElementById('calendar');
+            if (!calendarEl) {
+                console.error('Calendar element not found');
+                return;
+            }
+            if (typeof FullCalendar === 'undefined') {
+                console.error('FullCalendar not loaded');
+                return;
+            }
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                locale: 'fr',
+                initialView: 'timeGridWeek',
+                slotMinTime: '00:00:00',
+                slotMaxTime: '24:00:00',
+                allDaySlot: false,
+                height: '100%',
+                events: [],
+                eventTimeFormat: {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
+                },
+                headerToolbar: {
+                    left: 'prev,next',
+                    center: 'title',
+                    right: 'timeGridWeek'
+                },
+                buttonText: {
+                    today: "Aujourd’hui",
+                    week: "Cette semaine"
+                },
+
+                eventClick: function(info) {
+                    const vol = info.event;
+                    const equipage = vol.extendedProps.equipage || 'Non défini';
+                    const avion = vol.extendedProps.avion || 'Inconnu';
+                    const start = vol.start.toLocaleString('fr-FR');
+                    const end = vol.end.toLocaleString('fr-FR');
+
+                    const details = `
+                            <strong>Numéro du vol :</strong> ${vol.title}<br/>
+                            <strong>Heure de départ :</strong> ${start}<br/>
+                            <strong>Heure d'arrivée :</strong> ${end}<br/>
+                            <strong>Avion :</strong> ${avion}<br/>
+                            <strong>Équipage :</strong> ${equipage}
+                        `;
+                    document.getElementById('modalTitle').textContent = `Vol ${vol.title}`;
+                    document.getElementById('modalContent').innerHTML = details;
+                    document.getElementById('volModal').style.display = 'block';
+                }
+
+            });
+            calendar.render();
+            console.log('Calendar rendered');
+
+            // Fonction pour mettre à jour les événements
+            window.updateEvents = function(events) {
+                console.log('updateEvents called with:', events);
+                calendar.getEvents().forEach(event => event.remove());
+                events.forEach(event => calendar.addEvent(event));
+                console.log('Events updated');
+            };
+        } catch (e) {
+            console.error('Error initializing calendar:', e);
+        }
+    });
+</script>
+</body>
+</html>

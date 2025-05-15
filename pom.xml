@@ -34,7 +34,22 @@
             <artifactId>javafx-graphics</artifactId>
             <version>${javafx.version}</version>
         </dependency>
-
+        <!-- Manually included javafx-web JAR -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
+            <version>17.0.6</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/javafx-web-17.0.6-win.jar</systemPath>
+        </dependency>
+        <!-- Manually included javafx-media JAR -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>17.0.6</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/javafx-media-17.0.6-win.jar</systemPath>
+        </dependency>
         <!-- UI Libraries -->
         <dependency>
             <groupId>org.controlsfx</groupId>

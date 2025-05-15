@@ -1,4 +1,3 @@
-/* Fond global */
 .root {
     -fx-font-family: "Segoe UI", sans-serif;
     -fx-base: #f4f7fa; /* Couleur de fond neutre pour toute l'application */
@@ -51,6 +50,12 @@
     -fx-border-radius: 10; /* Coins arrondis pour une touche plus moderne */
     -fx-border-color: #e5e5e5;
     -fx-border-width: 1px;
+}
+
+/* Style pour WebView */
+.web-view {
+    -fx-pref-height: 100%;
+    -fx-pref-width: 100%;
 }
 
 /* Définition des espaces autour du contenu */

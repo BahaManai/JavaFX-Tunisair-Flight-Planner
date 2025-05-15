@@ -41,6 +41,13 @@
                         </graphic>
                     </Button>
 
+                    <Button text="Calendrier des Vols" onAction="#showCalendrier"
+                            styleClass="btn btn-outline-light text-start w-100 mb-2">
+                        <graphic>
+                            <FontIcon iconLiteral="fas-calendar" styleClass="me-2"/>
+                        </graphic>
+                    </Button>
+
                     <Button text="Équipages" onAction="#showEquipages"
                             styleClass="btn btn-outline-light text-start w-100 mb-2">
                         <graphic>

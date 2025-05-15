@@ -35,10 +35,10 @@ public class MainController {
     public void showArchives() {
         loadPage("ArchivVolView.fxml");
     }
+
     @FXML
     public void showListeAttente() {
         loadPage("PendingApprovals.fxml");
-
     }
 
     @FXML
@@ -46,12 +46,15 @@ public class MainController {
         loadPage("ListeEquipages.fxml");
     }
 
-
     @FXML
-    private void showMembres() {
+    public void showMembres() {
         loadPage("FXMLMembre.fxml");
     }
 
+    @FXML
+    public void showCalendrier() {
+        loadPage("CalendrierVol.fxml");
+    }
 
     @FXML
     public void showParametres() {

@@ -6,6 +6,8 @@ module com.beginsecure.tunisairaeroplan {
     requires jdk.jdi;
     requires mysql.connector.java;
     requires org.kordamp.bootstrapfx.core;
+    requires javafx.web;
+    requires javafx.media;
 
     opens com.beginsecure.tunisairaeroplan to javafx.fxml;
     opens com.beginsecure.tunisairaeroplan.Controller to javafx.fxml;

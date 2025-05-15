@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.*?>
+
+<?import java.net.URL?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.beginsecure.tunisairaeroplan.Controller.CalendrierVolController"
+           styleClass="stack-pane"
+           prefWidth="800"
+           prefHeight="600">
+    <stylesheets>
+        <URL value="@../view/main.css" />
+    </stylesheets>
+    <WebView fx:id="calendarWebView" prefWidth="800" prefHeight="600" />
+</StackPane>
