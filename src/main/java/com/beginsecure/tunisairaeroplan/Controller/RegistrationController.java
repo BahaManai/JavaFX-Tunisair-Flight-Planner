@@ -14,17 +14,15 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.Period;
-import java.util.regex.Pattern;
 
 public class RegistrationController {
 
-    @FXML private StackPane step1Pane, step2Pane, step3Pane, step4Pane;
+    @FXML private StackPane stepContentPane, step1Pane, step2Pane, step3Pane, step4Pane;
     @FXML private TextField nomField, prenomField, cinField, matriculeField, emailField, telephoneField;
     @FXML private DatePicker dateNaissancePicker;
     @FXML private ComboBox<String> nationaliteCombo, departementCombo, posteCombo, baseAffectationCombo;
     @FXML private PasswordField passwordField, confirmPasswordField;
-    @FXML private Button prevButton, nextButton;
+    @FXML private Button prevButton, nextButton, backToLoginButton;
     @FXML private ProgressBar progressBar;
     @FXML private Label stepLabel1, stepLabel2, stepLabel3, stepLabel4;
     @FXML private Label confirmNomComplet, confirmDepartement, confirmCin, confirmPoste, confirmEmail;
@@ -66,8 +64,6 @@ public class RegistrationController {
             }
         });
     }
-    @FXML
-    private Button backToLoginButton;
 
     @FXML
     private void handleBackToLogin() throws IOException {
@@ -75,6 +71,7 @@ public class RegistrationController {
         Stage stage = (Stage) backToLoginButton.getScene().getWindow();
         stage.setScene(new Scene(root));
     }
+
     @FXML
     private void handleNext() {
         if (!validateCurrentStep()) return;
@@ -94,6 +91,7 @@ public class RegistrationController {
     }
 
     private void updateUI() {
+        // Toggle visibility to show only the current step's pane
         step1Pane.setVisible(currentStep == 1);
         step2Pane.setVisible(currentStep == 2);
         step3Pane.setVisible(currentStep == 3);
