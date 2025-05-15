@@ -162,9 +162,10 @@ public class volDao {
     public List<vol> getAllVolsArchives() {
         List<vol> volsArchives = new ArrayList<>();
         String query = "SELECT * FROM archiveVol";
-
         try (PreparedStatement ps = connection.prepareStatement(query);
              ResultSet rs = ps.executeQuery()) {
+            DAOAvion daoAvion = new DAOAvion(connection);
+            EquipageDao daoEquipage = new EquipageDao(connection);
             while (rs.next()) {
                 vol v = new vol();
                 v.setIdVol(rs.getInt("idVol"));
@@ -174,12 +175,25 @@ public class volDao {
                 v.setHeureArrivee(rs.getTimestamp("heureArrivee"));
                 v.setTypeTrajet(TypeTrajet.valueOf(rs.getString("typeTrajet")));
                 v.setStatut(StatutVol.valueOf(rs.getString("statut")));
+
+                // Populate avion and equipage
+                int avionId = rs.getInt("avion_id");
+                if (avionId > 0) {
+                    Avion avion = daoAvion.getAvionById(avionId);
+                    v.setAvion(avion);
+                }
+
+                int equipageId = rs.getInt("equipage_id");
+                if (equipageId > 0) {
+                    Equipage equipage = daoEquipage.getEquipageById(equipageId);
+                    v.setEquipage(equipage);
+                }
+
                 volsArchives.add(v);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return volsArchives;
     }
 

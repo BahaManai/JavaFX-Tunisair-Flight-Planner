@@ -91,7 +91,6 @@ public class RegistrationController {
     }
 
     private void updateUI() {
-        // Toggle visibility to show only the current step's pane
         step1Pane.setVisible(currentStep == 1);
         step2Pane.setVisible(currentStep == 2);
         step3Pane.setVisible(currentStep == 3);
@@ -142,6 +141,11 @@ public class RegistrationController {
                 showAlert("Erreur", "Vous devez avoir au moins 20 ans pour vous inscrire");
                 return false;
             }
+
+            if (!cinField.getText().matches("\\d{8}")) {
+                showAlert("Erreur", "Le CIN doit contenir exactement 8 chiffres");
+                return false;
+            }
         }
         else if (currentStep == 2) {
             if (departementCombo.getValue() == null || posteCombo.getValue() == null ||
@@ -163,7 +167,7 @@ public class RegistrationController {
             }
 
             if (!isValidPassword(passwordField.getText())) {
-                showAlert("Erreur", "VERIFIEZ Le mot de passe ");
+                showAlert("Erreur", "Le mot de passe doit contenir au moins 8 caractères, 1 majuscule, 1 chiffre et 1 caractère spécial");
                 return false;
             }
 
@@ -171,48 +175,68 @@ public class RegistrationController {
                 showAlert("Erreur", "Le numéro de téléphone doit contenir 8 chiffres");
                 return false;
             }
+
+            if (!emailField.getText().matches("^[a-zA-Z0-9._%+-]+@tunisair\\.com$")) {
+                String fullEmail = emailField.getText() + "@tunisair.com";
+                if (!fullEmail.matches("^[a-zA-Z0-9._%+-]+@tunisair\\.com$")) {
+                    showAlert("Erreur", "L'email doit être un email professionnel valide (ex: prenom.nom@tunisair.com)");
+                    return false;
+                }
+            }
         }
         return true;
     }
 
     private boolean isValidPassword(String password) {
-        return password != null && !password.trim().isEmpty();
+        if (password == null || password.length() < 8) {
+            return false;
+        }
+        boolean hasUppercase = false;
+        boolean hasDigit = false;
+        boolean hasSpecialChar = false;
+        for (char c : password.toCharArray()) {
+            if (Character.isUpperCase(c)) hasUppercase = true;
+            if (Character.isDigit(c)) hasDigit = true;
+            if (!Character.isLetterOrDigit(c)) hasSpecialChar = true;
+        }
+        return hasUppercase && hasDigit && hasSpecialChar;
     }
 
     @FXML
     private void handleRegister() {
         User user = createUser();
+        System.out.println("Attempting to register user: " + user.getEmail() + ", CIN: " + user.getCin());
         if (registrationService.registerUser(user, passwordField.getText())) {
             showAlert("Succès", "Inscription réussie !\nVotre compte sera activé après vérification.");
             try {
                 testRegistration.showLoginView();
             } catch (Exception e) {
-                System.err.println("Error: " + e.getMessage());
+                System.err.println("Error showing login view: " + e.getMessage());
             }
         } else {
-            showAlert("Erreur", "Échec de l'inscription");
+            showAlert("Erreur", "Échec de l'inscription. Vérifiez les données saisies (CIN ou email peut-être déjà utilisé).");
         }
     }
 
     private User createUser() {
         User user = new User();
-        user.setNom(nomField.getText());
-        user.setPrenom(prenomField.getText());
-        user.setCin(cinField.getText());
-        user.setMatricule(matriculeField.getText());
+        user.setNom(nomField.getText().trim());
+        user.setPrenom(prenomField.getText().trim());
+        user.setCin(cinField.getText().trim());
+        user.setMatricule(matriculeField.getText().trim().isEmpty() ? null : matriculeField.getText().trim());
         user.setDateNaissance(dateNaissancePicker.getValue());
         user.setNationalite(nationaliteCombo.getValue());
         user.setDepartement(departementCombo.getValue());
         user.setPoste(posteCombo.getValue());
         user.setAeroport(baseAffectationCombo.getValue());
         user.setBaseAffectation(baseAffectationCombo.getValue());
-        user.setEmail(emailField.getText());
-        user.setTelephone(telephoneField.getText());
+        user.setEmail(emailField.getText().trim() + "@tunisair.com");
+        user.setTelephone(telephoneField.getText().trim().isEmpty() ? null : telephoneField.getText().trim());
         return user;
     }
 
     private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+        Alert alert = new Alert(title.equals("Succès") ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
