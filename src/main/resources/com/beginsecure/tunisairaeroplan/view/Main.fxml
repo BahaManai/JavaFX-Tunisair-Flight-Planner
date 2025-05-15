@@ -18,7 +18,7 @@
 
     <!-- Barre latérale -->
     <left>
-        <VBox fx:id="sidebar" prefWidth="250.0" spacing="0" styleClass="bg-primary min-vh-100">
+        <VBox fx:id="sidebar" prefWidth="250.0"  spacing="0" styleClass="bg-primary min-vh-100">
             <!-- En-tête avec logo -->
             <HBox alignment="CENTER_LEFT" spacing="10" styleClass="bg-primary-dark p-3">
                 <FontIcon iconLiteral="fas-plane-departure" iconSize="18" styleClass="text-light"/>
@@ -82,6 +82,15 @@
                             <FontIcon iconLiteral="fas-archive" styleClass="me-2"/>
                         </graphic>
                     </Button>
+
+                    <!-- Logout Button -->
+                    <Button text="Déconnexion" onAction="#handleLogout"
+                            styleClass="btn btn-outline-light text-start w-100 mb-2">
+                        <graphic>
+                            <FontIcon iconLiteral="fas-sign-out-alt" styleClass="me-2"/>
+                        </graphic>
+                    </Button>
+
                     <Separator styleClass="my-3"/>
 
                     <HBox alignment="CENTER_LEFT" spacing="10" styleClass="p-3 bg-primary-dark rounded">

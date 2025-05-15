@@ -3,7 +3,11 @@ package com.beginsecure.tunisairaeroplan.Controller;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+
 import java.io.IOException;
 
 public class MainController {
@@ -73,6 +77,18 @@ public class MainController {
             contentPane.getChildren().setAll(node);
         } catch (IOException e) {
             System.err.println("Erreur lors du chargement de la page : " + fxmlFile);
+            e.printStackTrace();
+        }
+
+    }
+    @FXML
+    private void handleLogout() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/com/beginsecure/tunisairaeroplan/View/Accueil.fxml"));
+            Stage stage = (Stage) contentPane.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.centerOnScreen();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

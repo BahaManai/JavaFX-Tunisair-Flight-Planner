@@ -1,10 +1,8 @@
-// AuthController.java
 package com.beginsecure.tunisairaeroplan.Controller;
 
 import com.beginsecure.tunisairaeroplan.Model.User;
 import com.beginsecure.tunisairaeroplan.Services.AuthService;
 import com.beginsecure.tunisairaeroplan.utilites.MainApp;
-import com.beginsecure.tunisairaeroplan.utilites.testRegistration;
 import com.beginsecure.tunisairaeroplan.utilites.testRegistration;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -43,8 +41,7 @@ public class AuthController implements Initializable {
     @FXML private Button forgotPasswordBtn;
     @FXML private StackPane rootVBox;
     @FXML private Pane particlePane;
-    @FXML
-    private StackPane contentPane;
+    @FXML private StackPane contentPane;
     private final List<Stop[]> gradientPhases = List.of(
             new Stop[]{new Stop(0, Color.web("#3498db")), new Stop(1, Color.web("#8e44ad"))},
             new Stop[]{new Stop(0, Color.web("#8e44ad")), new Stop(1, Color.web("#1abc9c"))},
@@ -52,9 +49,7 @@ public class AuthController implements Initializable {
             new Stop[]{new Stop(0, Color.web("#f39c12")), new Stop(1, Color.web("#3498db"))}
     );
 
-    @FXML
-    private Button backToHomeButton;
-
+    @FXML private Button backToHomeButton;
 
     @FXML
     private void handleBackToHome() throws IOException {
@@ -110,7 +105,6 @@ public class AuthController implements Initializable {
         }
     }
 
-
     private void setupEventHandlers() {
         loginButton.setOnAction(event -> handleLogin());
         registerButton.setOnAction(event -> {
@@ -123,6 +117,7 @@ public class AuthController implements Initializable {
         });
         forgotPasswordBtn.setOnAction(event -> showError("Fonctionnalité non implémentée"));
     }
+
     @FXML
     public void showRegistrationForm() {
         try {
@@ -176,6 +171,19 @@ public class AuthController implements Initializable {
             animation.setCycleCount(Animation.INDEFINITE);
             animation.setDelay(Duration.seconds(Math.random() * 5));
             animation.play();
+        }
+    }
+
+    @FXML
+    private void handleLogout() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/com/beginsecure/tunisairaeroplan/View/Accueil.fxml"));
+            Stage stage = (Stage) rootVBox.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.centerOnScreen();
+        } catch (IOException e) {
+            showError("Erreur lors de la déconnexion");
+            e.printStackTrace();
         }
     }
 }
