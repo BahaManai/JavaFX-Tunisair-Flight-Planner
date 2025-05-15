@@ -6,9 +6,12 @@
 <?import javafx.scene.text.*?>
 <ScrollPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.beginsecure.tunisairaeroplan.Controller.RegistrationController"
-            fitToWidth="true" styleClass="container" stylesheets="@registration.css">
+            fitToWidth="true"
+            prefViewportWidth="700"
+            prefViewportHeight="600"
+            hbarPolicy="NEVER" styleClass="container" stylesheets="@registration.css">
 <VBox spacing="15" prefWidth="700" styleClass="container">
-
+    <Button fx:id="backToLoginButton" text="Retour" onAction="#handleBackToLogin"/>
     <HBox spacing="10" alignment="CENTER_LEFT">
         <Label text="Inscription - Espace Agent Tunisair" styleClass="title"/>
     </HBox>

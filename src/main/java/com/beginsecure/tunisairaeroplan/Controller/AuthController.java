@@ -5,13 +5,18 @@ import com.beginsecure.tunisairaeroplan.Model.User;
 import com.beginsecure.tunisairaeroplan.Services.AuthService;
 import com.beginsecure.tunisairaeroplan.utilites.MainApp;
 import com.beginsecure.tunisairaeroplan.utilites.testRegistration;
+import com.beginsecure.tunisairaeroplan.utilites.testRegistration;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -19,6 +24,7 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -37,13 +43,25 @@ public class AuthController implements Initializable {
     @FXML private Button forgotPasswordBtn;
     @FXML private StackPane rootVBox;
     @FXML private Pane particlePane;
-
+    @FXML
+    private StackPane contentPane;
     private final List<Stop[]> gradientPhases = List.of(
             new Stop[]{new Stop(0, Color.web("#3498db")), new Stop(1, Color.web("#8e44ad"))},
             new Stop[]{new Stop(0, Color.web("#8e44ad")), new Stop(1, Color.web("#1abc9c"))},
             new Stop[]{new Stop(0, Color.web("#1abc9c")), new Stop(1, Color.web("#f39c12"))},
             new Stop[]{new Stop(0, Color.web("#f39c12")), new Stop(1, Color.web("#3498db"))}
     );
+
+    @FXML
+    private Button backToHomeButton;
+
+
+    @FXML
+    private void handleBackToHome() throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/com/beginsecure/tunisairaeroplan/View/Accueil.fxml"));
+        Stage stage = (Stage) backToHomeButton.getScene().getWindow();
+        stage.setScene(new Scene(root));
+    }
 
     private int currentIndex = 0;
     private AuthService authService;
@@ -92,17 +110,40 @@ public class AuthController implements Initializable {
         }
     }
 
+
     private void setupEventHandlers() {
         loginButton.setOnAction(event -> handleLogin());
         registerButton.setOnAction(event -> {
             try {
-                testRegistration.showRegistrationForm();
-            } catch (IOException e) {
+                this.showRegistrationForm();
+            } catch (Exception e) {
                 showError("Erreur lors de l'ouverture du formulaire d'inscription");
                 e.printStackTrace();
             }
         });
         forgotPasswordBtn.setOnAction(event -> showError("Fonctionnalité non implémentée"));
+    }
+    @FXML
+    public void showRegistrationForm() {
+        try {
+            Stage currentStage = (Stage) registerButton.getScene().getWindow();
+
+            Parent root = FXMLLoader.load(
+                    getClass().getResource("/com/beginsecure/tunisairaeroplan/View/RegistrationForm.fxml")
+            );
+
+            Scene scene = new Scene(root);
+
+            scene.getStylesheets().add(
+                    getClass().getResource("/com/beginsecure/tunisairaeroplan/View/registration.css").toExternalForm()
+            );
+            currentStage.setScene(scene);
+            currentStage.centerOnScreen();
+
+        } catch (IOException e) {
+            System.err.println("Erreur critique : " + e.getMessage());
+            showError("Impossible d'ouvrir le formulaire");
+        }
     }
 
     private void showError(String message) {

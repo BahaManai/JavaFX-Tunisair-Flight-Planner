@@ -5,8 +5,14 @@ import com.beginsecure.tunisairaeroplan.Model.LocationData;
 import com.beginsecure.tunisairaeroplan.Services.RegistrationService;
 import com.beginsecure.tunisairaeroplan.utilites.testRegistration;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.regex.Pattern;
@@ -60,7 +66,15 @@ public class RegistrationController {
             }
         });
     }
+    @FXML
+    private Button backToLoginButton;
 
+    @FXML
+    private void handleBackToLogin() throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/com/beginsecure/tunisairaeroplan/View/LoginView.fxml"));
+        Stage stage = (Stage) backToLoginButton.getScene().getWindow();
+        stage.setScene(new Scene(root));
+    }
     @FXML
     private void handleNext() {
         if (!validateCurrentStep()) return;

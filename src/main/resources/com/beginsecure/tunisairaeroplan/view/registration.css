@@ -131,3 +131,50 @@
 .progress-bar .bar {
     -fx-background-radius: 4;
 }
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-fit-to-width: true;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.container {
+    -fx-padding: 20;
+    -fx-background-color: linear-gradient(to bottom, #f8fafc, #e6f0fa);
+    -fx-spacing: 15;
+    -fx-min-width: 700;
+    -fx-pref-width: 700;
+    -fx-min-height: 600;
+}
+#backToLoginButton {
+    -fx-background-color: linear-gradient(to bottom, #4a90e2, #357bd8);
+    -fx-text-fill: white;
+    -fx-font-family: 'Arial';
+    -fx-font-size: 14px;
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 2, 0, 0, 1);
+}
+
+#backToLoginButton:hover {
+    -fx-background-color: linear-gradient(to bottom, #5fa0ff, #4a90e2);
+    -fx-cursor: hand;
+}
+
+
+
+#backToLoginButton:hover {
+    -fx-background-color: linear-gradient(to bottom, #5fa0ff, #4a90e2);
+    -fx-cursor: hand;
+}
+
+
+
+#backToLoginButton:hover {
+    -fx-text-fill: #e74c3c;
+    -fx-border-color: #e74c3c;
+}

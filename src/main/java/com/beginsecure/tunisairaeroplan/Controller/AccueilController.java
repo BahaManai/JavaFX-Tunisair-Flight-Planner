@@ -28,11 +28,9 @@ public class AccueilController {
 
 
     private String getUserName() {
-        // Implémentez cette méthode pour récupérer le nom de l'utilisateur connecté
         return "Utilisateur";
     }
 
-    // Méthodes pour les boutons
     @FXML
     private void handleLogin() throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/com/beginsecure/tunisairaeroplan/View/LoginView.fxml"));

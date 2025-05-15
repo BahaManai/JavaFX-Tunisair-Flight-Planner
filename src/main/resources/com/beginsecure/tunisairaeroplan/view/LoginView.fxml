@@ -7,7 +7,7 @@
 
 <StackPane fx:id="rootVBox"
            xmlns="http://javafx.com/javafx/8.0.171"
-           xmlns:fx="http://javafx.com/fxml/1"
+           xmlns:fx="http://javafx.com/fxml/1"  stylesheets="@login.css"
            fx:controller="com.beginsecure.tunisairaeroplan.Controller.AuthController"
            style="-fx-background-color: linear-gradient(to bottom right, #3498db, #8e44ad); -fx-padding: 50;">
 
@@ -49,6 +49,11 @@
             <Button fx:id="registerButton" text="Créer un compte"
                     style="-fx-background-color: transparent; -fx-text-fill: #0066cc; -fx-underline: true; -fx-padding: 0;"/>
         </HBox>
+
+            <StackPane fx:id="contentPane" styleClass="p-4">
+                <Button fx:id="backToHomeButton" text="Retour" onAction="#handleBackToHome"/>
+
+            </StackPane>
 
         <Label text="Développé par Ferchichi Molka et Mannai Baha Eddine"
                style="-fx-text-fill: #999; -fx-font-size: 10px;"/>
