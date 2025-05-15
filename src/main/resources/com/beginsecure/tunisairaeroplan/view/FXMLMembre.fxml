@@ -19,7 +19,7 @@
         <TextField fx:id="txtNom" layoutX="171.0" layoutY="70.0" promptText="Nom" />
         <TextField fx:id="txtPrenom" layoutX="291.0" layoutY="70.0" promptText="Prénom" />
         <ComboBox fx:id="cbRole" layoutX="411.0" layoutY="70.0" promptText="Rôle" />
-        <CheckBox fx:id="chkDisponible" layoutX="493.0" layoutY="74.0" text="Disponible" />
+        <CheckBox fx:id="chkDisponible" layoutX="455.0" layoutY="24.0" text="Disponible" />
 
         <TableView fx:id="tvMembre" layoutX="75.0" layoutY="114.0" prefHeight="250" prefWidth="498.0">
             <columns>

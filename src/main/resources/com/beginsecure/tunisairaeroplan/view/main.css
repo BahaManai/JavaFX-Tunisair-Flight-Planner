@@ -1,3 +1,4 @@
+
 /* ================= Variables CSS ================= */
 .root {
     -fx-primary-color: #003366;
@@ -7,13 +8,6 @@
     -fx-light-text: #f1f1f1;
     -fx-muted-text: #cccccc;
     -fx-success-color: #28a745;
-}
-
-/* ================= Structure Générale ================= */
-.root {
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
-    -fx-font-size: 13px;
-    -fx-background-color: #f9f9f9;
 }
 
 .main-root {
@@ -100,101 +94,127 @@
     -fx-text-fill: -fx-light-text;
     -fx-border-width: 1px;
 }
-
-.btn-outline:hover {
-    -fx-background-color: rgba(255,255,255,0.1);
-    -fx-border-color: white;
+/* Style pour WebView */
+.web-view {
+    -fx-pref-height: 100%;
+    -fx-pref-width: 100%;
 }
 
-/* ================= Icônes ================= */
-.icon {
-    -fx-fill: white;
-    -fx-opacity: 0.9;
-    -fx-padding: 0 8px 0 0;
+/* Définition des espaces autour du contenu */
+.stack-pane .content {
+    -fx-spacing: 15;
 }
 
-.icon:hover {
-    -fx-opacity: 1;
-}
+/* Responsive */
+@media (max-width: 768px) {
+    .vbox {
+        -fx-pref-width: 180px;
+    }
 
-/* ================= Typographie ================= */
-.text-light {
-    -fx-text-fill: -fx-light-text;
-}
+    .button {
+        -fx-font-size: 14px;
+        -fx-padding: 10 20;
+    }
 
-.text-muted {
-    -fx-text-fill: -fx-muted-text;
-}
+    .root {
+        -fx-font-size: 12px;
+    }
 
-.text-success {
-    -fx-text-fill: -fx-success-color;
-}
+    .btn-outline:hover {
+        -fx-background-color: rgba(255, 255, 255, 0.1);
+        -fx-border-color: white;
+    }
 
-.text-bold {
-    -fx-font-weight: bold;
-}
+    /* ================= Icônes ================= */
+    .icon {
+        -fx-fill: white;
+        -fx-opacity: 0.9;
+        -fx-padding: 0 8px 0 0;
+    }
 
-.text-sm {
-    -fx-font-size: 11px;
-}
+    .icon:hover {
+        -fx-opacity: 1;
+    }
 
-.text-xs {
-    -fx-font-size: 10px;
-}
+    /* ================= Typographie ================= */
+    .text-light {
+        -fx-text-fill: -fx-light-text;
+    }
 
-/* ================= Formes ================= */
-.rounded-sm {
-    -fx-background-radius: 4px;
-}
+    .text-muted {
+        -fx-text-fill: -fx-muted-text;
+    }
 
-.rounded-md {
-    -fx-background-radius: 8px;
-}
+    .text-success {
+        -fx-text-fill: -fx-success-color;
+    }
 
-.rounded-lg {
-    -fx-background-radius: 12px;
-}
+    .text-bold {
+        -fx-font-weight: bold;
+    }
 
-/* ================= Séparateurs ================= */
-.divider {
-    -fx-border-color: rgba(255,255,255,0.2);
-    -fx-border-width: 0 0 1px 0;
-}
+    .text-sm {
+        -fx-font-size: 11px;
+    }
 
-/* ================= ScrollPane ================= */
-.scroll-pane {
-    -fx-background-color: transparent;
-    -fx-border-width: 0;
-    -fx-padding: 0;
-}
+    .text-xs {
+        -fx-font-size: 10px;
+    }
 
-.scroll-pane > .viewport {
-    -fx-background-color: transparent;
-}
+    /* ================= Formes ================= */
+    .rounded-sm {
+        -fx-background-radius: 4px;
+    }
 
-/* ================= Effets ================= */
-.shadow-sm {
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 1);
-}
+    .rounded-md {
+        -fx-background-radius: 8px;
+    }
 
-.shadow-md {
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 0, 2);
-}
+    .rounded-lg {
+        -fx-background-radius: 12px;
+    }
 
-/* ================= Tableaux ================= */
-.table-view {
-    -fx-background-color: transparent;
-    -fx-border-color: rgba(255,255,255,0.1);
-}
+    /* ================= Séparateurs ================= */
+    .divider {
+        -fx-border-color: rgba(255, 255, 255, 0.2);
+        -fx-border-width: 0 0 1px 0;
+    }
 
-.table-row-cell {
-    -fx-background-color: rgba(255,255,255,0.05);
-}
+    /* ================= ScrollPane ================= */
+    .scroll-pane {
+        -fx-background-color: transparent;
+        -fx-border-width: 0;
+        -fx-padding: 0;
+    }
 
-.table-row-cell:odd {
-    -fx-background-color: rgba(255,255,255,0.1);
-}
+    .scroll-pane > .viewport {
+        -fx-background-color: transparent;
+    }
 
-.table-row-cell:selected {
-    -fx-background-color: rgba(0,85,170,0.3);
+    /* ================= Effets ================= */
+    .shadow-sm {
+        -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0, 0, 1);
+    }
+
+    .shadow-md {
+        -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 8, 0, 0, 2);
+    }
+
+    /* ================= Tableaux ================= */
+    .table-view {
+        -fx-background-color: transparent;
+        -fx-border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .table-row-cell {
+        -fx-background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .table-row-cell:odd {
+        -fx-background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .table-row-cell:selected {
+        -fx-background-color: rgba(0, 85, 170, 0.3);
+    }
 }

@@ -189,7 +189,6 @@ public class DAOAvion {
                 avion.setModele(rs.getString("modele"));
                 avion.setCapacite(rs.getInt("capacite"));
                 avion.setEstDisponible(rs.getBoolean("estDisponible"));
-                avion.setTypeTrajet(TypeTrajet.valueOf(rs.getString("type_trajet")));
                 avions.add(avion);
             }
         } catch (SQLException e) {

@@ -43,6 +43,8 @@ public class AjouterVolController {
     private DAOAvion daoAvion;
     private volDao daoVol;
     private EquipageDao equipageDao;
+    private membreDao membreDao;
+
     private void genererNumeroVol() {
         try {
             int dernierNumero = daoVol.getDernierNumeroVol();
@@ -55,6 +57,7 @@ public class AjouterVolController {
             numVolField.setEditable(false);
         }
     }
+
     @FXML
     public void initialize() {
         try {
@@ -62,16 +65,20 @@ public class AjouterVolController {
             daoAvion = new DAOAvion(connection);
             daoVol = new volDao(connection);
             equipageDao = new EquipageDao(connection);
+            membreDao = new membreDao(connection); // Added to support membreDao methods
             genererNumeroVol();
             typeTrajetCombo.setItems(FXCollections.observableArrayList(TypeTrajet.values()));
             statutCombo.setItems(FXCollections.observableArrayList(StatutVol.values()));
-<<<<<<< HEAD
-            chargerAvionsDisponibles();
-            chargerMembresParRole(null, null);
-            heureDepartField.valueProperty().addListener((obs, oldVal, newVal) -> updateMembresDisponibles());
-            heureArriveeField.valueProperty().addListener((obs, oldVal, newVal) -> updateMembresDisponibles());
-            heureDepartTimeField.textProperty().addListener((obs, oldVal, newVal) -> updateMembresDisponibles());
-            heureArriveeTimeField.textProperty().addListener((obs, oldVal, newVal) -> updateMembresDisponibles());
+            chargerAvionsDisponibles(null, null); // Initial load of all available avions
+            chargerMembresParRole(null, null); // Initial load of all available members
+
+            // Add listeners to refresh availability when dates or times change
+            heureDepartField.valueProperty().addListener((obs, oldVal, newVal) -> updateDisponibilites());
+            heureArriveeField.valueProperty().addListener((obs, oldVal, newVal) -> updateDisponibilites());
+            heureDepartTimeField.textProperty().addListener((obs, oldVal, newVal) -> updateDisponibilites());
+            heureArriveeTimeField.textProperty().addListener((obs, oldVal, newVal) -> updateDisponibilites());
+
+            // Populate country and airport combos
             paysOrigineCombo.setItems(FXCollections.observableArrayList(LocationData.getCountries()));
             paysDestinationCombo.setItems(FXCollections.observableArrayList(LocationData.getCountries()));
             paysOrigineCombo.valueProperty().addListener((obs, oldVal, newVal) -> {
@@ -90,17 +97,6 @@ public class AjouterVolController {
                     );
                 }
             });
-=======
-            chargerAvionsDisponibles(null, null); // Charger tous les avions disponibles par défaut
-            chargerMembresParRole(null, null); // Charger les membres par défaut
-
-            // Ajouter des écouteurs pour rafraîchir les avions et membres lorsque les horaires changent
-            heureDepartField.valueProperty().addListener((obs, oldVal, newVal) -> updateDisponibilites());
-            heureArriveeField.valueProperty().addListener((obs, oldVal, newVal) -> updateDisponibilites());
-            heureDepartTimeField.textProperty().addListener((obs, oldVal, newVal) -> updateDisponibilites());
-            heureArriveeTimeField.textProperty().addListener((obs, oldVal, newVal) -> updateDisponibilites());
-
->>>>>>> 719dc30b59cd1851d2478858b3c8b40d7b675b56
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Connexion", "Impossible d'établir la connexion à la base de données : " + e.getMessage());
         }
@@ -118,10 +114,7 @@ public class AjouterVolController {
                 chargerAvionsDisponibles(heureDepart, heureArrivee);
                 chargerMembresParRole(heureDepart, heureArrivee);
             } else {
-<<<<<<< HEAD
-=======
                 chargerAvionsDisponibles(null, null);
->>>>>>> 719dc30b59cd1851d2478858b3c8b40d7b675b56
                 chargerMembresParRole(null, null);
             }
         } catch (DateTimeParseException e) {
@@ -235,7 +228,7 @@ public class AjouterVolController {
                 || heureDepartField.getValue() == null || heureArriveeField.getValue() == null
                 || heureDepartTimeField.getText().isEmpty() || heureArriveeTimeField.getText().isEmpty()
                 || typeTrajetCombo.getValue() == null || statutCombo.getValue() == null
-                || avionCombo.getValue() == null || piloteCombo.getValue() == null  || aeroportOrigineCombo.getValue() == null
+                || avionCombo.getValue() == null || piloteCombo.getValue() == null || aeroportOrigineCombo.getValue() == null
                 || aeroportDestinationCombo.getValue() == null
                 || copiloteCombo.getValue() == null || chefCabineCombo.getValue() == null
                 || hotesseCombo.getValue() == null || mecanicienCombo.getValue() == null) {
@@ -244,6 +237,7 @@ public class AjouterVolController {
         }
         return true;
     }
+
     private vol creerVol(Equipage equipage) throws Exception {
         LocalDateTime heureDepart = getHeureDepart();
         LocalDateTime heureArrivee = getHeureArrivee();
@@ -264,15 +258,6 @@ public class AjouterVolController {
         );
     }
 
-<<<<<<< HEAD
-    private void chargerAvionsDisponibles() {
-        try {
-            List<Avion> avions = daoAvion.getAvionsDisponibles();
-            Platform.runLater(() -> avionCombo.setItems(FXCollections.observableArrayList(avions)));
-        } catch (Exception e) {
-            Platform.runLater(() -> showAlert(Alert.AlertType.ERROR, "Erreur", "Chargement avions", e.getMessage()));
-        }
-    }
     private boolean validerDates(LocalDateTime depart, LocalDateTime arrivee) {
         if (depart == null || arrivee == null) {
             return false;
@@ -293,14 +278,10 @@ public class AjouterVolController {
                     "La durée du vol ne peut pas dépasser 24 heures");
             return false;
         }
-
         return true;
     }
 
-  private boolean showAlertError(String header, String content) {
-=======
     private boolean showAlertError(String header, String content) {
->>>>>>> 719dc30b59cd1851d2478858b3c8b40d7b675b56
         showAlert(Alert.AlertType.ERROR, "Erreur", header, content);
         return false;
     }
@@ -312,6 +293,7 @@ public class AjouterVolController {
         alert.setContentText(content);
         alert.showAndWait();
     }
+
     @FXML
     private void retourListeVols() {
         try {
@@ -326,6 +308,7 @@ public class AjouterVolController {
             e.printStackTrace();
         }
     }
+
     private boolean validerMembresEquipage() {
         List<Membre> membres = List.of(
                 piloteCombo.getValue(),
@@ -345,5 +328,4 @@ public class AjouterVolController {
         }
         return true;
     }
-
 }

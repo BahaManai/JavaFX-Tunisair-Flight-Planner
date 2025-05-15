@@ -10,7 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class membreDao {
+    private Connection connection;
 
+    public membreDao(Connection connection) {
+        this.connection = connection;
+    }
     public static int ajouter(Membre m) {
         String requete = "INSERT INTO membre (cin, nom, prenom, role, estDisponible) VALUES (?, ?, ?, ?, ?)";
         try (Connection cn = LaConnexion.seConnecter();
