@@ -24,7 +24,6 @@
                 <TableColumn fx:id="colModele" text="Modèle"/>
                 <TableColumn fx:id="colCapacite" text="Capacité"/>
                 <TableColumn fx:id="colDisponible" text="Disponible"/>
-                <TableColumn fx:id="colTypeTrajet" text="Type Trajet"/>
             </columns>
         </TableView>
     </center>

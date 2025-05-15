@@ -11,9 +11,9 @@
     <children>
         <VBox layoutX="0" layoutY="0" prefWidth="800" prefHeight="600" alignment="CENTER" styleClass="center-container">
             <children>
-                <ImageView fx:id="avionLogo" fitWidth="160" fitHeight="50"/>
+                <ImageView fx:id="avionLogo" fitWidth="160" fitHeight="50" styleClass="logo-img"/>
 
-                <VBox spacing="20" alignment="CENTER" styleClass="card">
+                <VBox spacing="30" alignment="CENTER" styleClass="card">
                     <Label fx:id="bienvenueLabel" text="Système de Gestion des Vols" wrapText="true" styleClass="title-label"/>
                     <Label fx:id="projetDescriptionLabel" text="Découvrez notre flotte aérienne" wrapText="true" styleClass="subtitle-label"/>
 

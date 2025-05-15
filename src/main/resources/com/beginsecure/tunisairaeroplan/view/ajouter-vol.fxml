@@ -1,45 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml"
+<ScrollPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.beginsecure.tunisairaeroplan.Controller.AjouterVolController"
-            stylesheets="@style.css">
-    <children>
-        <ScrollPane fitToWidth="true" fitToHeight="true" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0">
-            <content>
-                <VBox alignment="CENTER" spacing="15" prefWidth="300" style="-fx-padding: 30;">
+            fitToWidth="true"
+            style="-fx-background: #f5f5f5;"
+            prefViewportWidth="800"
+            prefViewportHeight="600">
 
-                    <!-- Informations du vol -->
-                    <TextField fx:id="numVolField" promptText="Numéro du Vol" prefWidth="300" />
-                    <TextField fx:id="destinationField" promptText="Destination" prefWidth="300" />
-                    <DatePicker fx:id="heureDepartField" promptText="Date de départ" prefWidth="300" />
-                    <TextField fx:id="heureDepartTimeField" promptText="Heure de départ (HH:mm)" prefWidth="300" />
-                    <DatePicker fx:id="heureArriveeField" promptText="Date d'arrivée" prefWidth="300" />
-                    <TextField fx:id="heureArriveeTimeField" promptText="Heure d'arrivée (HH:mm)" prefWidth="300" />
-                    <ComboBox fx:id="typeTrajetCombo" promptText="Type de Trajet" prefWidth="300" />
-                    <ComboBox fx:id="statutCombo" promptText="Statut du Vol" prefWidth="300" />
-                    <ComboBox fx:id="avionCombo" promptText="Avion" prefWidth="300" />
+    <content>
+        <VBox spacing="15" alignment="TOP_CENTER" style="-fx-background-color: #f5f5f5; -fx-padding: 15;">
+            <Label text="Ajouter un nouveau vol" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;">
+                <font>
+                    <Font name="System Bold" size="16.0" />
+                </font>
+            </Label>
 
-                    <!-- Sélection dynamique des membres de l'équipage -->
-                    <Label text="Sélectionner les membres de l'équipage :" style="-fx-font-weight: bold;" />
+            <GridPane hgap="10" vgap="10" alignment="CENTER" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 5;">
+                <columnConstraints>
+                    <ColumnConstraints halignment="RIGHT" minWidth="120" prefWidth="120"/>
+                    <ColumnConstraints minWidth="200" prefWidth="200" hgrow="ALWAYS"/>
+                </columnConstraints>
 
-                    <ComboBox fx:id="piloteCombo" promptText="Pilote" prefWidth="300" />
-                    <ComboBox fx:id="copiloteCombo" promptText="Copilote" prefWidth="300" />
-                    <ComboBox fx:id="chefCabineCombo" promptText="Chef de cabine" prefWidth="300" />
-                    <ComboBox fx:id="hotesseCombo" promptText="Hôtesse" prefWidth="300" />
-                    <ComboBox fx:id="mecanicienCombo" promptText="Mécanicien" prefWidth="300" />
+                <Label text="Numéro du vol:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="numVolField" GridPane.rowIndex="0" GridPane.columnIndex="1" editable="false"/>
 
-                    <Button text="Ajouter Vol" onAction="#ajouterVol" prefWidth="200" />
-                </VBox>
-            </content>
-        </ScrollPane>
-    </children>
-</AnchorPane>
+                <Label text="Pays d'origine:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="paysOrigineCombo" GridPane.rowIndex="1" GridPane.columnIndex="1" editable="false"/>
+
+                <Label text="Aéroport d'origine:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="aeroportOrigineCombo" GridPane.rowIndex="2" GridPane.columnIndex="1" editable="false"/>
+
+                <Label text="Pays de destination:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="paysDestinationCombo" GridPane.rowIndex="3" GridPane.columnIndex="1" editable="false"/>
+
+                <Label text="Aéroport de destination:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="aeroportDestinationCombo" GridPane.rowIndex="4" GridPane.columnIndex="1" editable="false"/>
+
+                <!-- Dates et heures -->
+                <Label text="Date de départ:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                <DatePicker fx:id="heureDepartField" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+                <Label text="Heure de départ:" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+                <TextField fx:id="heureDepartTimeField" promptText="HH:mm" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+
+                <Label text="Date d'arrivée:" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
+                <DatePicker fx:id="heureArriveeField" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+
+                <Label text="Heure d'arrivée:" GridPane.rowIndex="8" GridPane.columnIndex="0"/>
+                <TextField fx:id="heureArriveeTimeField" promptText="HH:mm" GridPane.rowIndex="8" GridPane.columnIndex="1"/>
+
+                <!-- Type et statut -->
+                <Label text="Type de trajet:" GridPane.rowIndex="9" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="typeTrajetCombo" GridPane.rowIndex="9" GridPane.columnIndex="1"/>
+
+                <Label text="Statut du vol:" GridPane.rowIndex="10" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="statutCombo" GridPane.rowIndex="10" GridPane.columnIndex="1"/>
+
+                <!-- Avion -->
+                <Label text="Avion:" GridPane.rowIndex="11" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="avionCombo" GridPane.rowIndex="11" GridPane.columnIndex="1"/>
+
+                <!-- Section Équipage -->
+                <Label text="Équipage:" style="-fx-font-weight: bold;" GridPane.rowIndex="12" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+
+                <Label text="Pilote:" GridPane.rowIndex="13" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="piloteCombo" GridPane.rowIndex="13" GridPane.columnIndex="1"/>
+
+                <Label text="Copilote:" GridPane.rowIndex="14" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="copiloteCombo" GridPane.rowIndex="14" GridPane.columnIndex="1"/>
+
+                <Label text="Chef de cabine:" GridPane.rowIndex="15" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="chefCabineCombo" GridPane.rowIndex="15" GridPane.columnIndex="1"/>
+
+                <Label text="Hôtesse:" GridPane.rowIndex="16" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="hotesseCombo" GridPane.rowIndex="16" GridPane.columnIndex="1"/>
+
+                <Label text="Mécanicien:" GridPane.rowIndex="17" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="mecanicienCombo" GridPane.rowIndex="17" GridPane.columnIndex="1"/>
+            </GridPane>
+
+            <HBox spacing="15" alignment="CENTER" style="-fx-padding: 15 0 0 0;">
+                <Button fx:id="btnAjouter" text="Ajouter"
+                        style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 15;"
+                        onAction="#ajouterVol"/>
+                <Button fx:id="btnAnnuler" text="Annuler"
+                        style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 15;"
+                        onAction="#retourListeVols"/>
+            </HBox>
+        </VBox>
+    </content>
+</ScrollPane>

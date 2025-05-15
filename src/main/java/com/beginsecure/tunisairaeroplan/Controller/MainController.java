@@ -20,7 +20,9 @@ public class MainController {
     public void showHome() {
         loadPage("Home.fxml");
     }
-
+    public StackPane getContentPane() {
+        return contentPane;
+    }
     @FXML
     public void showAvions() {
         loadPage("ListeAvion.fxml");

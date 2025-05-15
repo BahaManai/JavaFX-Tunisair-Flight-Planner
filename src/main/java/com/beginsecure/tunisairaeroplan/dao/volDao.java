@@ -28,21 +28,31 @@ public class volDao {
     }
 
     public void insertVol(vol vol) throws SQLException {
-        String sql = "INSERT INTO Vol (numVol, destination, heure_depart, heure_arrivee, type_trajet, statutVol, avion_id, equipage_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Vol (numVol, origine,destination, heure_depart, heure_arrivee, type_trajet, statutVol, avion_id, equipage_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, vol.getNumVol());
-            stmt.setString(2, vol.getDestination());
-            stmt.setTimestamp(3, new Timestamp(vol.getHeureDepart().getTime()));
-            stmt.setTimestamp(4, new Timestamp(vol.getHeureArrivee().getTime()));
-            stmt.setString(5, vol.getTypeTrajet().name());
-            stmt.setString(6, vol.getStatut().name());
-            stmt.setInt(7, vol.getAvion().getId());
-            stmt.setInt(8, vol.getEquipage().getId());
+            stmt.setString(2, vol.getOrigine());
+            stmt.setString(3, vol.getDestination());
+            stmt.setTimestamp(4, new Timestamp(vol.getHeureDepart().getTime()));
+            stmt.setTimestamp(5, new Timestamp(vol.getHeureArrivee().getTime()));
+            stmt.setString(6, vol.getTypeTrajet().name());
+            stmt.setString(7, vol.getStatut().name());
+            stmt.setInt(8, vol.getAvion().getId());
+            stmt.setInt(9, vol.getEquipage().getId());
             stmt.executeUpdate();
         }
     }
-
+    public int getDernierNumeroVol() throws SQLException {
+        String sql = "SELECT MAX(CAST(SUBSTRING(numVol, 5) AS UNSIGNED)) FROM vol WHERE numVol LIKE 'vol %'";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
+        }
+    }
     public List<vol> getAllVols() throws SQLException {
         List<vol> vols = new ArrayList<>();
         String sql = "SELECT * FROM Vol";
@@ -58,6 +68,7 @@ public class volDao {
                 vol v = new vol();
                 v.setIdVol(rs.getInt("id"));
                 v.setNumeroVol(rs.getString("numVol"));
+                v.setOrigine(rs.getString("origine"));
                 v.setDestination(rs.getString("destination"));
                 v.setHeureDepart(rs.getTimestamp("heure_depart"));
                 v.setHeureArrivee(rs.getTimestamp("heure_arrivee"));

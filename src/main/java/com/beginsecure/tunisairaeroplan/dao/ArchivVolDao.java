@@ -87,7 +87,6 @@ public class ArchivVolDao {
                 archiveStmt.setString(2, avion.getModele());
                 archiveStmt.setInt(3, avion.getCapacite());
                 archiveStmt.setBoolean(4, avion.isEstDisponible());
-                archiveStmt.setString(5, avion.getTypeTrajet().name());
                 archiveStmt.executeUpdate();
             }
 

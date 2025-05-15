@@ -43,7 +43,6 @@ public class ListeAvionController {
         colModele.setCellValueFactory(new PropertyValueFactory<>("modele"));
         colCapacite.setCellValueFactory(new PropertyValueFactory<>("capacite"));
         colDisponible.setCellValueFactory(new PropertyValueFactory<>("estDisponible"));
-        colTypeTrajet.setCellValueFactory(new PropertyValueFactory<>("typeTrajet"));
     }
 
     private void loadAvions() {

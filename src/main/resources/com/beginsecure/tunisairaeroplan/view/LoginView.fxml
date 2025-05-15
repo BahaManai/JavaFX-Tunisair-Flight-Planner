@@ -42,11 +42,8 @@
 
         <Button fx:id="loginButton" text="Se connecter"
                 style="-fx-background-color: #0066cc; -fx-text-fill: white; -fx-font-weight: bold; -fx-pref-width: 200; -fx-pref-height: 35;"/>
-
         <Label fx:id="errorLabel" style="-fx-text-fill: red; -fx-font-weight: bold;" visible="false" wrapText="true" maxWidth="300"/>
-
         <Separator />
-
         <HBox spacing="5" alignment="CENTER">
             <Label text="Nouveau employé?" style="-fx-text-fill: #666;"/>
             <Button fx:id="registerButton" text="Créer un compte"

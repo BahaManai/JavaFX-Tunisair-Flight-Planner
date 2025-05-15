@@ -15,11 +15,19 @@ public class vol {
     private StatutVol statut;
     private Avion avion;
     private Equipage equipage;
-
+    private String origine;
     public vol() {
     }
 
-    public vol(String numeroVol, String destination, Date heureDepart, Date heureArrivee, TypeTrajet typeTrajet, StatutVol statut, Avion avion, Equipage equipage) {
+    public String getOrigine() {
+        return origine;
+    }
+
+    public void setOrigine(String origine) {
+        this.origine = origine;
+    }
+
+    public vol(String numeroVol, String origine, String destination, Date heureDepart, Date heureArrivee, TypeTrajet typeTrajet, StatutVol statut, Avion avion, Equipage equipage) {
         this.numeroVol = numeroVol;
         this.destination = destination;
         this.heureDepart = heureDepart;
@@ -28,6 +36,7 @@ public class vol {
         this.statut = statut;
         this.avion = avion;
         this.equipage = equipage;
+        this.origine = origine;
     }
 
     public void modifierHoraire(Date nvDep, Date nvArr) {

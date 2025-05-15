@@ -29,11 +29,7 @@
 
         <Label text="Disponible:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
         <CheckBox fx:id="cbDisponible" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-
-        <Label text="Type Trajet:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-        <ComboBox fx:id="cbTypeTrajet" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
     </GridPane>
-
     <HBox spacing="10" alignment="CENTER">
         <Button fx:id="btnValider" text="Valider"
                 style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold;"

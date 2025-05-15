@@ -22,7 +22,6 @@ public class ArchiveAvionController {
     @FXML private TableColumn<Avion, String> colModele;
     @FXML private TableColumn<Avion, Integer> colCapacite;
     @FXML private TableColumn<Avion, Boolean> colDisponible;
-    @FXML private TableColumn<Avion, String> colTypeTrajet;
 
     private Connection connection;
     private ArchiveAvionDao archiveDao;
@@ -46,7 +45,6 @@ public class ArchiveAvionController {
         colModele.setCellValueFactory(new PropertyValueFactory<>("modele"));
         colCapacite.setCellValueFactory(new PropertyValueFactory<>("capacite"));
         colDisponible.setCellValueFactory(new PropertyValueFactory<>("estDisponible"));
-        colTypeTrajet.setCellValueFactory(new PropertyValueFactory<>("typeTrajet"));
     }
 
     private void loadArchivedAvions() {
@@ -109,7 +107,6 @@ public class ArchiveAvionController {
         Stage stage = (Stage) archiveTable.getScene().getWindow();
         stage.close();
     }
-
     private void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
