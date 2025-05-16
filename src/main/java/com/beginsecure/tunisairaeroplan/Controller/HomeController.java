@@ -18,7 +18,7 @@ public class HomeController {
     public void initialize() {
         bienvenueLabel.setText("Bienvenue sur le système de gestion Tunisair !");
         projetDescriptionLabel.setText("Projet de gestion des vols, avions, et équipages.");
-        developpeursLabel.setText("Ferchichi Molka & Mannai Baha Eddine");
+        developpeursLabel.setText("Ferchichi Molka & Manai Baha Eddine");
     }
 
 }

@@ -8,6 +8,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class DAOAvion {
     private Connection connection;
@@ -195,5 +196,39 @@ public class DAOAvion {
             e.printStackTrace();
         }
         return avions;
+    }
+    public int getTotalAvions() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM Avion";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    // Récupère le nombre d'avions par marque
+    public List<Map<String, Object>> getAvionsByMarque() throws SQLException {
+        String sql = "SELECT marque, COUNT(*) as count FROM Avion GROUP BY marque";
+        List<Map<String, Object>> result = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                result.add(Map.of("marque", rs.getString("marque"), "count", rs.getInt("count")));
+            }
+        }
+        return result;
+    }
+
+    public int getAvailableAvions() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM Avion WHERE estDisponible = true";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
     }
 }

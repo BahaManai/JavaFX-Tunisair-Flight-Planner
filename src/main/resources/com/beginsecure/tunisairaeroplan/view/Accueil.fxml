@@ -3,6 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
 
 <VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.beginsecure.tunisairaeroplan.Controller.AccueilController"
       stylesheets="@Accueil.css">
@@ -25,9 +26,13 @@
 
         <Text text="Cette application permet de gérer les vols de la compagnie Tunisair."
               style="-fx-font-size: 16;"
-
               textAlignment="CENTER"/>
 
-        <!-- Vous pouvez ajouter d'autres éléments ici -->
+        <!-- Ajout de l'image -->
+        <ImageView fx:id="welcomeImage" fitWidth="600" preserveRatio="true">
+            <image>
+                <Image url="@../images/tunisair-airplane.png"/>
+            </image>
+        </ImageView>
     </VBox>
 </VBox>

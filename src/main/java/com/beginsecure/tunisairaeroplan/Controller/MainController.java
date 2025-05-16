@@ -22,7 +22,7 @@ public class MainController {
 
     @FXML
     public void showHome() {
-        loadPage("Home.fxml");
+        loadPage("Dashboard.fxml");
     }
     public StackPane getContentPane() {
         return contentPane;

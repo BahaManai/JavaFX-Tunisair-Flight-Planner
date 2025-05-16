@@ -10,3 +10,10 @@
     -fx-background-color: linear-gradient(to bottom, #FF8C00, #FF4500);
     -fx-cursor: hand;
 }
+
+#welcomeImage {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 5);
+    -fx-border-color: #2c3e50;
+    -fx-border-width: 2;
+    -fx-border-radius: 5;
+}

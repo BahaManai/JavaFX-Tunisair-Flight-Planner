@@ -1,21 +1,47 @@
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.Button?>
+<?xml version="1.0" encoding="UTF-8"?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.beginsecure.tunisairaeroplan.Controller.ArchivVolController">
-    <TableView fx:id="tableVolsArchives" layoutX="20" layoutY="20" prefWidth="800" prefHeight="300">
-        <columns>
-            <TableColumn fx:id="colNumVol" text="Numéro Vol" />
-            <TableColumn fx:id="colDestination" text="Destination" />
-            <TableColumn fx:id="colDepart" text="Heure Départ" />
-            <TableColumn fx:id="colArrivee" text="Heure Arrivée" />
-            <TableColumn fx:id="colTypeTrajet" text="Type Trajet" />
-            <TableColumn fx:id="colStatut" text="Statut" />
-            <TableColumn fx:id="colAvion" text="ID Avion" />
-            <TableColumn fx:id="colEquipage" text="ID Équipage" />
-            <TableColumn fx:id="colRestaurer" text="Restaurer" />
-            <TableColumn fx:id="colSupprimer" text="Supprimer" />
-        </columns>
-    </TableView>
-</AnchorPane>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.beginsecure.tunisairaeroplan.Controller.ArchivVolController">
+
+    <top>
+        <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 15 15 15 15;" text="Liste des Vols Archivés" BorderPane.alignment="CENTER" />
+    </top>
+
+    <center>
+        <VBox spacing="10">
+            <TableView fx:id="tableVolsArchives" prefHeight="300.0" prefWidth="800.0">
+                <columns>
+                    <TableColumn fx:id="colNumVol" text="Numéro Vol" />
+                    <TableColumn fx:id="colDestination" text="Destination" />
+                    <TableColumn fx:id="colDepart" text="Heure Départ" />
+                    <TableColumn fx:id="colArrivee" text="Heure Arrivée" />
+                    <TableColumn fx:id="colTypeTrajet" text="Type Trajet" />
+                    <TableColumn fx:id="colStatut" text="Statut" />
+                    <TableColumn fx:id="colAvion" text="ID Avion" />
+                    <TableColumn fx:id="colEquipage" text="ID Équipage" />
+                    <TableColumn fx:id="colRestaurer" text="Restaurer" />
+                    <TableColumn fx:id="colSupprimer" text="Supprimer" />
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+
+    <bottom>
+        <StackPane alignment="CENTER" prefHeight="200.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+            <ImageView fx:id="archiveImage" fitHeight="147.0" fitWidth="176.0">
+                <image>
+                    <Image url="@../images/vols_archivés.png" />
+                </image>
+            </ImageView>
+        </StackPane>
+    </bottom>
+
+</BorderPane>

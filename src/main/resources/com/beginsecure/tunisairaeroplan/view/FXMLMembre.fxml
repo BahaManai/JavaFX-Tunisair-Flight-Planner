@@ -7,17 +7,20 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="545.0" prefWidth="622.0" stylesheets="@../css/membre.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.beginsecure.tunisairaeroplan.Controller.MembreController">
+<BorderPane stylesheets="@../css/membre.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.beginsecure.tunisairaeroplan.Controller.MembreController">
+    <top>
+        <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 15 15 15 15;" text="Gestion des Membres" BorderPane.alignment="CENTER" />
+    </top>
 
-    <children>
-        <VBox alignment="TOP_CENTER" spacing="20" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
-            <!-- Titre -->
-            <Label styleClass="title-label" text="Gestion des Membres" />
-
+    <center>
+        <VBox alignment="TOP_CENTER" spacing="20">
             <!-- Formulaire + Boutons -->
             <HBox alignment="CENTER" spacing="10">
                 <TextField fx:id="txtCin" promptText="CIN" />
@@ -27,6 +30,9 @@
                 <CheckBox fx:id="chkDisponible" text="Disponible" />
             </HBox>
 
+                  <!-- Image -->
+            <StackPane alignment="CENTER" prefHeight="0.0" prefWidth="602.0" />
+
             <!-- Boutons -->
             <HBox alignment="CENTER" spacing="10">
                 <Button fx:id="btnAjouter" onAction="#ajouterMembre" styleClass="btn-primary" text="Ajouter" />
@@ -34,9 +40,14 @@
                 <Button fx:id="btnSupprimer" onAction="#supprimerMembre" styleClass="btn-danger" text="Supprimer" />
                 <Button fx:id="btnConsulter" onAction="#consulterMembre" styleClass="btn-info" text="Consulter" />
             </HBox>
+             <ImageView fx:id="membreImage" fitHeight="134.0" fitWidth="141.0">
+                 <image>
+                     <Image url="@../images/membre.png" />
+                 </image>
+             </ImageView>
 
             <!-- Tableau des membres -->
-            <TableView fx:id="tvMembre" maxWidth="600" prefHeight="332.0" prefWidth="600.0">
+            <TableView fx:id="tvMembre" maxWidth="600" prefHeight="250.0" prefWidth="600.0">
                 <columns>
                     <TableColumn fx:id="colCin" prefWidth="100" text="CIN" />
                     <TableColumn fx:id="colNom" prefWidth="100" text="Nom" />
@@ -46,5 +57,5 @@
                 </columns>
             </TableView>
         </VBox>
-    </children>
-</AnchorPane>
+    </center>
+</BorderPane>

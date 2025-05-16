@@ -8,6 +8,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class membreDao {
     private Connection connection;
@@ -157,5 +158,51 @@ public class membreDao {
             throw new SQLException("Erreur lors de la récupération des membres disponibles : " + ex.getMessage(), ex);
         }
         return membres;
+    }
+
+    // Dans membreDao.java
+    public List<Map<String, Object>> getCrewRolesDistribution() throws SQLException {
+        String sql = "SELECT role, COUNT(*) as count FROM Membre GROUP BY role";
+        List<Map<String, Object>> result = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                result.add(Map.of("role", rs.getString("role"), "count", rs.getInt("count")));
+            }
+        }
+        return result;
+    }
+    // Dans membreDao.java
+    public double getCrewAvailabilityPercentage() throws SQLException {
+        String sql = "SELECT (COUNT(CASE WHEN estDisponible = true THEN 1 END) * 100.0 / COUNT(*)) as availability FROM Membre";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("availability");
+            }
+        }
+        return 0.0;
+    }
+
+    public int getAvailableMembres() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM Membre WHERE estDisponible = true";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    public int getTotalMembres() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM Membre";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
     }
 }

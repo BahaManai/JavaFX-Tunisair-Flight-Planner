@@ -9,10 +9,7 @@ import com.beginsecure.tunisairaeroplan.utilites.LaConnexion;
 
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class volDao {
 
@@ -434,5 +431,99 @@ public class volDao {
             }
         }
         return vols;
+    }
+
+    public List<Map<String, Object>> getTopDestinations(int limit) throws SQLException {
+        String sql = "SELECT destination, COUNT(*) as count FROM vol GROUP BY destination ORDER BY count DESC LIMIT ?";
+        List<Map<String, Object>> result = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, limit);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                result.add(Map.of("destination", rs.getString("destination"), "count", rs.getInt("count")));
+            }
+        }
+        return result;
+    }
+
+    public List<Map<String, Object>> getVolsByStatus() throws SQLException {
+        String sql = "SELECT statutVol as status, COUNT(*) as count FROM vol GROUP BY statutVol";
+        List<Map<String, Object>> result = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                result.add(Map.of("status", rs.getString("status"), "count", rs.getInt("count")));
+            }
+        }
+        return result;
+    }
+
+    public int getTotalVols() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM vol";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    public int getVolsAnnules() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM vol WHERE statutVol = 'Annulé'";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    public double getTauxOccupationMoyen() throws SQLException {
+        // Placeholder : À adapter selon votre modèle de données (ex. table de réservations)
+        return 75.0; // Valeur fictive pour l'exemple
+    }
+
+    public Map<StatutVol, Integer> countVolsByStatut() throws SQLException {
+        Map<StatutVol, Integer> counts = new HashMap<>();
+        String sql = "SELECT statutVol, COUNT(*) as total FROM vol GROUP BY statutVol";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                String statutStr = rs.getString("statutVol");
+                int count = rs.getInt("total");
+                StatutVol statut = StatutVol.valueOf(statutStr);
+                counts.put(statut, count);
+            }
+        }
+
+        // Assurer que tous les statuts soient présents avec 0 si manquants
+        for (StatutVol statut : StatutVol.values()) {
+            counts.putIfAbsent(statut, 0);
+        }
+
+        return counts;
+    }
+
+    public int getVolsThisWeek() throws SQLException {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        java.sql.Date startOfWeek = new java.sql.Date(cal.getTimeInMillis());
+        cal.add(Calendar.DAY_OF_WEEK, 6);
+        java.sql.Date endOfWeek = new java.sql.Date(cal.getTimeInMillis());
+
+        String sql = "SELECT COUNT(*) FROM Vol WHERE heure_depart BETWEEN ? AND ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setDate(1, startOfWeek);
+            stmt.setDate(2, endOfWeek);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
     }
 }

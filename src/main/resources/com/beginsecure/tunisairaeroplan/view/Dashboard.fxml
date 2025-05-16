@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.web.WebView?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.beginsecure.tunisairaeroplan.Controller.DashboardController"
+           alignment="CENTER" prefWidth="800" prefHeight="600">
+    <WebView fx:id="webView" prefHeight="550" prefWidth="780"/>
+</StackPane>
