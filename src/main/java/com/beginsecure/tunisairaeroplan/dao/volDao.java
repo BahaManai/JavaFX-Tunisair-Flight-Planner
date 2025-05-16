@@ -10,6 +10,7 @@ import com.beginsecure.tunisairaeroplan.utilites.LaConnexion;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class volDao {
@@ -19,6 +20,7 @@ public class volDao {
     public volDao(Connection connection) {
         this.connection = connection;
     }
+
     public volDao() {
         try {
             this.connection = LaConnexion.seConnecter();
@@ -28,7 +30,7 @@ public class volDao {
     }
 
     public void insertVol(vol vol) throws SQLException {
-        String sql = "INSERT INTO Vol (numVol, origine,destination, heure_depart, heure_arrivee, type_trajet, statutVol, avion_id, equipage_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)";
+        String sql = "INSERT INTO Vol (numVol, origine, destination, heure_depart, heure_arrivee, type_trajet, statutVol, avion_id, equipage_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, vol.getNumVol());
@@ -43,6 +45,7 @@ public class volDao {
             stmt.executeUpdate();
         }
     }
+
     public int getDernierNumeroVol() throws SQLException {
         String sql = "SELECT MAX(CAST(SUBSTRING(numVol, 5) AS UNSIGNED)) FROM vol WHERE numVol LIKE 'vol %'";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -53,6 +56,7 @@ public class volDao {
             return 0;
         }
     }
+
     public List<vol> getAllVols() throws SQLException {
         List<vol> vols = new ArrayList<>();
         String sql = "SELECT * FROM Vol";
@@ -233,6 +237,44 @@ public class volDao {
         }
     }
 
+    public boolean canAddVolForMembres(List<Integer> membreIds, LocalDateTime heureDepart, LocalDateTime heureArrivee) {
+        String sql = "SELECT COUNT(*) FROM vol v " +
+                "JOIN equipage_membre em ON v.equipage_id = em.equipage_id " +
+                "JOIN membre m ON em.membre_id = m.id " +
+                "WHERE em.membre_id IN (" + String.join(",", membreIds.stream().map(id -> "?").toList()) + ") " +
+                "AND v.statutVol != 'Annulé' " +
+                "AND m.estDisponible = TRUE " +
+                "AND (? BETWEEN v.heure_depart AND v.heure_arrivee " +
+                "     OR ? BETWEEN v.heure_depart AND v.heure_arrivee " +
+                "     OR v.heure_depart BETWEEN ? AND ? " +
+                "     OR v.heure_arrivee BETWEEN ? AND ?)";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            // Set the member IDs
+            int index = 1;
+            for (Integer membreId : membreIds) {
+                stmt.setInt(index++, membreId);
+            }
+            // Set the timestamps
+            stmt.setTimestamp(index++, Timestamp.valueOf(heureDepart));
+            stmt.setTimestamp(index++, Timestamp.valueOf(heureArrivee));
+            stmt.setTimestamp(index++, Timestamp.valueOf(heureDepart));
+            stmt.setTimestamp(index++, Timestamp.valueOf(heureArrivee));
+            stmt.setTimestamp(index++, Timestamp.valueOf(heureDepart));
+            stmt.setTimestamp(index, Timestamp.valueOf(heureArrivee));
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) == 0; // Returns true if no conflicts
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // Deprecated method (kept for backward compatibility, but should be phased out)
+    @Deprecated
     public boolean canAddVolForMembres(int equipageId, LocalDateTime heureDepart, LocalDateTime heureArrivee) {
         String sql = "SELECT COUNT(*) FROM vol v " +
                 "JOIN equipage_membre em ON v.equipage_id = em.equipage_id " +
@@ -253,7 +295,7 @@ public class volDao {
             stmt.setTimestamp(7, Timestamp.valueOf(heureArrivee));
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return rs.getInt(1) == 0; // Retourne true si aucun conflit
+                return rs.getInt(1) == 0; // Returns true if no conflicts
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -280,13 +322,14 @@ public class volDao {
             stmt.setTimestamp(7, Timestamp.valueOf(heureArrivee));
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return rs.getInt(1) == 0; // Retourne true si aucun conflit
+                return rs.getInt(1) == 0; // Returns true if no conflicts
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
+
     public String getNomEquipageParId(int id) throws SQLException {
         String sql = "SELECT nomEquipage FROM equipage WHERE id = ?";
         try (PreparedStatement pst = connection.prepareStatement(sql)) {
@@ -311,4 +354,53 @@ public class volDao {
         return "Avion inconnu";
     }
 
+    public List<vol> getVolsByWeek(int weekOfYear, int year) throws SQLException {
+        List<vol> vols = new ArrayList<>();
+        // Calculate the start and end of the week
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.WEEK_OF_YEAR, weekOfYear);
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY); // Start of the week (Monday)
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Timestamp startOfWeek = new Timestamp(cal.getTimeInMillis());
+
+        cal.add(Calendar.DAY_OF_WEEK, 6); // End of the week (Sunday)
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        cal.set(Calendar.MILLISECOND, 999);
+        Timestamp endOfWeek = new Timestamp(cal.getTimeInMillis());
+
+        String sql = "SELECT * FROM vol WHERE heure_depart BETWEEN ? AND ?";
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {
+            pst.setTimestamp(1, startOfWeek);
+            pst.setTimestamp(2, endOfWeek);
+            ResultSet rs = pst.executeQuery();
+            DAOAvion daoAvion = new DAOAvion(connection);
+            EquipageDao daoEquipage = new EquipageDao(connection);
+            while (rs.next()) {
+                vol v = new vol();
+                v.setIdVol(rs.getInt("id"));
+                v.setNumeroVol(rs.getString("numVol"));
+                v.setOrigine(rs.getString("origine"));
+                v.setDestination(rs.getString("destination"));
+                v.setHeureDepart(rs.getTimestamp("heure_depart"));
+                v.setHeureArrivee(rs.getTimestamp("heure_arrivee"));
+                v.setTypeTrajet(TypeTrajet.valueOf(rs.getString("type_trajet")));
+                v.setStatut(StatutVol.valueOf(rs.getString("statutVol")));
+
+                int avionId = rs.getInt("avion_id");
+                v.setAvion(avionId > 0 ? daoAvion.getAvionById(avionId) : null);
+
+                int equipageId = rs.getInt("equipage_id");
+                v.setEquipage(equipageId > 0 ? daoEquipage.getEquipageById(equipageId) : null);
+
+                vols.add(v);
+            }
+        }
+        return vols;
+    }
 }

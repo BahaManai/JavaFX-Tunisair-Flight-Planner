@@ -69,19 +69,22 @@
                 <Label text="Équipage:" style="-fx-font-weight: bold;" GridPane.rowIndex="12" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
 
                 <Label text="Pilote:" GridPane.rowIndex="13" GridPane.columnIndex="0"/>
-                <ComboBox fx:id="piloteCombo" GridPane.rowIndex="13" GridPane.columnIndex="1"/>
+                <ComboBox fx:id="piloteCombo" promptText="Sélectionner (requis)" GridPane.rowIndex="13" GridPane.columnIndex="1"/>
 
                 <Label text="Copilote:" GridPane.rowIndex="14" GridPane.columnIndex="0"/>
-                <ComboBox fx:id="copiloteCombo" GridPane.rowIndex="14" GridPane.columnIndex="1"/>
+                <ComboBox fx:id="copiloteCombo" promptText="Sélectionner (requis)" GridPane.rowIndex="14" GridPane.columnIndex="1"/>
 
                 <Label text="Chef de cabine:" GridPane.rowIndex="15" GridPane.columnIndex="0"/>
-                <ComboBox fx:id="chefCabineCombo" GridPane.rowIndex="15" GridPane.columnIndex="1"/>
+                <ComboBox fx:id="chefCabineCombo" promptText="Sélectionner (optionnel)" GridPane.rowIndex="15" GridPane.columnIndex="1"/>
 
                 <Label text="Hôtesse:" GridPane.rowIndex="16" GridPane.columnIndex="0"/>
-                <ComboBox fx:id="hotesseCombo" GridPane.rowIndex="16" GridPane.columnIndex="1"/>
+                <ComboBox fx:id="hotesseCombo" promptText="Sélectionner (optionnel)" GridPane.rowIndex="16" GridPane.columnIndex="1"/>
 
                 <Label text="Mécanicien:" GridPane.rowIndex="17" GridPane.columnIndex="0"/>
-                <ComboBox fx:id="mecanicienCombo" GridPane.rowIndex="17" GridPane.columnIndex="1"/>
+                <ComboBox fx:id="mecanicienCombo" promptText="Sélectionner (optionnel)" GridPane.rowIndex="17" GridPane.columnIndex="1"/>
+
+                <Label text="Agent de sécurité:" GridPane.rowIndex="18" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="agentSecuriteCombo" promptText="Sélectionner (optionnel)" GridPane.rowIndex="18" GridPane.columnIndex="1"/>
             </GridPane>
 
             <HBox spacing="15" alignment="CENTER" style="-fx-padding: 15 0 0 0;">

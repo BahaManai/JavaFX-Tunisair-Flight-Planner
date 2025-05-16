@@ -92,14 +92,7 @@
     -fx-background-color: linear-gradient(to bottom, #FF8C00, #FF4500);
     -fx-cursor: hand;
 }
-.home-root {
-    -fx-background-color: linear-gradient(to bottom,
-        #a1c4fd 0%,
-        #c2e9fb 50%,
-        #f6d365 100%);
-    -fx-background-size: 400% 400%;
-    -fx-animation: SkyAnimation 15s ease infinite;
-}
+
 
 @keyframes SkyAnimation {
     0% { -fx-background-position: 0% 50% }
@@ -109,21 +102,3 @@
 
 
 /* Overlay pour améliorer la lisibilité */
-.home-root:before {
-    -fx-content: "";
-    -fx-position: absolute;
-    -fx-background: rgba(255,255,255,0.3);
-    -fx-insets: 0;
-}
-.home-root {
-    -fx-background-color: #f0f8ff;
-    -fx-background-repeat: repeat;
-    -fx-background-opacity: 0.05;
-}
-.home-root {
-    -fx-background-color: radial-gradient(center 50% 50%, radius 100%,
-        #0a1128 0%,
-        #001f3f 70%,
-        #034078 100%);
-    -fx-effect: dropshadow(three-pass-box, rgba(255,255,255,0.2), 100, 0, 0, 0);
-}

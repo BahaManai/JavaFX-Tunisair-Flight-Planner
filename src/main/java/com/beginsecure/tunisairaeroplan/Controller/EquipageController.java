@@ -65,14 +65,33 @@ public class EquipageController {
     }
 
     private void chargerEquipages() {
-        List<Equipage> liste = equipageDao.getAllEquipagesAvecVol();
-        ObservableList<Equipage> data = FXCollections.observableArrayList(liste);
-        tableEquipages.setItems(data);
+        try {
+            List<Equipage> liste = equipageDao.getAllEquipagesAvecVol();
+            ObservableList<Equipage> data = FXCollections.observableArrayList(liste);
+            tableEquipages.setItems(data);
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Chargement des équipages", "Impossible de charger la liste des équipages : " + e.getMessage());
+            tableEquipages.setItems(FXCollections.observableArrayList()); // Clear table on error
+        }
     }
 
     private void afficherMembresEquipage(int equipageId) {
-        List<Membre> membres = equipageDao.getMembresByEquipageId(equipageId);
-        tableMembres.setItems(FXCollections.observableArrayList(membres));
-        lblMessage.setText("Membres de l’équipage sélectionné.");
+        try {
+            List<Membre> membres = equipageDao.getMembresByEquipageId(equipageId);
+            tableMembres.setItems(FXCollections.observableArrayList(membres));
+            lblMessage.setText("Membres de l’équipage sélectionné.");
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Affichage des membres", "Impossible d'afficher les membres de l’équipage : " + e.getMessage());
+            tableMembres.setItems(FXCollections.observableArrayList()); // Clear table on error
+            lblMessage.setText("Erreur lors du chargement des membres.");
+        }
+    }
+
+    private void showAlert(Alert.AlertType type, String title, String header, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

@@ -8,6 +8,7 @@ module com.beginsecure.tunisairaeroplan {
     requires org.kordamp.bootstrapfx.core;
     requires javafx.web;
     requires javafx.media;
+    requires jdk.jsobject;
 
     opens com.beginsecure.tunisairaeroplan to javafx.fxml;
     opens com.beginsecure.tunisairaeroplan.Controller to javafx.fxml;

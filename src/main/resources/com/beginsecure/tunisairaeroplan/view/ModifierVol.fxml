@@ -30,32 +30,62 @@
                 <Label text="Numéro du vol:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
                 <TextField fx:id="numVolField" GridPane.rowIndex="0" GridPane.columnIndex="1" editable="false"/>
 
-                <Label text="Destination:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                <TextField fx:id="destinationField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                <Label text="Pays d'origine:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="paysOrigineCombo" GridPane.rowIndex="1" GridPane.columnIndex="1" editable="false"/>
 
-                <Label text="Date de départ:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                <DatePicker fx:id="dateDepartPicker" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                <Label text="Aéroport d'origine:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="aeroportOrigineCombo" GridPane.rowIndex="2" GridPane.columnIndex="1" editable="false"/>
 
-                <Label text="Heure de départ:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                <TextField fx:id="heureDepartField" promptText="HH:mm" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                <Label text="Pays de destination:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="paysDestinationCombo" GridPane.rowIndex="3" GridPane.columnIndex="1" editable="false"/>
 
-                <Label text="Date d'arrivée:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-                <DatePicker fx:id="dateArriveePicker" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                <Label text="Destination:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="aeroportDestinationCombo" GridPane.rowIndex="4" GridPane.columnIndex="1" editable="false"/>
 
-                <Label text="Heure d'arrivée:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
-                <TextField fx:id="heureArriveeField" promptText="HH:mm" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+                <!-- Dates et heures -->
+                <Label text="Date de départ:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                <DatePicker fx:id="heureDepartField" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
 
-                <Label text="Type de trajet:" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
-                <ComboBox fx:id="typeTrajetComboBox" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+                <Label text="Heure de départ:" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+                <TextField fx:id="heureDepartTimeField" promptText="HH:mm" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
 
-                <Label text="Statut du vol:" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
-                <ComboBox fx:id="statutComboBox" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+                <Label text="Date d'arrivée:" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
+                <DatePicker fx:id="heureArriveeField" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
 
-                <Label text="Avion:" GridPane.rowIndex="8" GridPane.columnIndex="0"/>
-                <ComboBox fx:id="avionCombo" GridPane.rowIndex="8" GridPane.columnIndex="1"/>
+                <Label text="Heure d'arrivée:" GridPane.rowIndex="8" GridPane.columnIndex="0"/>
+                <TextField fx:id="heureArriveeTimeField" promptText="HH:mm" GridPane.rowIndex="8" GridPane.columnIndex="1"/>
 
-                <Label text="Équipage:" GridPane.rowIndex="9" GridPane.columnIndex="0"/>
-                <ComboBox fx:id="equipageCombo" GridPane.rowIndex="9" GridPane.columnIndex="1" disable="true"/>
+                <!-- Type et statut -->
+                <Label text="Type de trajet:" GridPane.rowIndex="9" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="typeTrajetCombo" GridPane.rowIndex="9" GridPane.columnIndex="1"/>
+
+                <Label text="Statut du vol:" GridPane.rowIndex="10" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="statutCombo" GridPane.rowIndex="10" GridPane.columnIndex="1"/>
+
+                <!-- Avion -->
+                <Label text="Avion:" GridPane.rowIndex="11" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="avionCombo" GridPane.rowIndex="11" GridPane.columnIndex="1"/>
+
+                <!-- Section Équipage -->
+                <Label text="Équipage:" style="-fx-font-weight: bold;" GridPane.rowIndex="12" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+
+                <Label text="Pilote:" GridPane.rowIndex="13" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="piloteCombo" promptText="Sélectionner (requis)" GridPane.rowIndex="13" GridPane.columnIndex="1"/>
+
+                <Label text="Copilote:" GridPane.rowIndex="14" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="copiloteCombo" promptText="Sélectionner (requis)" GridPane.rowIndex="14" GridPane.columnIndex="1"/>
+
+                <Label text="Chef de cabine:" GridPane.rowIndex="15" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="chefCabineCombo" promptText="Sélectionner (optionnel)" GridPane.rowIndex="15" GridPane.columnIndex="1"/>
+
+                <Label text="Hôtesse:" GridPane.rowIndex="16" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="hotesseCombo" promptText="Sélectionner (optionnel)" GridPane.rowIndex="16" GridPane.columnIndex="1"/>
+
+                <Label text="Mécanicien:" GridPane.rowIndex="17" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="mecanicienCombo" promptText="Sélectionner (optionnel)" GridPane.rowIndex="17" GridPane.columnIndex="1"/>
+
+                <Label text="Agent de sécurité:" GridPane.rowIndex="18" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="agentSecuriteCombo" promptText="Sélectionner (optionnel)" GridPane.rowIndex="18" GridPane.columnIndex="1"/>
             </GridPane>
 
             <HBox spacing="15" alignment="CENTER" style="-fx-padding: 15 0 0 0;">

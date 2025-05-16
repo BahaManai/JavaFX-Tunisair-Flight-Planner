@@ -138,6 +138,7 @@ public class ArchivVolController {
             }
         });
     }
+
     private void restaurerVol(vol v) {
         try {
             ArchivVolDao archivDao = new ArchivVolDao(LaConnexion.seConnecter());

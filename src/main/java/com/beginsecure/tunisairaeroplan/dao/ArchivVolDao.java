@@ -20,8 +20,8 @@ public class ArchivVolDao {
             ResultSet rs = selectStmt.executeQuery();
 
             if (rs.next()) {
-                String insertSql = "INSERT INTO Vol (id, numVol, destination, heure_depart, heure_arrivee, type_trajet, statutVol, avion_id, equipage_id) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                String insertSql = "INSERT INTO Vol (id, numVol, destination, heure_depart, heure_arrivee, type_trajet, statutVol, avion_id, equipage_id, origine) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 try (PreparedStatement insertStmt = connection.prepareStatement(insertSql)) {
                     insertStmt.setInt(1, rs.getInt("idVol"));
                     insertStmt.setString(2, rs.getString("numeroVol"));
@@ -32,6 +32,7 @@ public class ArchivVolDao {
                     insertStmt.setString(7, rs.getString("statut"));
                     insertStmt.setInt(8, rs.getInt("avion_id"));
                     insertStmt.setInt(9, rs.getInt("equipage_id"));
+                    insertStmt.setInt(10, rs.getInt("origine"));
                     insertStmt.executeUpdate();
                 }
 

@@ -66,16 +66,7 @@
 }
 
 /* ================= Boutons ================= */
-.button {
-    -fx-background-radius: 4px;
-    -fx-padding: 8px 16px;
-    -fx-font-size: 13px;
-    -fx-cursor: hand;
-    -fx-text-fill: white;
-    -fx-background-color: -fx-accent-color;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 0, 1);
-    -fx-transition: all 0.2s ease;
-}
+
 
 .button:hover {
     -fx-background-color: derive(-fx-accent-color, 20%);

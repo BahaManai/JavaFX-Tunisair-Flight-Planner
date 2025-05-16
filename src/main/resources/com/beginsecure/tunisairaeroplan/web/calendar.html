@@ -68,13 +68,23 @@
                 headerToolbar: {
                     left: 'prev,next',
                     center: 'title',
-                    right: 'timeGridWeek'
+                    right: 'today'
                 },
                 buttonText: {
-                    today: "Aujourd’hui",
-                    week: "Cette semaine"
+                    today: "Cette semaine",
                 },
-
+                customButtons: {
+                    timeGridWeek: {
+                        text: 'Cette semaine',
+                        click: function() {
+                            calendar.changeView('timeGridWeek');
+                            console.log('Changement de vue vers timeGridWeek');
+                            if (window.java) {
+                                window.java.loadEventsForWeek();
+                            }
+                        }
+                    }
+                },
                 eventClick: function(info) {
                     const vol = info.event;
                     const equipage = vol.extendedProps.equipage || 'Non défini';
@@ -83,17 +93,19 @@
                     const end = vol.end.toLocaleString('fr-FR');
 
                     const details = `
-                            <strong>Numéro du vol :</strong> ${vol.title}<br/>
-                            <strong>Heure de départ :</strong> ${start}<br/>
-                            <strong>Heure d'arrivée :</strong> ${end}<br/>
-                            <strong>Avion :</strong> ${avion}<br/>
-                            <strong>Équipage :</strong> ${equipage}
-                        `;
+                        <strong>Numéro du vol :</strong> ${vol.title}<br/>
+                        <strong>Heure de départ :</strong> ${start}<br/>
+                        <strong>Heure d'arrivée :</strong> ${end}<br/>
+                        <strong>Avion :</strong> ${avion}<br/>
+                        <strong>Équipage :</strong> ${equipage}
+                    `;
                     document.getElementById('modalTitle').textContent = `Vol ${vol.title}`;
                     document.getElementById('modalContent').innerHTML = details;
                     document.getElementById('volModal').style.display = 'block';
+                },
+                datesSet: function(info) {
+                    console.log('Vue actuelle:', info.view.type, 'pour la période:', info.start, 'à', info.end);
                 }
-
             });
             calendar.render();
             console.log('Calendar rendered');
@@ -102,7 +114,7 @@
             window.updateEvents = function(events) {
                 console.log('updateEvents called with:', events);
                 calendar.getEvents().forEach(event => event.remove());
-                events.forEach(event => calendar.addEvent(event));
+                calendar.addEventSource(events); // Remove JSON.parse, events is already an array
                 console.log('Events updated');
             };
         } catch (e) {

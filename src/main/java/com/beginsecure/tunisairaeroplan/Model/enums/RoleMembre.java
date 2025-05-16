@@ -5,5 +5,6 @@ public enum RoleMembre {
     Copilote,
     Chef_de_cabine,
     Hôtesse,
-    Mécanicien
+    Mécanicien,
+    Agent_de_sécurité
 }

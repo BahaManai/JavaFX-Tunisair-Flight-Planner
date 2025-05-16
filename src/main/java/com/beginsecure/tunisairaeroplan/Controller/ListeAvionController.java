@@ -21,8 +21,7 @@ public class ListeAvionController {
     @FXML private TableColumn<Avion, String> colMarque;
     @FXML private TableColumn<Avion, String> colModele;
     @FXML private TableColumn<Avion, Integer> colCapacite;
-    @FXML private TableColumn<Avion, Boolean> colDisponible;
-    @FXML private TableColumn<Avion, String> colTypeTrajet;
+    @FXML private TableColumn<Avion, String> colDisponible;
     @FXML private TableColumn<Avion, Void> colModifier;
     @FXML private TableColumn<Avion, Void> colArchiver;
 
@@ -42,7 +41,11 @@ public class ListeAvionController {
         colMarque.setCellValueFactory(new PropertyValueFactory<>("marque"));
         colModele.setCellValueFactory(new PropertyValueFactory<>("modele"));
         colCapacite.setCellValueFactory(new PropertyValueFactory<>("capacite"));
-        colDisponible.setCellValueFactory(new PropertyValueFactory<>("estDisponible"));
+        colDisponible.setCellValueFactory(data -> {
+            boolean disponible = data.getValue().isEstDisponible();
+            String affichage = disponible ? "Oui" : "Non";
+            return new javafx.beans.property.SimpleStringProperty(affichage);
+        });
     }
 
     private void loadAvions() {

@@ -95,7 +95,6 @@ ALTER TABLE Membre MODIFY role ENUM('Pilote', 'Copilote', 'Chef_de_cabine', 'Hô
 ALTER TABLE archiveVol
 ADD COLUMN avion_id INT,
 ADD COLUMN equipage_id INT;
---à executer
 ALTER TABLE Vol
 ADD COLUMN origine VARCHAR(255) NOT NULL AFTER numVol;
 
@@ -104,3 +103,8 @@ DROP COLUMN type_trajet;
 ALTER TABLE archiveAvion
 DROP COLUMN type_trajet;
 ALTER TABLE archiveAvion ADD COLUMN marque VARCHAR(100);
+ALTER TABLE archivevol
+ADD COLUMN origine VARCHAR(255) DEFAULT '';
+
+-- à exécuter
+ALTER TABLE Membre MODIFY role ENUM('Pilote', 'Copilote', 'Chef_de_cabine', 'Hôtesse', 'Mécanicien', 'Agent_de_sécurité') NOT NULL;

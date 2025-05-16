@@ -54,7 +54,7 @@ public class ListeVolController {
         colTypeTrajet.setCellValueFactory(new PropertyValueFactory<>("typeTrajet"));
         colStatut.setCellValueFactory(new PropertyValueFactory<>("statut"));
         colAvion.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getAvion() != null ? data.getValue().getAvion().getModele() : "N/A")
+                new SimpleStringProperty(data.getValue().getAvion() != null ?data.getValue().getAvion().getMarque() +" "+ data.getValue().getAvion().getModele() : "N/A")
         );
         colEquipage.setCellValueFactory(data ->
                 new SimpleStringProperty(data.getValue().getEquipage() != null ? data.getValue().getEquipage().getNomEquipage() : "N/A")
