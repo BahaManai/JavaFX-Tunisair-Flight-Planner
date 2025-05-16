@@ -11,6 +11,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 public class volDao {
@@ -237,11 +238,12 @@ public class volDao {
         }
     }
 
-    public boolean canAddVolForMembres(List<Integer> membreIds, LocalDateTime heureDepart, LocalDateTime heureArrivee) {
+    public boolean canAddVolForMembres(List<Integer> membreIds, LocalDateTime heureDepart, LocalDateTime heureArrivee, int volIdToExclude) {
         String sql = "SELECT COUNT(*) FROM vol v " +
                 "JOIN equipage_membre em ON v.equipage_id = em.equipage_id " +
                 "JOIN membre m ON em.membre_id = m.id " +
-                "WHERE em.membre_id IN (" + String.join(",", membreIds.stream().map(id -> "?").toList()) + ") " +
+                "WHERE em.membre_id IN (" + String.join(",", Collections.nCopies(membreIds.size(), "?")) + ") " +
+                "AND v.id != ? " + // Exclure le vol en cours de modification
                 "AND v.statutVol != 'Annulé' " +
                 "AND m.estDisponible = TRUE " +
                 "AND (? BETWEEN v.heure_depart AND v.heure_arrivee " +
@@ -255,6 +257,8 @@ public class volDao {
             for (Integer membreId : membreIds) {
                 stmt.setInt(index++, membreId);
             }
+            // Set the volIdToExclude
+            stmt.setInt(index++, volIdToExclude);
             // Set the timestamps
             stmt.setTimestamp(index++, Timestamp.valueOf(heureDepart));
             stmt.setTimestamp(index++, Timestamp.valueOf(heureArrivee));
@@ -320,6 +324,34 @@ public class volDao {
             stmt.setTimestamp(5, Timestamp.valueOf(heureArrivee));
             stmt.setTimestamp(6, Timestamp.valueOf(heureDepart));
             stmt.setTimestamp(7, Timestamp.valueOf(heureArrivee));
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) == 0; // Returns true if no conflicts
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean canAddVolForAvion(int avionId, LocalDateTime heureDepart, LocalDateTime heureArrivee, int volIdToExclude) {
+        String sql = "SELECT COUNT(*) FROM Vol v " +
+                "JOIN Avion a ON v.avion_id = a.id " +
+                "WHERE v.avion_id = ? AND v.id != ? AND v.statutVol != 'Annulé' " +
+                "AND a.estDisponible = TRUE " +
+                "AND (? BETWEEN v.heure_depart AND v.heure_arrivee " +
+                "     OR ? BETWEEN v.heure_depart AND v.heure_arrivee " +
+                "     OR v.heure_depart BETWEEN ? AND ? " +
+                "     OR v.heure_arrivee BETWEEN ? AND ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, avionId);
+            stmt.setInt(2, volIdToExclude);
+            stmt.setTimestamp(3, Timestamp.valueOf(heureDepart));
+            stmt.setTimestamp(4, Timestamp.valueOf(heureArrivee));
+            stmt.setTimestamp(5, Timestamp.valueOf(heureDepart));
+            stmt.setTimestamp(6, Timestamp.valueOf(heureArrivee));
+            stmt.setTimestamp(7, Timestamp.valueOf(heureDepart));
+            stmt.setTimestamp(8, Timestamp.valueOf(heureArrivee));
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return rs.getInt(1) == 0; // Returns true if no conflicts

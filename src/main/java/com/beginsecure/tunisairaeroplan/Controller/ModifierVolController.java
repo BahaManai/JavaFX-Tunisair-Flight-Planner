@@ -166,27 +166,31 @@ public class ModifierVolController {
                     .map(Membre::getId)
                     .toList();
 
-            if (!daoVol.canAddVolForMembres(membreIds, heureDepart, heureArrivee)) {
+            // Vérifier la disponibilité des membres en excluant le vol en cours
+            if (!daoVol.canAddVolForMembres(membreIds, heureDepart, heureArrivee, selectedVol.getIdVol())) {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Conflit membres", "Un ou plusieurs membres ne sont pas disponibles pour cette période.");
                 return;
             }
-            if (!daoVol.canAddVolForAvion(avionCombo.getValue().getId(), heureDepart, heureArrivee)) {
+
+            // Vérifier la disponibilité de l'avion en excluant le vol en cours (nécessite une mise à jour dans volDao)
+            if (!daoVol.canAddVolForAvion(avionCombo.getValue().getId(), heureDepart, heureArrivee, selectedVol.getIdVol())) {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Conflit avion", "L'avion sélectionné n'est pas disponible pour cette période.");
                 return;
             }
 
-            // Create new equipage if members changed
+            // Mettre à jour le vol avec le nouvel equipage_id avant de supprimer l'ancien
             int newEquipageId = originalEquipageId;
             boolean membersChanged = hasMembersChanged(newMembres);
             if (membersChanged) {
-                equipageDao.deleteEquipage(originalEquipageId); // Delete old equipage
                 String nomEquipage = "AutoGen" + System.currentTimeMillis();
                 newEquipageId = equipageDao.creerEquipageAvecMembres(nomEquipage, newMembres);
+                selectedVol.getEquipage().setId(newEquipageId); // Mettre à jour l'ID avant la suppression
+                daoVol.updateVol(selectedVol); // Mettre à jour le vol avec le nouvel equipage_id
+                equipageDao.deleteEquipage(originalEquipageId); // Supprimer l'ancien équipage après mise à jour
             }
 
-            // Update vol
+            // Mettre à jour les autres champs du vol
             selectedVol.setNumeroVol(numVolField.getText());
-            // Use aeroportDestinationCombo.getValue() instead of destinationField.getText()
             selectedVol.setDestination(aeroportDestinationCombo.getValue());
             selectedVol.setHeureDepart(Date.from(heureDepart.atZone(ZoneId.systemDefault()).toInstant()));
             selectedVol.setHeureArrivee(Date.from(heureArrivee.atZone(ZoneId.systemDefault()).toInstant()));
@@ -195,7 +199,6 @@ public class ModifierVolController {
             selectedVol.setAvion(avionCombo.getValue());
             selectedVol.setOrigine(aeroportOrigineCombo.getValue());
             selectedVol.setDestination(aeroportDestinationCombo.getValue());
-            selectedVol.getEquipage().setId(newEquipageId);
 
             daoVol.updateVol(selectedVol);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Vol modifié avec succès.", null);

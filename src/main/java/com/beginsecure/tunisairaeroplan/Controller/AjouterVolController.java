@@ -201,7 +201,8 @@ public class AjouterVolController {
                     .map(Membre::getId)
                     .toList();
 
-            if (!daoVol.canAddVolForMembres(membreIds, heureDepart, heureArrivee)) {
+            // Pass -1 as volIdToExclude since this is a new flight
+            if (!daoVol.canAddVolForMembres(membreIds, heureDepart, heureArrivee, -1)) {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Conflit membres", "Un ou plusieurs membres ne sont pas disponibles pour cette période.");
                 return;
             }
