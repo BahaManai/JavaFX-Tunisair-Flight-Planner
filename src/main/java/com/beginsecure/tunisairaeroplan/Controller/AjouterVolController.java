@@ -34,7 +34,6 @@ public class AjouterVolController {
     @FXML private TextField numVolField, heureDepartTimeField, heureArriveeTimeField;
     @FXML private DatePicker heureDepartField, heureArriveeField;
     @FXML private ComboBox<TypeTrajet> typeTrajetCombo;
-    @FXML private ComboBox<StatutVol> statutCombo;
     @FXML private ComboBox<Avion> avionCombo;
     @FXML private ComboBox<Membre> piloteCombo, copiloteCombo, chefCabineCombo, hotesseCombo, mecanicienCombo, agentSecuriteCombo;
     @FXML private ComboBox<String> paysOrigineCombo;
@@ -70,7 +69,6 @@ public class AjouterVolController {
             membreDao = new membreDao(connection);
             genererNumeroVol();
             typeTrajetCombo.setItems(FXCollections.observableArrayList(TypeTrajet.values()));
-            statutCombo.setItems(FXCollections.observableArrayList(StatutVol.values()));
             chargerAvionsDisponibles(null, null);
             chargerMembresParRole(null, null);
 
@@ -265,7 +263,7 @@ public class AjouterVolController {
         if (numVolField.getText().isEmpty()
                 || heureDepartField.getValue() == null || heureArriveeField.getValue() == null
                 || heureDepartTimeField.getText().isEmpty() || heureArriveeTimeField.getText().isEmpty()
-                || typeTrajetCombo.getValue() == null || statutCombo.getValue() == null
+                || typeTrajetCombo.getValue() == null
                 || avionCombo.getValue() == null || piloteCombo.getValue() == null
                 || copiloteCombo.getValue() == null
                 || aeroportOrigineCombo.getValue() == null || aeroportDestinationCombo.getValue() == null) {
@@ -281,7 +279,6 @@ public class AjouterVolController {
         if (heureDepart == null || heureArrivee == null) {
             throw new IllegalArgumentException("Horaires de départ ou d'arrivée invalides");
         }
-
         return new vol(
                 numVolField.getText(),
                 aeroportOrigineCombo.getValue(),
@@ -289,7 +286,7 @@ public class AjouterVolController {
                 Timestamp.valueOf(heureDepart),
                 Timestamp.valueOf(heureArrivee),
                 typeTrajetCombo.getValue(),
-                statutCombo.getValue(),
+                StatutVol.Planifié,
                 avionCombo.getValue(),
                 equipage
         );

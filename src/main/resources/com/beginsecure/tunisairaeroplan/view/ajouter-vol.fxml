@@ -19,7 +19,6 @@
                     <Font name="System Bold" size="16.0" />
                 </font>
             </Label>
-
             <GridPane hgap="10" vgap="10" alignment="CENTER" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 5;">
                 <columnConstraints>
                     <ColumnConstraints halignment="RIGHT" minWidth="120" prefWidth="120"/>
@@ -57,10 +56,6 @@
                 <!-- Type et statut -->
                 <Label text="Type de trajet:" GridPane.rowIndex="9" GridPane.columnIndex="0"/>
                 <ComboBox fx:id="typeTrajetCombo" GridPane.rowIndex="9" GridPane.columnIndex="1"/>
-
-                <Label text="Statut du vol:" GridPane.rowIndex="10" GridPane.columnIndex="0"/>
-                <ComboBox fx:id="statutCombo" GridPane.rowIndex="10" GridPane.columnIndex="1"/>
-
                 <!-- Avion -->
                 <Label text="Avion:" GridPane.rowIndex="11" GridPane.columnIndex="0"/>
                 <ComboBox fx:id="avionCombo" GridPane.rowIndex="11" GridPane.columnIndex="1"/>

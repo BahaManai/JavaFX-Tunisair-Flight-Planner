@@ -19,10 +19,11 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class ListeVolController {
-
-    @FXML private TableView<vol> volTable;
+    @FXML private TableColumn<vol, Void> colAnnuler;    @FXML private TableView<vol> volTable;
     @FXML private TableColumn<vol, String> colNumVol;
     @FXML private TableColumn<vol, String> colDestination;
     @FXML private TableColumn<vol, java.util.Date> colDepart;
@@ -40,11 +41,72 @@ public class ListeVolController {
     @FXML
     public void initialize() {
         dao = new volDao();
+        try {
+            // Update past flights to Terminé if their departure date is before now
+            dao.updatePastFlightsStatus(); // Ensure past flights are marked as Terminé
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Database Error", "Failed to update flight statuses: " + e.getMessage());
+        }
         setupTableColumns();
-        loadVols();
+        loadVols(); // Load flights (corrected from loadAvions)
         addModifyButtons();
         addArchiveButtons();
+        addCancelButtons(); // Add the cancel button logic
     }
+    private void addCancelButtons() {
+        colAnnuler.setCellFactory(param -> new TableCell<>() {
+            private final Button btn = new Button("Annuler");
+
+            {
+                btn.setOnAction(event -> {
+                    vol v = getTableView().getItems().get(getIndex());
+                    annulerVol(v);
+                });
+
+                // Style du bouton
+                btn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white;");
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    vol v = getTableView().getItems().get(getIndex());
+                    // Show button only for Planifié or Terminé
+                    btn.setVisible(v.getStatut() == StatutVol.Planifié || v.getStatut() == StatutVol.Terminé);
+                    setGraphic(btn);
+                }
+            }
+        });
+    }
+    private void annulerVol(vol v) {
+        Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmation.setTitle("Confirmation");
+        confirmation.setHeaderText("Annulation du vol");
+        confirmation.setContentText("Voulez-vous vraiment annuler ce vol ?");
+
+        confirmation.getButtonTypes().setAll(
+                new ButtonType("Oui", ButtonBar.ButtonData.YES),
+                new ButtonType("Non", ButtonBar.ButtonData.NO)
+        );
+
+        confirmation.showAndWait().ifPresent(response -> {
+            if (response.getButtonData() == ButtonBar.ButtonData.YES) {
+                try {
+                    v.setStatut(StatutVol.Annulé);
+                    dao.updateVol(v);
+                    loadVols();
+                    showAlert(Alert.AlertType.INFORMATION, "Succès", "Le vol a été annulé avec succès.");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de l'annulation du vol.");
+                }
+            }
+        });
+    }
+
 
     private void setupTableColumns() {
         colNumVol.setCellValueFactory(new PropertyValueFactory<>("numVol"));
@@ -64,7 +126,19 @@ public class ListeVolController {
     private void loadVols() {
         try {
             volList.clear();
-            volList.addAll(dao.getAllVols());
+            List<vol> vols = dao.getAllVols();
+            LocalDateTime now = LocalDateTime.now();
+            for (vol v : vols) {
+                // Convert java.util.Date to LocalDateTime
+                LocalDateTime depart = v.getHeureDepart().toInstant()
+                        .atZone(java.time.ZoneId.systemDefault())
+                        .toLocalDateTime();
+                if (v.getStatut() != StatutVol.Annulé && depart.isBefore(now)) {
+                    v.setStatut(StatutVol.Terminé);
+                    dao.updateVol(v); // Persist the status change to the database
+                }
+                volList.add(v);
+            }
             volTable.setItems(volList);
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Database Error", "Failed to load flights: " + e.getMessage());

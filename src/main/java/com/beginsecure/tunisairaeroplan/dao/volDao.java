@@ -75,8 +75,14 @@ public class volDao {
                 v.setHeureDepart(rs.getTimestamp("heure_depart"));
                 v.setHeureArrivee(rs.getTimestamp("heure_arrivee"));
                 v.setTypeTrajet(TypeTrajet.valueOf(rs.getString("type_trajet")));
-                v.setStatut(StatutVol.valueOf(rs.getString("statutVol")));
-
+                v.setTypeTrajet(TypeTrajet.valueOf(rs.getString("type_trajet")));
+                StatutVol statut = StatutVol.valueOf(rs.getString("statutVol"));
+                LocalDateTime depart = rs.getTimestamp("heure_depart").toLocalDateTime();
+                LocalDateTime now = LocalDateTime.now();
+                if (statut != StatutVol.Annulé && depart.isBefore(now)) {
+                    statut = StatutVol.Terminé;
+                }
+                v.setStatut(statut);
                 int avionId = rs.getInt("avion_id");
                 if (avionId > 0) {
                     v.setAvion(daoAvion.getAvionById(avionId));
@@ -93,7 +99,13 @@ public class volDao {
 
         return vols;
     }
-
+    public void updatePastFlightsStatus() throws SQLException {
+        String sql = "UPDATE Vol SET statutVol = ? WHERE statutVol != 'Annulé' AND heure_depart < NOW()";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, StatutVol.Terminé.name());
+            stmt.executeUpdate();
+        }
+    }
     public boolean archiver(int idVol) throws SQLException {
         vol volToArchive = null;
         int avionId = -1;

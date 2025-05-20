@@ -31,6 +31,7 @@
                     <TableColumn fx:id="colEquipage" text="Équipage" />
                     <TableColumn fx:id="colModifier" text="Modifier" />
                     <TableColumn fx:id="colArchiver" text="Archiver" />
+                    <TableColumn fx:id="colAnnuler" text="Annuler" />
                 </columns>
             </TableView>
 
