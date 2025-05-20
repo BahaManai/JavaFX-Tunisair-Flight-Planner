@@ -101,13 +101,23 @@ public class ArchivVolController {
                 if (empty || getIndex() >= getTableView().getItems().size()) {
                     setGraphic(null);
                 } else {
-                    setGraphic(btnRestaurer);
+                    vol v = getTableView().getItems().get(getIndex());
+                    try {
+                        // Show Restore button only if the associated airplane is not archived AND exists
+                        if (!dao.isAvionArchived(v.getAvionId()) && dao.isAvionExists(v.getAvionId())) {
+                            setGraphic(btnRestaurer);
+                        } else {
+                            setGraphic(null); // Hide the Restore button
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        showAlert("Erreur", "Erreur de vérification", "Impossible de vérifier si l'avion est archivé ou existe.");
+                        setGraphic(null); // Hide button on error to be safe
+                    }
                 }
             }
         });
-    }
-
-    private void configurerColonneSupprimer() {
+    }    private void configurerColonneSupprimer() {
         colSupprimer.setCellFactory(param -> new TableCell<vol, Void>() {
             private final Button btnSupprimer = new Button("Supprimer");
 

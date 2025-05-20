@@ -211,7 +211,7 @@ public class volDao {
         }
         return volsArchives;
     }
-    private boolean isAvionArchived(int avionId) {
+    public boolean isAvionArchived(int avionId) throws SQLException {
         String query = "SELECT COUNT(*) FROM ArchiveAvion WHERE id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setInt(1, avionId);
@@ -219,18 +219,25 @@ public class volDao {
             if (rs.next()) {
                 return rs.getInt(1) > 0; // Returns true if the airplane is archived
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            showAlert("Erreur", "Erreur de vérification", "Impossible de vérifier si l'avion est archivé.");
+            return false; // No record found, airplane is not archived
         }
-        return false;
-    }
-    private void showAlert(String title, String header, String content) {
+    }    private void showAlert(String title, String header, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+    public boolean isAvionExists(int avionId) throws SQLException {
+        String query = "SELECT COUNT(*) FROM avion WHERE id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, avionId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Returns true if the airplane exists
+            }
+            return false; // No record found, airplane does not exist
+        }
     }
     public void restaurerVol(int idVol) throws SQLException {
         String selectSql = "SELECT * FROM archiveVol WHERE idVol = ?";
