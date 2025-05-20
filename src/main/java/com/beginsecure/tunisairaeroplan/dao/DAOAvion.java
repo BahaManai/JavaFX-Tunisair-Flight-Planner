@@ -81,21 +81,29 @@ public class DAOAvion {
         }
     }
 
-    public boolean archiverAvion(Avion avion) {
+    public List<Integer> archiverAvion(Avion avion) {
         String archiveQuery = "INSERT INTO ArchiveAvion (id, modele, capacite, estDisponible, marque) VALUES (?, ?, ?, ?, ?)";
         String deleteQuery = "DELETE FROM Avion WHERE id = ?";
-        String selectVolsQuery = "SELECT id FROM Vol WHERE avion_id = ? AND statutVol != 'Annulé'";
+        String selectVolsQuery = "SELECT id FROM Vol WHERE avion_id = ?";
+        List<Integer> archivedFlightIds = new ArrayList<>();
+
         try {
             connection.setAutoCommit(false);
             volDao volDao = new volDao(connection);
+
+            // Collect IDs of all flights to be archived
             try (PreparedStatement selectStmt = connection.prepareStatement(selectVolsQuery)) {
                 selectStmt.setInt(1, avion.getId());
                 ResultSet rs = selectStmt.executeQuery();
                 while (rs.next()) {
                     int volId = rs.getInt("id");
-                    volDao.archiver(volId); // Archiver chaque vol non annulé
+                    if (volDao.archiver(volId)) {
+                        archivedFlightIds.add(volId);
+                    }
                 }
             }
+
+            // Archive the airplane
             try (PreparedStatement pstmt = connection.prepareStatement(archiveQuery)) {
                 pstmt.setInt(1, avion.getId());
                 pstmt.setString(2, avion.getModele());
@@ -105,13 +113,14 @@ public class DAOAvion {
                 pstmt.executeUpdate();
             }
 
+            // Delete the airplane
             try (PreparedStatement pstmt = connection.prepareStatement(deleteQuery)) {
                 pstmt.setInt(1, avion.getId());
                 pstmt.executeUpdate();
             }
 
             connection.commit();
-            return true;
+            return archivedFlightIds;
         } catch (SQLException e) {
             try {
                 connection.rollback();
@@ -119,7 +128,7 @@ public class DAOAvion {
                 ex.printStackTrace();
             }
             e.printStackTrace();
-            return false;
+            return archivedFlightIds; // Return empty or partial list in case of failure
         } finally {
             try {
                 connection.setAutoCommit(true);
@@ -127,9 +136,7 @@ public class DAOAvion {
                 e.printStackTrace();
             }
         }
-    }
-
-    public List<Avion> getAvionsDisponibles() {
+    }    public List<Avion> getAvionsDisponibles() {
         List<Avion> avions = new ArrayList<>();
         String query = "SELECT * FROM Avion WHERE estDisponible = true";
 

@@ -6,6 +6,7 @@ import com.beginsecure.tunisairaeroplan.Model.vol;
 import com.beginsecure.tunisairaeroplan.Model.enums.StatutVol;
 import com.beginsecure.tunisairaeroplan.Model.enums.TypeTrajet;
 import com.beginsecure.tunisairaeroplan.utilites.LaConnexion;
+import javafx.scene.control.Alert;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -210,7 +211,27 @@ public class volDao {
         }
         return volsArchives;
     }
-
+    private boolean isAvionArchived(int avionId) {
+        String query = "SELECT COUNT(*) FROM ArchiveAvion WHERE id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, avionId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Returns true if the airplane is archived
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Erreur de vérification", "Impossible de vérifier si l'avion est archivé.");
+        }
+        return false;
+    }
+    private void showAlert(String title, String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
     public void restaurerVol(int idVol) throws SQLException {
         String selectSql = "SELECT * FROM archiveVol WHERE idVol = ?";
         try (PreparedStatement selectStmt = connection.prepareStatement(selectSql)) {

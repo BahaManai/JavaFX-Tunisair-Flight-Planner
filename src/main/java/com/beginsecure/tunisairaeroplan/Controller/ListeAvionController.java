@@ -13,6 +13,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 
 public class ListeAvionController {
 
@@ -101,14 +102,17 @@ public class ListeAvionController {
     }
 
     private void archiverAvion(Avion avion) {
-        if (daoAvion.archiverAvion(avion)) {
-            loadAvions();
-            showAlert(Alert.AlertType.INFORMATION, "Succès", "Avion archivé avec succès");
+        List<Integer> archivedFlightIds = daoAvion.archiverAvion(avion);
+        loadAvions();
+        if (!archivedFlightIds.isEmpty()) {
+            String flightIds = String.join(", ", archivedFlightIds.stream().map(String::valueOf).toList());
+            showAlert(Alert.AlertType.INFORMATION, "Succès",
+                    "Avion archivé avec succès. Les vols associés suivants ont également été archivés : " + flightIds);
         } else {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de l'archivage de l'avion");
+            showAlert(Alert.AlertType.INFORMATION, "Succès",
+                    "Avion archivé avec succès. Aucun vol associé n'a été archivé.");
         }
     }
-
     @FXML
     private void ouvrirAjoutAvion() {
         try {
