@@ -84,10 +84,18 @@ public class DAOAvion {
     public boolean archiverAvion(Avion avion) {
         String archiveQuery = "INSERT INTO ArchiveAvion (id, modele, capacite, estDisponible, marque) VALUES (?, ?, ?, ?, ?)";
         String deleteQuery = "DELETE FROM Avion WHERE id = ?";
-
+        String selectVolsQuery = "SELECT id FROM Vol WHERE avion_id = ? AND statutVol != 'Annulé'";
         try {
             connection.setAutoCommit(false);
-
+            volDao volDao = new volDao(connection);
+            try (PreparedStatement selectStmt = connection.prepareStatement(selectVolsQuery)) {
+                selectStmt.setInt(1, avion.getId());
+                ResultSet rs = selectStmt.executeQuery();
+                while (rs.next()) {
+                    int volId = rs.getInt("id");
+                    volDao.archiver(volId); // Archiver chaque vol non annulé
+                }
+            }
             try (PreparedStatement pstmt = connection.prepareStatement(archiveQuery)) {
                 pstmt.setInt(1, avion.getId());
                 pstmt.setString(2, avion.getModele());

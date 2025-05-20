@@ -65,7 +65,6 @@ public class AjoutAvionController {
 
     @FXML
     private void handleAjouter() {
-        // Vérification des champs vides
         if (cbMarque.getValue() == null || cbMarque.getValue().isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez sélectionner une marque");
             return;
