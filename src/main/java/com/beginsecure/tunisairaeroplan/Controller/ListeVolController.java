@@ -8,6 +8,7 @@ import com.beginsecure.tunisairaeroplan.utilites.LaConnexion;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -34,10 +35,10 @@ public class ListeVolController {
     @FXML private TableColumn<vol, Void> colArchiver;
     @FXML private TableColumn<vol, String> colAvion;
     @FXML private TableColumn<vol, String> colEquipage;
-
+    @FXML private TextField searchField;
     private volDao dao;
     private ObservableList<vol> volList = FXCollections.observableArrayList();
-
+    private FilteredList<vol> filteredVolList;
     @FXML
     public void initialize() {
         dao = new volDao();
@@ -48,10 +49,32 @@ public class ListeVolController {
             showAlert(Alert.AlertType.ERROR, "Database Error", "Failed to update flight statuses: " + e.getMessage());
         }
         setupTableColumns();
-        loadVols(); // Load flights (corrected from loadAvions)
+        loadVols();
+        setupSearchFilter();
         addModifyButtons();
         addArchiveButtons();
         addCancelButtons(); // Add the cancel button logic
+    }
+    private void setupSearchFilter() {
+        // Initialize the FilteredList with the volList
+        filteredVolList = new FilteredList<>(volList, p -> true);
+
+        // Add listener to the search field
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredVolList.setPredicate(vol -> {
+                if (newValue == null || newValue.trim().isEmpty()) {
+                    return true; // Show all flights if search field is empty
+                }
+
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                return vol.getNumVol().toLowerCase().contains(lowerCaseFilter) ||
+                        vol.getDestination().toLowerCase().contains(lowerCaseFilter) ||
+                        vol.getStatut().toString().toLowerCase().contains(lowerCaseFilter);
+            });
+        });
+
+        volTable.setItems(filteredVolList);
     }
     private void addCancelButtons() {
         colAnnuler.setCellFactory(param -> new TableCell<>() {

@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.TextField?>
 <BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.beginsecure.tunisairaeroplan.Controller.ListeVolController">
 
     <top>
@@ -19,6 +20,10 @@
 
     <center>
         <VBox>
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Rechercher :" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+                <TextField fx:id="searchField" promptText="Rechercher par numéro, destination ou statut..." style="-fx-pref-width: 300px; -fx-background-color: #ffffff; -fx-border-color: #cccccc; -fx-border-radius: 5; -fx-background-radius: 5; -fx-padding: 8; -fx-font-size: 14px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);" />
+            </HBox>
             <TableView fx:id="volTable" prefHeight="508.0" prefWidth="900">
                 <columns>
                     <TableColumn fx:id="colNumVol" text="Numéro Vol" />
