@@ -41,6 +41,8 @@ public class ListeVolController {
     @FXML private TableColumn<vol, Void> colActions;
     @FXML private TextField searchField;
     @FXML private Label searchLabel;
+    @FXML private ComboBox<StatutVol> statutFilterComboBox;
+    @FXML private ComboBox<TypeTrajet> typeTrajetFilterComboBox;
     private volDao dao;
     private ObservableList<vol> volList = FXCollections.observableArrayList();
     private FilteredList<vol> filteredVolList;
@@ -53,7 +55,18 @@ public class ListeVolController {
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Database Error", "Failed to update flight statuses: " + e.getMessage());
         }
+        try {
+            dao.updatePastFlightsStatus();
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Database Error", "Failed to update flight statuses: " + e.getMessage());
+        }
+        statutFilterComboBox.setItems(FXCollections.observableArrayList(StatutVol.values()));
+        statutFilterComboBox.getSelectionModel().selectFirst();
 
+        typeTrajetFilterComboBox.setItems(FXCollections.observableArrayList(TypeTrajet.values()));
+        typeTrajetFilterComboBox.getSelectionModel().selectFirst();
+
+        setupFilters();
         // Add search icon using Ikonli FontIcon
         FontIcon searchIcon = new FontIcon(FontAwesomeSolid.SEARCH);
         searchIcon.setIconSize(16);
@@ -65,8 +78,44 @@ public class ListeVolController {
         setupSearchFilter();
         addActionButtons();
     }
-
-    private void setupSearchFilter() {
+    @FXML
+    private void resetFilters() {
+        statutFilterComboBox.getSelectionModel().selectFirst();
+        typeTrajetFilterComboBox.getSelectionModel().selectFirst();
+        searchField.clear();
+    }
+    private void setupFilters() {
+        statutFilterComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            applyFilters();
+        });
+        typeTrajetFilterComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            applyFilters();
+        });
+    }
+    private void applyFilters() {
+        filteredVolList.setPredicate(vol -> {
+            boolean matchesSearch = true;
+            boolean matchesStatut = true;
+            boolean matchesType = true;
+            String searchText = searchField.getText();
+            if (searchText != null && !searchText.trim().isEmpty()) {
+                String lowerCaseFilter = searchText.toLowerCase();
+                matchesSearch = vol.getNumVol().toLowerCase().contains(lowerCaseFilter) ||
+                        vol.getOrigine().toLowerCase().contains(lowerCaseFilter) ||
+                        vol.getDestination().toLowerCase().contains(lowerCaseFilter) ||
+                        vol.getStatut().toString().toLowerCase().contains(lowerCaseFilter);
+            }
+            StatutVol selectedStatut = statutFilterComboBox.getValue();
+            if (selectedStatut != null && selectedStatut != StatutVol.values()[0]) {
+                matchesStatut = vol.getStatut() == selectedStatut;
+            }
+            TypeTrajet selectedType = typeTrajetFilterComboBox.getValue();
+            if (selectedType != null && selectedType != TypeTrajet.values()[0]) {
+                matchesType = vol.getTypeTrajet() == selectedType;
+            }
+            return (matchesStatut || matchesType) && matchesSearch;
+        });
+    }    private void setupSearchFilter() {
         filteredVolList = new FilteredList<>(volList, p -> true);
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredVolList.setPredicate(vol -> {
@@ -89,33 +138,26 @@ public class ListeVolController {
             private final HBox hbox = new HBox(modifyBtn, archiveBtn, cancelBtn);
 
             {
-                // Configure Modify Button with Ikonli FontIcon
                 FontIcon modifyIcon = new FontIcon(FontAwesomeSolid.EDIT);
                 modifyIcon.setIconSize(16);
                 modifyIcon.setIconColor(javafx.scene.paint.Color.web("#2196F3"));
                 modifyBtn.setGraphic(modifyIcon);
                 modifyBtn.setStyle("-fx-background-color: transparent;");
                 modifyBtn.setTooltip(new Tooltip("Modifier"));
-
-                // Configure Archive Button with Ikonli FontIcon
                 FontIcon archiveIcon = new FontIcon(FontAwesomeSolid.ARCHIVE);
                 archiveIcon.setIconSize(16);
                 archiveIcon.setIconColor(javafx.scene.paint.Color.web("#607D8B"));
                 archiveBtn.setGraphic(archiveIcon);
                 archiveBtn.setStyle("-fx-background-color: transparent;");
                 archiveBtn.setTooltip(new Tooltip("Archiver"));
-
-                // Configure Cancel Button with Ikonli FontIcon
                 FontIcon cancelIcon = new FontIcon(FontAwesomeSolid.TIMES);
                 cancelIcon.setIconSize(16);
                 cancelIcon.setIconColor(javafx.scene.paint.Color.web("#e74c3c"));
                 cancelBtn.setGraphic(cancelIcon);
                 cancelBtn.setStyle("-fx-background-color: transparent;");
                 cancelBtn.setTooltip(new Tooltip("Annuler"));
-
                 hbox.setSpacing(5);
                 hbox.setAlignment(javafx.geometry.Pos.CENTER);
-
                 modifyBtn.setOnAction(event -> ouvrirModifierVol(getTableView().getItems().get(getIndex())));
                 archiveBtn.setOnAction(event -> archiverVol(getTableView().getItems().get(getIndex())));
                 cancelBtn.setOnAction(event -> annulerVol(getTableView().getItems().get(getIndex())));
