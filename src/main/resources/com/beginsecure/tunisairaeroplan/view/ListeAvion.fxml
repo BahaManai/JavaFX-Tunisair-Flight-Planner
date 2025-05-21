@@ -11,40 +11,41 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.beginsecure.tunisairaeroplan.Controller.ListeAvionController">
-
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.beginsecure.tunisairaeroplan.Controller.ListeAvionController" style="-fx-background-color: #F5F5F5;" stylesheets="@avion.css">
     <top>
-        <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 15 15 15 15;" text="Liste des Avions" BorderPane.alignment="CENTER" />
+        <Label style="-fx-font-size: 32px; -fx-font-weight: 900; -fx-padding: 20 20 20 20; -fx-text-fill: #F5F5F5; -fx-background-color: #333333; -fx-border-radius: 0 0 12 12; -fx-background-radius: 0 0 12 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 4); -fx-font-family: 'Segoe UI', sans-serif;" text="Liste des Avions" BorderPane.alignment="CENTER" />
     </top>
 
     <center>
-        <VBox>
-            <TableView fx:id="avionTable" prefHeight="406.0" prefWidth="560.0">
+        <VBox alignment="CENTER" spacing="20" style="-fx-padding: 25; -fx-background-color: #F5F5F5;">
+            <TableView fx:id="avionTable" prefHeight="406.0" prefWidth="560.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #333333; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 8; -fx-font-size: 14px; -fx-font-family: 'Segoe UI', sans-serif; -fx-control-inner-background: #FFFFFF;">
                 <columns>
-                    <TableColumn fx:id="colId" text="ID" />
-                    <TableColumn fx:id="colMarque" text="Marque" />
-                    <TableColumn fx:id="colModele" text="Modèle" />
-                    <TableColumn fx:id="colCapacite" text="Capacité" />
-                    <TableColumn fx:id="colDisponible" text="Disponible" />
-                    <TableColumn fx:id="colModifier" text="Modifier" />
-                    <TableColumn fx:id="colArchiver" text="Archiver" />
+                    <TableColumn fx:id="colId" text="ID" prefWidth="80" />
+                    <TableColumn fx:id="colMarque" text="Marque" prefWidth="120" />
+                    <TableColumn fx:id="colModele" text="Modèle" prefWidth="120" />
+                    <TableColumn fx:id="colCapacite" text="Capacité" prefWidth="100" />
+                    <TableColumn fx:id="colDisponible" text="Disponible" prefWidth="100" />
+                    <TableColumn fx:id="colModifier" text="Modifier" prefWidth="80" styleClass="button modifier" />
+                    <TableColumn fx:id="colArchiver" text="Archiver" prefWidth="80" styleClass="button archiver" />
                 </columns>
             </TableView>
-
-            <HBox alignment="CENTER_LEFT" spacing="10">
-                <Button fx:id="btnAjouterAvion" onAction="#ouvrirAjoutAvion" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold;" text="Ajouter Avion" />
-                <Button fx:id="btnVoirArchive" onAction="#ouvrirArchiveAvion" style="-fx-background-color: #607D8B; -fx-text-fill: white;" text="Voir archive Avions" />
+            <HBox alignment="CENTER_LEFT" spacing="12" style="-fx-padding: 10 0;">
+                <Button fx:id="btnAjouterAvion" onAction="#ouvrirAjoutAvion" style="-fx-background-color: #2ECC71; -fx-text-fill: #F5F5F5; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 10; -fx-background-radius: 10; -fx-font-size: 15px; -fx-font-family: 'Segoe UI', sans-serif; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0, 0, 3); -fx-cursor: hand;" text="Ajouter Avion">
+                    <styleClass>button-hover button-ajouter</styleClass>
+                </Button>
+                <Button fx:id="btnVoirArchive" onAction="#ouvrirArchiveAvion" style="-fx-background-color: #00838F; -fx-text-fill: #F5F5F5; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 10; -fx-background-radius: 10; -fx-font-size: 15px; -fx-font-family: 'Segoe UI', sans-serif; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0, 0, 3); -fx-cursor: hand;" text="Voir archive Avions">
+                    <styleClass>button-hover button-archive</styleClass>
+                </Button>
             </HBox>
         </VBox>
     </center>
-   <bottom>
-        <StackPane alignment="CENTER" prefHeight="215.0" prefWidth="560.0" BorderPane.alignment="CENTER">
+    <bottom>
+        <StackPane alignment="CENTER" prefHeight="215.0" prefWidth="560.0" style="-fx-padding: 10;" BorderPane.alignment="CENTER">
             <ImageView fx:id="avionImage" fitHeight="237.0" fitWidth="235.0">
                 <image>
                     <Image url="@../images/avion.png" />
                 </image>
             </ImageView>
         </StackPane>
-   </bottom>
-
+    </bottom>
 </BorderPane>

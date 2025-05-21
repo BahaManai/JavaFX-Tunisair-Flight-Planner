@@ -1,0 +1,80 @@
+.table-view .button {
+    -fx-font-size: 13px;
+    -fx-font-family: 'Segoe UI', sans-serif;
+    -fx-text-fill: #F5F5F5;
+    -fx-padding: 6 12;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 6, 0, 0, 2);
+    -fx-cursor: hand;
+}
+
+.table-view .button:hover {
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0, 0, 3);
+    -fx-transition: all 0.3s ease;
+}
+
+.table-view .button:pressed {
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+}
+/* Style de base pour tous les boutons dans le TableView */
+.table-view .button {
+    -fx-font-size: 13px;
+    -fx-font-family: 'Segoe UI', sans-serif;
+    -fx-font-weight: bold;
+    -fx-padding: 6 12;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 6, 0, 0, 2);
+    -fx-cursor: hand;
+    -fx-transition: all 0.2s ease;
+}
+
+/* Style spécifique pour le bouton Modifier */
+.table-view .button.modifier {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-border-color: #2980b9;
+    -fx-border-width: 2;
+}
+
+/* Style spécifique pour le bouton Archiver */
+.table-view .button.archiver {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-border-color: #c0392b;
+    -fx-border-width: 2;
+}
+
+/* Effet hover pour les boutons */
+.table-view .button:hover {
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0, 0, 3);
+}
+
+/* Effet hover spécifique pour Modifier */
+.table-view .button.modifier:hover {
+    -fx-background-color: #2980b9;
+}
+
+/* Effet hover spécifique pour Archiver */
+.table-view .button.archiver:hover {
+    -fx-background-color: #c0392b;
+}
+
+/* Effet pressed pour tous les boutons */
+.table-view .button:pressed {
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+}
+
+.table-view .button.modifier:pressed {
+    -fx-background-color: #2472a4;
+}
+.table-view .button.archiver:pressed {
+    -fx-background-color: #a83224;
+}

@@ -5,7 +5,6 @@
     -fx-background-radius: 5;
     -fx-padding: 8 15;
 }
-
 .button:hover {
     -fx-background-color: linear-gradient(to bottom, #FF8C00, #FF4500);
     -fx-cursor: hand;

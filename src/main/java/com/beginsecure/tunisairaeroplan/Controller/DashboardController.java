@@ -85,13 +85,19 @@ public class DashboardController {
         }
 
         private String toJSArray(List<Map<String, Object>> list, String labelKey) {
-            StringBuilder sb = new StringBuilder("[");
-            for (Map<String, Object> item : list) {
-                String label = String.valueOf(item.get(labelKey)).replace("\"", "\\\"");
-                int count = ((Number) item.get("count")).intValue();
-                sb.append(String.format("{%s:\"%s\", count:%d},", labelKey, label, count));
+            if (list == null || list.isEmpty()) {
+                return "[]";
             }
-            if (sb.length() > 1) sb.setLength(sb.length() - 1);
+            StringBuilder sb = new StringBuilder("[");
+            for (int i = 0; i < list.size(); i++) {
+                Map<String, Object> item = list.get(i);
+                String label = String.valueOf(item.getOrDefault(labelKey, "")).replace("\"", "\\\"");
+                int count = item.containsKey("count") ? ((Number) item.get("count")).intValue() : 0;
+                sb.append(String.format("{%s:\"%s\", count:%d}", labelKey, label, count));
+                if (i < list.size() - 1) {
+                    sb.append(",");
+                }
+            }
             sb.append("]");
             return sb.toString();
         }

@@ -6,11 +6,11 @@
 <?import org.kordamp.bootstrapfx.scene.layout.*?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import org.kordamp.bootstrapfx.BootstrapFX?>
-<BorderPane xmlns:fx="http://javafx.com/fxml"
+<BorderPane fx:id="mainBorderPane" xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.beginsecure.tunisairaeroplan.Controller.MainController"
             stylesheets="@main.css">
     <left>
-        <VBox fx:id="sidebar" prefWidth="180" spacing="0" styleClass="sidebar">
+        <VBox fx:id="sidebar" prefWidth="220" spacing="0" styleClass="sidebar">
             <StackPane styleClass="sidebar-header" prefHeight="60">
                 <HBox alignment="CENTER_LEFT" spacing="8" styleClass="header-content">
                     <ImageView fitWidth="28" fitHeight="28" preserveRatio="true">
@@ -18,59 +18,59 @@
                             <Image url="@../images/logo.png" />
                         </image>
                     </ImageView>
-                    <Label text="TUNISAIR" styleClass="app-title" wrapText="true" maxWidth="120"/>
+                    <Label text="TUNISAIR" styleClass="app-title" wrapText="true" maxWidth="160"/>
                 </HBox>
             </StackPane>
             <VBox styleClass="user-profile" spacing="5" prefHeight="100">
                 <FontIcon iconLiteral="fas-user-circle" iconSize="32" styleClass="user-icon"/>
-                <Label text="Admin" styleClass="user-name"/>
-                <Label text="admin@tunisair.com" styleClass="user-email" wrapText="true" maxWidth="150"/>
+                <Label text="Administrateur" styleClass="user-name"/>
+                <Label text="admin@tunisair.com" styleClass="user-email" wrapText="true" maxWidth="200"/>
             </VBox>
 
             <VBox spacing="4" styleClass="nav-menu">
-                <Button text="DASHBOARD" onAction="#showHome" styleClass="nav-btn">
+                <Button text="TABLEAU DE BORD" onAction="#showHome" styleClass="nav-btn">
                     <graphic>
                         <FontIcon iconLiteral="fas-chart-line" styleClass="nav-icon"/>
                     </graphic>
                 </Button>
 
-                <Button text="PLANIFICATION" onAction="#showPlanificationVols" styleClass="nav-btn">
+                <Button text="PLANIFICATION DES VOLS" onAction="#showPlanificationVols" styleClass="nav-btn">
                     <graphic>
                         <FontIcon iconLiteral="fas-calendar-check" styleClass="nav-icon"/>
                     </graphic>
                 </Button>
 
-                <Button text="CALENDRIER" onAction="#showCalendrier" styleClass="nav-btn">
+                <Button text="CALENDRIER" onAction="#showCalendrier" styleClass="nav-btn"> <!-- Texte complet -->
                     <graphic>
                         <FontIcon iconLiteral="fas-calendar-alt" styleClass="nav-icon"/>
                     </graphic>
                 </Button>
 
-                <Button text="ÉQUIPAGES" onAction="#showEquipages" styleClass="nav-btn">
+                <Button text="ÉQUIPAGES" onAction="#showEquipages" styleClass="nav-btn"> <!-- Texte complet -->
                     <graphic>
                         <FontIcon iconLiteral="fas-users-cog" styleClass="nav-icon"/>
                     </graphic>
                 </Button>
 
-                <Button text="MEMBRES" onAction="#showMembres" styleClass="nav-btn">
+                <Button text="PILOTES et MEMBRES" onAction="#showMembres" styleClass="nav-btn"> <!-- Texte complet -->
                     <graphic>
                         <FontIcon iconLiteral="fas-user-tie" styleClass="nav-icon"/>
                     </graphic>
                 </Button>
 
-                <Button text="AVIONS" onAction="#showAvions" styleClass="nav-btn">
+                <Button text="GESTION AVIONS" onAction="#showAvions" styleClass="nav-btn"> <!-- Texte légèrement réduit -->
                     <graphic>
                         <FontIcon iconLiteral="fas-plane" styleClass="nav-icon"/>
                     </graphic>
                 </Button>
 
-                <Button text="ARCHIVES" onAction="#showArchives" styleClass="nav-btn">
+                <Button text="ARCHIVES" onAction="#showArchives" styleClass="nav-btn"> <!-- Texte complet -->
                     <graphic>
                         <FontIcon iconLiteral="fas-archive" styleClass="nav-icon"/>
                     </graphic>
                 </Button>
 
-                <Button text="ATTENTE" onAction="#showListeAttente" styleClass="nav-btn">
+                <Button text="LISTE D'ATTENTE" onAction="#showListeAttente" styleClass="nav-btn"> <!-- Texte complet -->
                     <graphic>
                         <FontIcon iconLiteral="fas-clock" styleClass="nav-icon"/>
                     </graphic>
@@ -93,8 +93,8 @@
 
     <bottom>
         <HBox alignment="CENTER" styleClass="status-bar" prefHeight="30">
-            <Label text="© 2023 Tunisair" styleClass="copyright"/>
-            <Label fx:id="statusLabel" text="En ligne" styleClass="status-indicator"/>
+            <Label text="© 2023 Tunisair Aéroplan" styleClass="copyright"/> <!-- Texte complet -->
+            <Label fx:id="statusLabel" text="Système en ligne" styleClass="status-indicator"/> <!-- Texte complet -->
         </HBox>
     </bottom>
 </BorderPane>

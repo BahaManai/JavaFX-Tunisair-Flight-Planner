@@ -135,3 +135,15 @@
     -fx-font-size: 12px;
     -fx-font-weight: bold;
 }
+.sidebar {
+    -fx-min-width: 240px;
+    -fx-max-width: 240px;
+}
+
+.nav-btn {
+    -fx-padding: 8px 10px;
+    -fx-font-size: 12px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-content-display: LEFT;
+    -fx-graphic-text-gap: 10px;
+}

@@ -63,11 +63,9 @@ public class ListeVolController {
         statutFilterComboBox.setItems(FXCollections.observableArrayList(StatutVol.values()));
         statutFilterComboBox.getSelectionModel().selectFirst();
 
-        typeTrajetFilterComboBox.setItems(FXCollections.observableArrayList(TypeTrajet.values()));
+        typeTrajetFilterComboBox.setItems(FXCollections.observableArrayList(TypeTrajet.values()) );
         typeTrajetFilterComboBox.getSelectionModel().selectFirst();
-
         setupFilters();
-        // Add search icon using Ikonli FontIcon
         FontIcon searchIcon = new FontIcon(FontAwesomeSolid.SEARCH);
         searchIcon.setIconSize(16);
         searchIcon.setIconColor(javafx.scene.paint.Color.web("#333333"));
@@ -92,11 +90,13 @@ public class ListeVolController {
             applyFilters();
         });
     }
+
     private void applyFilters() {
         filteredVolList.setPredicate(vol -> {
             boolean matchesSearch = true;
             boolean matchesStatut = true;
             boolean matchesType = true;
+
             String searchText = searchField.getText();
             if (searchText != null && !searchText.trim().isEmpty()) {
                 String lowerCaseFilter = searchText.toLowerCase();
@@ -105,17 +105,27 @@ public class ListeVolController {
                         vol.getDestination().toLowerCase().contains(lowerCaseFilter) ||
                         vol.getStatut().toString().toLowerCase().contains(lowerCaseFilter);
             }
+
             StatutVol selectedStatut = statutFilterComboBox.getValue();
             if (selectedStatut != null && selectedStatut != StatutVol.values()[0]) {
                 matchesStatut = vol.getStatut() == selectedStatut;
+            } else {
+                matchesStatut = true;
             }
+
             TypeTrajet selectedType = typeTrajetFilterComboBox.getValue();
             if (selectedType != null && selectedType != TypeTrajet.values()[0]) {
                 matchesType = vol.getTypeTrajet() == selectedType;
+            } else {
+                matchesType = true;
             }
-            return (matchesStatut || matchesType) && matchesSearch;
+
+            return matchesSearch && matchesStatut && matchesType;
         });
-    }    private void setupSearchFilter() {
+    }
+
+
+    private void setupSearchFilter() {
         filteredVolList = new FilteredList<>(volList, p -> true);
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredVolList.setPredicate(vol -> {
@@ -170,7 +180,6 @@ public class ListeVolController {
                     setGraphic(null);
                 } else {
                     vol v = getTableView().getItems().get(getIndex());
-                    // Show Cancel button only if the flight is not already canceled
                     cancelBtn.setVisible(v.getStatut() != StatutVol.Annulé);
                     setGraphic(hbox);
                 }

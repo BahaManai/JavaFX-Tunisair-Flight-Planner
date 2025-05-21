@@ -65,6 +65,7 @@ public class ListeAvionController {
                     ouvrirModifierAvion(avion);
                 });
             }
+
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
@@ -76,9 +77,11 @@ public class ListeAvionController {
             }
         });
     }
+
     private void addArchiveButtons() {
         colArchiver.setCellFactory(param -> new TableCell<>() {
             private final Button btn = new Button("Archiver");
+
             {
                 btn.setOnAction(event -> {
                     Avion avion = getTableView().getItems().get(getIndex());

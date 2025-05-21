@@ -3,39 +3,92 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.paint.Color?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.beginsecure.tunisairaeroplan.Controller.ArchiveAvionController">
+            fx:controller="com.beginsecure.tunisairaeroplan.Controller.ArchiveAvionController"
+            style="-fx-background-color: #ffffff;">
 
     <top>
-        <Label text="Archive des Avions"
-               style="-fx-font-size: 24px; -fx-font-weight: bold;">
-            <padding>
-                <Insets top="15" right="15" bottom="15" left="15"/>
-            </padding>
-        </Label>
+        <VBox style="-fx-background-color: #d3d3d3; -fx-padding: 20; -fx-alignment: CENTER;">
+            <Label text="ARCHIVE DES AVIONS"
+                   style="-fx-font-size: 22px;
+                          -fx-text-fill: #2c3e50;
+                          -fx-font-weight: bold;
+                          -fx-font-family: 'Roboto';
+                          -fx-letter-spacing: 1px;"/>
+        </VBox>
     </top>
 
     <center>
-        <TableView fx:id="archiveTable" prefHeight="400" prefWidth="900">
+        <TableView fx:id="archiveTable" prefHeight="400" prefWidth="900"
+                   style="-fx-background-color: white;
+                          -fx-border-color: #bdc3c7;
+                          -fx-border-radius: 6;
+                          -fx-padding: 10;
+                          -fx-font-family: 'Roboto';
+                          -fx-font-size: 14px;
+                          -fx-selection-bar: #ecf0f1;
+                          -fx-selection-bar-non-focused: #f0f3f4;">
+            <effect>
+                <DropShadow color="#95a5a6" radius="6" offsetX="0" offsetY="1"/>
+            </effect>
             <columns>
-                <TableColumn fx:id="colId" text="ID"/>
-                <TableColumn fx:id="colMarque" text="Marque"/>
-                <TableColumn fx:id="colModele" text="Modèle"/>
-                <TableColumn fx:id="colCapacite" text="Capacité"/>
-                <TableColumn fx:id="colDisponible" text="Disponible"/>
+                <TableColumn fx:id="colId" text="ID"
+                             style="-fx-text-fill: #2c3e50;
+                                    -fx-font-weight: bold;
+                                    -fx-alignment: CENTER_LEFT;"/>
+                <TableColumn fx:id="colMarque" text="MARQUE"
+                             style="-fx-text-fill: #2c3e50;
+                                    -fx-font-weight: bold;
+                                    -fx-alignment: CENTER_LEFT;"/>
+                <TableColumn fx:id="colModele" text="MODÈLE"
+                             style="-fx-text-fill: #2c3e50;
+                                    -fx-font-weight: bold;
+                                    -fx-alignment: CENTER_LEFT;"/>
+                <TableColumn fx:id="colCapacite" text="CAPACITÉ"
+                             style="-fx-text-fill: #2c3e50;
+                                    -fx-font-weight: bold;
+                                    -fx-alignment: CENTER_LEFT;"/>
+                <TableColumn fx:id="colDisponible" text="DISPONIBLE"
+                             style="-fx-text-fill: #2c3e50;
+                                    -fx-font-weight: bold;
+                                    -fx-alignment: CENTER_LEFT;"/>
             </columns>
         </TableView>
     </center>
 
     <bottom>
-        <HBox alignment="CENTER" spacing="10">
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
-            <Button text="Restaurer" onAction="#handleRestaurer" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
-            <Button text="Supprimer définitivement" onAction="#handleSupprimer" style="-fx-background-color: #f44336; -fx-text-fill: white;"/>
-            <Button text="Fermer" onAction="#handleFermer"/>
+        <HBox alignment="CENTER" spacing="20"
+              style="-fx-background-color: #f5f5f5;
+                     -fx-padding: 20;
+                     -fx-border-color: #d3d3d3;
+                     -fx-border-width: 1 0 0 0;">
+            <Button text="Restaurer" onAction="#handleRestaurer"
+                    style="-fx-background-color: #27ae60;
+                           -fx-text-fill: white;
+                           -fx-font-weight: bold;
+                           -fx-font-family: 'Roboto';
+                           -fx-padding: 10 25;
+                           -fx-background-radius: 4;
+                           -fx-cursor: hand;"/>
+            <Button text="Supprimer définitivement" onAction="#handleSupprimer"
+                    style="-fx-background-color: #e74c3c;
+                           -fx-text-fill: white;
+                           -fx-font-weight: bold;
+                           -fx-font-family: 'Roboto';
+                           -fx-padding: 10 25;
+                           -fx-background-radius: 4;
+                           -fx-cursor: hand;"/>
+            <Button text="Fermer" onAction="#handleFermer"
+                    style="-fx-background-color: #7f8c8d;
+                           -fx-text-fill: white;
+                           -fx-font-weight: bold;
+                           -fx-font-family: 'Roboto';
+                           -fx-padding: 10 25;
+                           -fx-background-radius: 4;
+                           -fx-cursor: hand;"/>
         </HBox>
     </bottom>
 </BorderPane>
