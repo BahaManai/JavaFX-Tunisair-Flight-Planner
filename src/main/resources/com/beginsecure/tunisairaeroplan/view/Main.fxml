@@ -9,14 +9,11 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.beginsecure.tunisairaeroplan.Controller.MainController"
             stylesheets="@main.css">
-
-    <!-- Barre latérale professionnelle -->
     <left>
-        <VBox fx:id="sidebar" prefWidth="280" spacing="0" styleClass="sidebar">
-            <!-- En-tête avec logo amélioré -->
+        <VBox fx:id="sidebar" prefWidth="200" spacing="0" styleClass="sidebar">
             <StackPane styleClass="sidebar-header">
-                <HBox alignment="CENTER_LEFT" spacing="12" styleClass="header-content">
-                    <ImageView fitWidth="40" fitHeight="40" preserveRatio="true">
+                <HBox alignment="CENTER_LEFT" spacing="8" styleClass="header-content">
+                    <ImageView fitWidth="32" fitHeight="32" preserveRatio="true">
                         <image>
                             <Image url="@../images/logo.png" />
                         </image>
@@ -27,13 +24,11 @@
 
             <!-- Section utilisateur profil -->
             <VBox styleClass="user-profile">
-                <FontIcon iconLiteral="fas-user-circle" iconSize="48" styleClass="user-icon"/>
+                <FontIcon iconLiteral="fas-user-circle" iconSize="36" styleClass="user-icon"/>
                 <Label text="Administrateur" styleClass="user-name"/>
                 <Label text="admin@tunisair.com" styleClass="user-email"/>
             </VBox>
-
-            <!-- Menu de navigation amélioré -->
-            <VBox spacing="8" styleClass="nav-menu">
+            <VBox spacing="6" styleClass="nav-menu">
                 <Button text="TABLEAU DE BORD" onAction="#showHome" styleClass="nav-btn">
                     <graphic>
                         <FontIcon iconLiteral="fas-chart-line" styleClass="nav-icon"/>
@@ -58,13 +53,13 @@
                     </graphic>
                 </Button>
 
-                <Button text="PILOTES et MEMBRES" onAction="#showMembres" styleClass="nav-btn">
+                <Button text="MEMBRES" onAction="#showMembres" styleClass="nav-btn">
                     <graphic>
                         <FontIcon iconLiteral="fas-user-tie" styleClass="nav-icon"/>
                     </graphic>
                 </Button>
 
-                <Button text="GESTION DES AVIONS" onAction="#showAvions" styleClass="nav-btn">
+                <Button text="AVIONS" onAction="#showAvions" styleClass="nav-btn">
                     <graphic>
                         <FontIcon iconLiteral="fas-plane" styleClass="nav-icon"/>
                     </graphic>
@@ -76,14 +71,13 @@
                     </graphic>
                 </Button>
 
-                <Button text="LISTE D'ATTENTE" onAction="#showListeAttente" styleClass="nav-btn">
+                <Button text="ATTENTE" onAction="#showListeAttente" styleClass="nav-btn">
                     <graphic>
                         <FontIcon iconLiteral="fas-clock" styleClass="nav-icon"/>
                     </graphic>
                 </Button>
             </VBox>
 
-            <!-- Bouton de déconnexion positionné en bas -->
             <Button text="DÉCONNEXION" onAction="#handleLogout" styleClass="logout-btn">
                 <graphic>
                     <FontIcon iconLiteral="fas-sign-out-alt" styleClass="logout-icon"/>
@@ -93,7 +87,9 @@
     </left>
 
     <center>
-        <StackPane fx:id="contentPane" styleClass="content-pane"/>
+        <ScrollPane fitToWidth="true" styleClass="content-scroll">
+            <StackPane fx:id="contentPane" styleClass="content-pane"/>
+        </ScrollPane>
     </center>
 
     <bottom>
