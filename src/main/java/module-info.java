@@ -9,6 +9,8 @@ module com.beginsecure.tunisairaeroplan {
     requires javafx.web;
     requires javafx.media;
     requires jdk.jsobject;
+    requires org.kordamp.ikonli.javafx;
+    requires org.kordamp.ikonli.fontawesome5;
 
     opens com.beginsecure.tunisairaeroplan to javafx.fxml;
     opens com.beginsecure.tunisairaeroplan.Controller to javafx.fxml;

@@ -4,69 +4,215 @@
   <meta charset="UTF-8">
   <title>Statistiques des Vols</title>
   <script src="https://www.gstatic.com/charts/loader.js"></script>
+  <!-- Ajout de Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
       padding: 20px;
-      background-color: #f4f4f4;
+      background: linear-gradient(135deg, #e0eafc, #cfdef3);
       margin: 0;
+      min-height: 100vh;
     }
     .header {
-      background-color: #2c3e50;
+      background: linear-gradient(90deg, #2c3e50, #3498db);
       color: white;
-      padding: 15px;
+      padding: 20px;
       text-align: center;
-      border-radius: 8px 8px 0 0;
-      margin-bottom: 20px;
+      border-radius: 15px 15px 0 0;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 28px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
     }
     #stats {
       display: flex;
       justify-content: space-around;
       flex-wrap: wrap;
-      gap: 20px;
-      margin-bottom: 30px;
+      gap: 25px;
+      margin-bottom: 40px;
+      padding: 20px;
     }
     .stat-card {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      background: linear-gradient(145deg, #ffffff, #f0f4f8);
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
       text-align: center;
-      width: 180px;
-      transition: transform 0.2s;
+      width: 200px;
+      transition: all 0.3s ease;
+      overflow: hidden;
+      position: relative;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(33, 150, 243, 0.1) 0%, transparent 70%);
+      animation: glowPulse 8s infinite;
+      z-index: 0;
     }
     .stat-card:hover {
-      transform: scale(1.05);
+      transform: scale(1.1);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
     }
-    .stat-card span.icon {
-      font-size: 28px;
-      margin-bottom: 10px;
+    .stat-card .icon {
+      font-size: 40px;
+      margin-bottom: 15px;
       display: block;
+      color: #2196F3;
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 1;
+      animation: pulse 2s infinite;
+    }
+    .stat-card:hover .icon {
+      color: #1976D2;
+      transform: scale(1.3);
     }
     .stat-card h3 {
       margin: 10px 0;
       color: #34495e;
       font-size: 16px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      z-index: 1;
     }
     .stat-card p {
-      font-size: 20px;
+      font-size: 24px;
       font-weight: bold;
       color: #2c3e50;
       margin: 0;
+      position: relative;
+      z-index: 1;
     }
     #charts {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 30px;
+      gap: 40px;
+      padding: 20px;
     }
     .chart-box {
-      width: 400px;
-      height: 300px;
-      background: white;
-      padding: 15px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      border-radius: 8px;
+      position: relative;
+      width: 450px;
+      height: 350px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      overflow: hidden;
+    }
+    .chart-box::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(33, 150, 243, 0.1) 0%, transparent 70%);
+      animation: chartGlow 10s infinite;
+      z-index: 0;
+    }
+    .chart-box .chart-title {
+      position: absolute;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 20px;
+      font-weight: bold;
+      color: #2c3e50;
+      padding: 5px 15px;
+      border-radius: 10px;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .spinner {
+      position: relative;
+      width: 60px;
+      height: 60px;
+      z-index: 1;
+    }
+    .spinner .circle {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 5px solid transparent;
+      border-radius: 50%;
+      box-sizing: border-box;
+      animation: spin 2s linear infinite, pulse 1.5s ease-in-out infinite;
+    }
+    .spinner .circle:nth-child(1) {
+      border-top-color: #2196F3;
+      border-bottom-color: #64B5F6;
+      animation-delay: 0s;
+    }
+    .spinner .circle:nth-child(2) {
+      border-left-color: #42A5F5;
+      border-right-color: #90CAF9;
+      animation-delay: 0.5s;
+      width: 70%;
+      height: 70%;
+      top: 15%;
+      left: 15%;
+    }
+    .spinner .circle:nth-child(3) {
+      border-top-color: #64B5F6;
+      border-bottom-color: #BBDEFB;
+      animation-delay: 1s;
+      width: 40%;
+      height: 40%;
+      top: 30%;
+      left: 30%;
+    }
+    .spinner::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      box-shadow: 0 0 20px rgba(33, 150, 243, 0.6);
+      animation: glow 1.5s ease-in-out infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.8; }
+    }
+    @keyframes glow {
+      0% { box-shadow: 0 0 10px rgba(33, 150, 243, 0.3); }
+      50% { box-shadow: 0 0 25px rgba(33, 150, 243, 0.8); }
+      100% { box-shadow: 0 0 10px rgba(33, 150, 243, 0.3); }
+    }
+    @keyframes glowPulse {
+      0% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.2); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 0.5; }
+    }
+    @keyframes chartGlow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .chart-box.loaded .spinner {
+      display: none;
     }
   </style>
 </head>
@@ -76,31 +222,59 @@
 </div>
 <div id="stats">
   <div class="stat-card">
-    <span class="icon">✈️</span>
+    <i class="fas fa-plane icon"></i>
     <h3>Vols cette semaine</h3>
     <p id="volsThisWeek">0</p>
   </div>
   <div class="stat-card">
-    <span class="icon">⚠️</span>
+    <i class="fas fa-exclamation-triangle icon"></i>
     <h3>Vols Annulés (%)</h3>
     <p id="annulesPercentage">0%</p>
   </div>
   <div class="stat-card">
-    <span class="icon">🛩️</span>
+    <i class="fas fa-plane-departure icon"></i>
     <h3>Avions Disponibles</h3>
     <p id="availableAvions">0/0</p>
   </div>
   <div class="stat-card">
-    <span class="icon">👥</span>
+    <i class="fas fa-users icon"></i>
     <h3>Membres Disponibles</h3>
     <p id="availableMembres">0/0</p>
   </div>
 </div>
 <div id="charts">
-  <div id="destinationChart" class="chart-box">Chargement...</div>
-  <div id="statusChart" class="chart-box">Chargement...</div>
-  <div id="crewChart" class="chart-box">Chargement...</div>
-  <div id="avionChart" class="chart-box">Chargement...</div>
+  <div id="destinationChart" class="chart-box">
+    <div class="chart-title">Top Destinations</div>
+    <div class="spinner">
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="circle"></div>
+    </div>
+  </div>
+  <div id="statusChart" class="chart-box">
+    <div class="chart-title">Statuts des Vols</div>
+    <div class="spinner">
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="circle"></div>
+    </div>
+  </div>
+  <div id="crewChart" class="chart-box">
+    <div class="chart-title">Répartition des Rôles</div>
+    <div class="spinner">
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="circle"></div>
+    </div>
+  </div>
+  <div id="avionChart" class="chart-box">
+    <div class="chart-title">Avions par Marque</div>
+    <div class="spinner">
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="circle"></div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -111,14 +285,14 @@
             google.visualization &&
             typeof google.visualization.DataTable !== 'undefined') {
       if (window.java && typeof window.java.injectData === 'function') {
-        console.log("Google Charts prêt, appel Java injectData()");
+        console.log("✅ Google Charts prêt, appel Java injectData()");
         window.java.injectData();
       } else {
-        console.log("⚠Java bridge non encore prêt.");
+        console.log("⚠️ Java bridge non encore prêt.");
         setTimeout(waitForChartsAndCallJava, 200);
       }
     } else {
-      console.log("En attente de Google Charts...");
+      console.log("⏳ En attente de Google Charts...");
       setTimeout(waitForChartsAndCallJava, 200);
     }
   }
@@ -139,24 +313,34 @@
     const crewData = new google.visualization.DataTable();
     crewData.addColumn('string', 'Rôle');
     crewData.addColumn('number', 'Nombre');
-    crewRoles.forEach(r => crewData.addRow([r.role, r.count]));
+    crewRoles.forEach(r => crewData.addRow([r.role.replace('Chef_de_cabine', 'Chef de cabine').replace('Agent_de_sécurité', 'Agent de sécurité'), r.count]));
 
     const avionData = new google.visualization.DataTable();
     avionData.addColumn('string', 'Marque');
     avionData.addColumn('number', 'Nombre');
     avions.forEach(a => avionData.addRow([a.marque, a.count]));
 
-    const destChart = new google.visualization.PieChart(document.getElementById('destinationChart'));
-    destChart.draw(destData, {title: 'Top Destinations'});
+    const destChartBox = document.getElementById('destinationChart');
+    const statusChartBox = document.getElementById('statusChart');
+    const crewChartBox = document.getElementById('crewChart');
+    const avionChartBox = document.getElementById('avionChart');
 
-    const statusChart = new google.visualization.PieChart(document.getElementById('statusChart'));
-    statusChart.draw(statusData, {title: 'Statuts des Vols'});
+    const destChart = new google.visualization.PieChart(destChartBox);
+    destChart.draw(destData, {title: 'Top Destinations', titleTextStyle: {color: '#2c3e50', fontSize: 18, bold: true}});
 
-    const crewChart = new google.visualization.BarChart(document.getElementById('crewChart'));
-    crewChart.draw(crewData, {title: 'Répartition des Rôles d\'Équipage', legend: {position: 'none'}});
+    const statusChart = new google.visualization.PieChart(statusChartBox);
+    statusChart.draw(statusData, {title: 'Statuts des Vols', titleTextStyle: {color: '#2c3e50', fontSize: 18, bold: true}});
 
-    const avionChart = new google.visualization.ColumnChart(document.getElementById('avionChart'));
-    avionChart.draw(avionData, {title: 'Nombre d\'Avions par Marque', legend: {position: 'none'}});
+    const crewChart = new google.visualization.BarChart(crewChartBox);
+    crewChart.draw(crewData, {title: 'Répartition des Rôles d\'Équipage', legend: {position: 'none'}, titleTextStyle: {color: '#2c3e50', fontSize: 17, bold: true}});
+
+    const avionChart = new google.visualization.ColumnChart(avionChartBox);
+    avionChart.draw(avionData, {title: 'Nombre d\'Avions par Marque', legend: {position: 'none'}, titleTextStyle: {color: '#2c3e50', fontSize: 18, bold: true}});
+
+    destChartBox.classList.add('loaded');
+    statusChartBox.classList.add('loaded');
+    crewChartBox.classList.add('loaded');
+    avionChartBox.classList.add('loaded');
 
     document.getElementById('volsThisWeek').textContent = stats.volsThisWeek;
     document.getElementById('annulesPercentage').textContent = stats.annulesPercentage.toFixed(2) + '%';
