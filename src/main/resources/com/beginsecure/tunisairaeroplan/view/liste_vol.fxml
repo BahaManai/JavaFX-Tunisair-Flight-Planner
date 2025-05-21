@@ -10,20 +10,20 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.control.ComboBox?>
+
 <BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.beginsecure.tunisairaeroplan.Controller.ListeVolController">
     <top>
-        <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 15 15 15 15;" text="Liste des Vols" BorderPane.alignment="CENTER" />
+        <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 15 15 15 15; -fx-text-fill: #F5F5F5; -fx-background-color: #333333;" text="Liste des Vols" BorderPane.alignment="CENTER" />
     </top>
 
     <center>
         <VBox alignment="CENTER" spacing="15">
             <HBox alignment="CENTER_LEFT" spacing="10">
-                <Label fx:id="searchLabel" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333;" text="Rechercher :" />
-                <TextField fx:id="searchField" promptText="Rechercher par numéro, trajet ou statut..." style="-fx-pref-width: 300px; -fx-background-color: #ffffff; -fx-border-color: #cccccc; -fx-border-radius: 5; -fx-background-radius: 5; -fx-padding: 8; -fx-font-size: 14px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);" />
+                <Label fx:id="searchLabel" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #F5F5F5;" text="Rechercher :" />
+                <TextField fx:id="searchField" promptText="Rechercher par numéro, trajet ou statut..." style="-fx-pref-width: 300px; -fx-background-color: #F5F5F5; -fx-border-color: #333333; -fx-border-radius: 5; -fx-background-radius: 5; -fx-padding: 8; -fx-font-size: 14px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);" />
             </HBox>
-            <TableView fx:id="volTable" prefHeight="599.0" prefWidth="900" style="-fx-background-color: #ffffff; -fx-border-color: #cccccc; -fx-border-radius: 10; -fx-background-insets: 0; -fx-padding: 5;">
+            <TableView fx:id="volTable" prefHeight="400.0" prefWidth="1200.0" style="-fx-background-color: #F5F5F5; -fx-border-color: #333333; -fx-border-radius: 10; -fx-background-insets: 0; -fx-padding: 5;">
                 <columnResizePolicy>
                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                 </columnResizePolicy>
@@ -42,20 +42,19 @@
             </TableView>
 
             <HBox alignment="CENTER_LEFT" spacing="10">
-                <Button fx:id="btnAjouterVol" onAction="#ouvrirAjoutVol" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 15; -fx-border-radius: 5;" text="Ajouter Vol" />
-                <Button fx:id="btnVoirArchive" onAction="#ouvrirArchiveVol" style="-fx-background-color: #607D8B; -fx-text-fill: white; -fx-padding: 8 15; -fx-border-radius: 5;" text="Voir archive Vol" />
+                <Button fx:id="btnAjouterVol" onAction="#ouvrirAjoutVol" style="-fx-background-color: #2ECC71; -fx-text-fill: #F5F5F5; -fx-font-weight: bold; -fx-padding: 8 15; -fx-border-radius: 5;" text="Ajouter Vol" />
+                <Button fx:id="btnVoirArchive" onAction="#ouvrirArchiveVol" style="-fx-background-color: #333333; -fx-text-fill: #F5F5F5; -fx-padding: 8 15; -fx-border-radius: 5;" text="Voir archive Vol" />
             </HBox>
             <HBox alignment="CENTER_LEFT" spacing="10">
-                <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333;" text="Statut:" />
-                <ComboBox fx:id="statutFilterComboBox" style="-fx-pref-width: 150px;" />
-
-                <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333;" text="Type Trajet:" />
-                <ComboBox fx:id="typeTrajetFilterComboBox" style="-fx-pref-width: 150px;" />
-                <Button text="Réinitialiser" onAction="#resetFilters" style="-fx-background-color: #9E9E9E; -fx-text-fill: white; -fx-padding: 8 15; -fx-border-radius: 5;" />
+                <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #F5F5F5;" text="Statut:" />
+                <ComboBox fx:id="statutFilterComboBox" style="-fx-pref-width: 150px; -fx-background-color: #F5F5F5; -fx-border-color: #333333;" />
+                <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #F5F5F5;" text="Type Trajet:" />
+                <ComboBox fx:id="typeTrajetFilterComboBox" style="-fx-pref-width: 150px; -fx-background-color: #F5F5F5; -fx-border-color: #333333;" />
+                <Button text="Réinitialiser" onAction="#resetFilters" style="-fx-background-color: #333333; -fx-text-fill: #F5F5F5; -fx-padding: 8 15; -fx-border-radius: 5;" />
             </HBox>
 
-            <StackPane alignment="CENTER" prefHeight="347.0" prefWidth="900.0">
-                <ImageView fx:id="listImage" fitHeight="291.0" fitWidth="489.0">
+            <StackPane alignment="CENTER" prefHeight="150.0" prefWidth="1200.0">
+                <ImageView fx:id="listImage" fitHeight="120.0" fitWidth="450.0">
                     <image>
                         <Image url="@../images/planification_vols.png" />
                     </image>
