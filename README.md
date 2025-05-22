@@ -20,13 +20,13 @@ Tunisair Aéroplan is a JavaFX-based desktop application designed to manage flig
 ## Screenshots
 
 ### Dashboard
-![Dashboard Screenshot](./screenshots/1.png)
+![Dashboard Screenshot](./Screenshots/1.png)
 
 ### Flight List
-![Flight List Screenshot](./screenshots/2.png)
+![Flight List Screenshot](./Screenshots/2.png)
 
 ### Flight Schedule
-![Flight Schedule Screenshot](./screenshots/3.png)
+![Flight Schedule Screenshot](./Screenshots/3.png)
 
 ### Approval List
-![Aooroval List Screenshot](./screenshots/4.png)
+![Aooroval List Screenshot](./Screenshots/4.png)
