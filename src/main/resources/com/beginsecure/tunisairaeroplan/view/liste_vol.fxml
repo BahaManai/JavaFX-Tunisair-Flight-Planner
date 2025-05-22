@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -12,8 +13,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.beginsecure.tunisairaeroplan.Controller.ListeVolController" style="-fx-background-color: #F5F5F5;"
-            stylesheets="@vol.css">
+<BorderPane style="-fx-background-color: #F5F5F5;" stylesheets="@vol.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.beginsecure.tunisairaeroplan.Controller.ListeVolController">
     <top>
         <Label style="-fx-font-size: 32px; -fx-font-weight: 900; -fx-padding: 20 20 20 20; -fx-text-fill: #F5F5F5; -fx-background-color: #333333; -fx-border-radius: 0 0 12 12; -fx-background-radius: 0 0 12 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 4); -fx-font-family: 'Segoe UI', sans-serif;" text="Liste des Vols" BorderPane.alignment="CENTER" />
     </top>
@@ -29,7 +29,7 @@
                 <ComboBox fx:id="statutFilterComboBox" style="-fx-pref-width: 180px; -fx-background-color: #FFFFFF; -fx-border-color: #2ECC71; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-font-size: 14px; -fx-font-family: 'Segoe UI', sans-serif; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0, 0, 3);" />
                 <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333333; -fx-font-family: 'Segoe UI', sans-serif;" text="Type Trajet :" />
                 <ComboBox fx:id="typeTrajetFilterComboBox" style="-fx-pref-width: 180px; -fx-background-color: #FFFFFF; -fx-border-color: #2ECC71; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-font-size: 14px; -fx-font-family: 'Segoe UI', sans-serif; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0, 0, 3);" />
-                <Button text="Réinitialiser" onAction="#resetFilters" style="-fx-background-color: #333333; -fx-text-fill: #F5F5F5; -fx-padding: 10 20; -fx-border-radius: 10; -fx-background-radius: 10; -fx-font-size: 15px; -fx-font-family: 'Segoe UI', sans-serif; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0, 0, 3); -fx-cursor: hand;" />
+                <Button onAction="#resetFilters" style="-fx-background-color: #333333; -fx-text-fill: #F5F5F5; -fx-padding: 10 20; -fx-border-radius: 10; -fx-background-radius: 10; -fx-font-size: 15px; -fx-font-family: 'Segoe UI', sans-serif; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0, 0, 3); -fx-cursor: hand;" text="Réinitialiser" />
             </HBox>
             <TableView fx:id="volTable" style="-fx-background-color: #FFFFFF; -fx-border-color: #333333; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 8; -fx-font-size: 14px; -fx-font-family: 'Segoe UI', sans-serif; -fx-control-inner-background: #FFFFFF;" VBox.vgrow="ALWAYS">
                 <columnResizePolicy>
@@ -53,13 +53,13 @@
                 <Button fx:id="btnAjouterVol" onAction="#ouvrirAjoutVol" style="-fx-background-color: #2ECC71; -fx-text-fill: #F5F5F5; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 10; -fx-background-radius: 10; -fx-font-size: 15px; -fx-font-family: 'Segoe UI', sans-serif; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0, 0, 3); -fx-cursor: hand;" text="Ajouter Vol">
                     <styleClass>button-hover</styleClass>
                 </Button>
-                <Button fx:id="btnVoirArchive" onAction="#ouvrirArchiveVol" style="-fx-background-color: #333333; -fx-text-fill: #F5F5F5; -fx-padding: 10 20; -fx-border-radius: 10; -fx-background-radius: 10; -fx-font-size: 15px; -fx-font-family: 'Segoe UI', sans-serif; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0, 0, 3); -fx-cursor: hand;" text="Voir archive Vol" visible="false" managed="false">
+                <Button fx:id="btnVoirArchive" managed="false" onAction="#ouvrirArchiveVol" style="-fx-background-color: #333333; -fx-text-fill: #F5F5F5; -fx-padding: 10 20; -fx-border-radius: 10; -fx-background-radius: 10; -fx-font-size: 15px; -fx-font-family: 'Segoe UI', sans-serif; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0, 0, 3); -fx-cursor: hand;" text="Voir archive Vol" visible="false">
                     <styleClass>button-hover</styleClass>
                 </Button>
             </HBox>
 
             <StackPane alignment="CENTER" style="-fx-padding: 10;" VBox.vgrow="NEVER">
-                <ImageView fx:id="listImage" fitHeight="100.0" fitWidth="400.0">
+                <ImageView fx:id="listImage" fitHeight="241.0" fitWidth="436.0">
                     <image>
                         <Image url="@../images/planification_vols.png" />
                     </image>

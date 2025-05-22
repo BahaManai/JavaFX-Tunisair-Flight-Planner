@@ -40,7 +40,7 @@
                 <Button fx:id="btnSupprimer" onAction="#supprimerMembre" styleClass="btn-danger" text="Supprimer" />
                 <Button fx:id="btnConsulter" onAction="#consulterMembre" styleClass="btn-info" text="Consulter" />
             </HBox>
-             <ImageView fx:id="membreImage" fitHeight="134.0" fitWidth="141.0">
+             <ImageView fx:id="membreImage" fitHeight="162.0" fitWidth="135.0">
                  <image>
                      <Image url="@../images/membre.png" />
                  </image>

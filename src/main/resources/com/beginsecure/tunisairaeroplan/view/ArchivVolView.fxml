@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.beginsecure.tunisairaeroplan.Controller.ArchivVolController">
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.beginsecure.tunisairaeroplan.Controller.ArchivVolController">
 
     <top>
         <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 15 15 15 15;" text="Liste des Vols Archivés" BorderPane.alignment="CENTER" />
@@ -36,7 +36,7 @@
 
     <bottom>
         <StackPane alignment="CENTER" prefHeight="200.0" prefWidth="800.0" BorderPane.alignment="CENTER">
-            <ImageView fx:id="archiveImage" fitHeight="147.0" fitWidth="176.0">
+            <ImageView fx:id="archiveImage" fitHeight="152.0" fitWidth="154.0">
                 <image>
                     <Image url="@../images/vols_archivés.png" />
                 </image>
