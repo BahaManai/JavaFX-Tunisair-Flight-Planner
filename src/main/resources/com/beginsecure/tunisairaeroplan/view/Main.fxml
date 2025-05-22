@@ -3,9 +3,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
-<?import org.kordamp.bootstrapfx.scene.layout.*?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
-<?import org.kordamp.bootstrapfx.BootstrapFX?>
+
 <BorderPane fx:id="mainBorderPane" xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.beginsecure.tunisairaeroplan.Controller.MainController"
             stylesheets="@main.css">
@@ -18,13 +17,13 @@
                             <Image url="@../images/logo.png" />
                         </image>
                     </ImageView>
-                    <Label text="TUNISAIR" styleClass="app-title" wrapText="true" maxWidth="160"/>
+                    <Label text="TUNISAIR AÉROPLAN" styleClass="app-title" wrapText="true" maxWidth="160"/>
                 </HBox>
             </StackPane>
             <VBox styleClass="user-profile" spacing="5" prefHeight="100">
                 <FontIcon iconLiteral="fas-user-circle" iconSize="32" styleClass="user-icon"/>
-                <Label text="Administrateur" styleClass="user-name"/>
-                <Label text="admin@tunisair.com" styleClass="user-email" wrapText="true" maxWidth="200"/>
+                <Label fx:id="userRoleLabel" text="Utilisateur" styleClass="user-name"/>
+                <Label fx:id="userEmailLabel" text="user@tunisair.com" styleClass="user-email" wrapText="true" maxWidth="200"/>
             </VBox>
 
             <VBox spacing="4" styleClass="nav-menu">
@@ -40,37 +39,37 @@
                     </graphic>
                 </Button>
 
-                <Button text="CALENDRIER" onAction="#showCalendrier" styleClass="nav-btn"> <!-- Texte complet -->
+                <Button text="CALENDRIER DES VOLS" onAction="#showCalendrier" styleClass="nav-btn">
                     <graphic>
                         <FontIcon iconLiteral="fas-calendar-alt" styleClass="nav-icon"/>
                     </graphic>
                 </Button>
 
-                <Button text="ÉQUIPAGES" onAction="#showEquipages" styleClass="nav-btn"> <!-- Texte complet -->
+                <Button text="ÉQUIPAGES" onAction="#showEquipages" styleClass="nav-btn">
                     <graphic>
                         <FontIcon iconLiteral="fas-users-cog" styleClass="nav-icon"/>
                     </graphic>
                 </Button>
 
-                <Button text="PILOTES et MEMBRES" onAction="#showMembres" styleClass="nav-btn"> <!-- Texte complet -->
+                <Button text="PILOTES ET MEMBRES" onAction="#showMembres" styleClass="nav-btn">
                     <graphic>
                         <FontIcon iconLiteral="fas-user-tie" styleClass="nav-icon"/>
                     </graphic>
                 </Button>
 
-                <Button text="GESTION AVIONS" onAction="#showAvions" styleClass="nav-btn"> <!-- Texte légèrement réduit -->
+                <Button text="GESTION DES AVIONS" onAction="#showAvions" styleClass="nav-btn">
                     <graphic>
                         <FontIcon iconLiteral="fas-plane" styleClass="nav-icon"/>
                     </graphic>
                 </Button>
 
-                <Button text="ARCHIVES" onAction="#showArchives" styleClass="nav-btn"> <!-- Texte complet -->
+                <Button text="VOLS ARCHIVÉS" onAction="#showArchives" styleClass="nav-btn">
                     <graphic>
                         <FontIcon iconLiteral="fas-archive" styleClass="nav-icon"/>
                     </graphic>
                 </Button>
 
-                <Button text="LISTE D'ATTENTE" onAction="#showListeAttente" styleClass="nav-btn"> <!-- Texte complet -->
+                <Button text="LISTE D'ATTENTE" onAction="#showListeAttente" styleClass="nav-btn">
                     <graphic>
                         <FontIcon iconLiteral="fas-clock" styleClass="nav-icon"/>
                     </graphic>
@@ -93,8 +92,8 @@
 
     <bottom>
         <HBox alignment="CENTER" styleClass="status-bar" prefHeight="30">
-            <Label text="© 2023 Tunisair Aéroplan" styleClass="copyright"/> <!-- Texte complet -->
-            <Label fx:id="statusLabel" text="Système en ligne" styleClass="status-indicator"/> <!-- Texte complet -->
+            <Label text="© 2023 Tunisair Aéroplan" styleClass="copyright"/>
+            <Label fx:id="statusLabel" text="Connecté" styleClass="status-indicator"/>
         </HBox>
     </bottom>
 </BorderPane>

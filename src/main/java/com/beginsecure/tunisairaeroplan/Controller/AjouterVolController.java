@@ -4,11 +4,13 @@ import com.beginsecure.tunisairaeroplan.Model.*;
 import com.beginsecure.tunisairaeroplan.Model.enums.RoleMembre;
 import com.beginsecure.tunisairaeroplan.Model.enums.StatutVol;
 import com.beginsecure.tunisairaeroplan.Model.enums.TypeTrajet;
+import com.beginsecure.tunisairaeroplan.Services.AuthService;
 import com.beginsecure.tunisairaeroplan.dao.DAOAvion;
 import com.beginsecure.tunisairaeroplan.dao.EquipageDao;
 import com.beginsecure.tunisairaeroplan.dao.membreDao;
 import com.beginsecure.tunisairaeroplan.dao.volDao;
 import com.beginsecure.tunisairaeroplan.utilites.LaConnexion;
+import com.beginsecure.tunisairaeroplan.utils.SessionManager;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -45,6 +47,7 @@ public class AjouterVolController {
     private volDao daoVol;
     private EquipageDao equipageDao;
     private membreDao membreDao;
+    private AuthService authService;
 
     private void genererNumeroVol() {
         try {
@@ -67,18 +70,17 @@ public class AjouterVolController {
             daoVol = new volDao(connection);
             equipageDao = new EquipageDao(connection);
             membreDao = new membreDao(connection);
+            authService = new AuthService();
             genererNumeroVol();
             typeTrajetCombo.setItems(FXCollections.observableArrayList(TypeTrajet.values()));
             chargerAvionsDisponibles(null, null);
             chargerMembresParRole(null, null);
 
-            // Add listeners to refresh availability when dates or times change
             heureDepartField.valueProperty().addListener((obs, oldVal, newVal) -> updateDisponibilites());
             heureArriveeField.valueProperty().addListener((obs, oldVal, newVal) -> updateDisponibilites());
             heureDepartTimeField.textProperty().addListener((obs, oldVal, newVal) -> updateDisponibilites());
             heureArriveeTimeField.textProperty().addListener((obs, oldVal, newVal) -> updateDisponibilites());
 
-            // Populate country and airport combos
             paysOrigineCombo.setItems(FXCollections.observableArrayList(LocationData.getCountries()));
             paysDestinationCombo.setItems(FXCollections.observableArrayList(LocationData.getCountries()));
             paysOrigineCombo.valueProperty().addListener((obs, oldVal, newVal) -> {
@@ -185,7 +187,6 @@ public class AjouterVolController {
                 return;
             }
 
-            // Collect member IDs for availability check
             List<Membre> membresEquipage = new ArrayList<>();
             membresEquipage.add(piloteCombo.getValue());
             membresEquipage.add(copiloteCombo.getValue());
@@ -199,7 +200,6 @@ public class AjouterVolController {
                     .map(Membre::getId)
                     .toList();
 
-            // Pass -1 as volIdToExclude since this is a new flight
             if (!daoVol.canAddVolForMembres(membreIds, heureDepart, heureArrivee, -1)) {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Conflit membres", "Un ou plusieurs membres ne sont pas disponibles pour cette période.");
                 return;
@@ -209,7 +209,6 @@ public class AjouterVolController {
                 return;
             }
 
-            // Validate origin and destination are different
             String origine = aeroportOrigineCombo.getValue();
             String destination = aeroportDestinationCombo.getValue();
             if (origine != null && destination != null && origine.equals(destination)) {
@@ -217,7 +216,6 @@ public class AjouterVolController {
                 return;
             }
 
-            // Create equipage
             String nomEquipage = "AutoGen" + System.currentTimeMillis();
             int idEquipage = equipageDao.creerEquipageAvecMembres(nomEquipage, membresEquipage);
 
@@ -225,8 +223,9 @@ public class AjouterVolController {
             vol vol = creerVol(nouvelEquipage);
             daoVol.insertVol(vol);
 
-            showAlert(Alert.AlertType.INFORMATION, "Succès", "Vol ajouté", "Le vol a été ajouté avec succès.");
-            retourListeVols(); // Return to flight list after success
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "Vol ajouté",
+                    isAdmin() ? "Le vol a été ajouté avec succès." : "Le vol a été ajouté avec le statut 'En attente'. Un administrateur doit l'approuver.");
+            retourListeVols();
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Ajout du vol", "Erreur lors de l'ajout du vol : " + e.getMessage());
         } catch (IllegalArgumentException e) {
@@ -279,6 +278,8 @@ public class AjouterVolController {
         if (heureDepart == null || heureArrivee == null) {
             throw new IllegalArgumentException("Horaires de départ ou d'arrivée invalides");
         }
+        // Set status to En_attente for non-admins, Planifié for admins
+        StatutVol status = isAdmin() ? StatutVol.Planifié : StatutVol.En_attente;
         return new vol(
                 numVolField.getText(),
                 aeroportOrigineCombo.getValue(),
@@ -286,10 +287,15 @@ public class AjouterVolController {
                 Timestamp.valueOf(heureDepart),
                 Timestamp.valueOf(heureArrivee),
                 typeTrajetCombo.getValue(),
-                StatutVol.Planifié,
+                status,
                 avionCombo.getValue(),
                 equipage
         );
+    }
+
+    private boolean isAdmin() {
+        User user = authService.getUserByEmail(SessionManager.getCurrentUser());
+        return user != null && user.isAdmin();
     }
 
     private boolean validerDates(LocalDateTime depart, LocalDateTime arrivee) {
@@ -345,7 +351,6 @@ public class AjouterVolController {
         if (mecanicienCombo.getValue() != null) membres.add(mecanicienCombo.getValue());
         if (agentSecuriteCombo.getValue() != null) membres.add(agentSecuriteCombo.getValue());
 
-        // Remove null values for duplicate check
         long distinctCount = membres.stream()
                 .filter(Objects::nonNull)
                 .map(Membre::getId)

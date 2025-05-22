@@ -8,7 +8,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -16,12 +15,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class MainController {
+public class PlannerHomeController {
 
     @FXML
     private StackPane contentPane;
     @FXML
-    private VBox menuVBox;
+    private VBox sidebar;
     @FXML
     private Label userRoleLabel;
     @FXML
@@ -29,58 +28,13 @@ public class MainController {
 
     @FXML
     public void initialize() {
-        // Check user role and restrict menu items
+        // Check user role and set labels
         restrictMenuBasedOnRole();
-        showHome();
+        showCalendrier(); // Default view for planner
     }
 
     public StackPane getContentPane() {
         return contentPane;
-    }
-
-    @FXML
-    public void showHome() {
-        loadPage("Dashboard.fxml");
-    }
-
-    @FXML
-    public void showAvions() {
-        if (isAdmin()) {
-            loadPage("ListeAvion.fxml");
-        }
-    }
-
-    @FXML
-    public void showPlanificationVols() {
-        loadPage("liste_vol.fxml");
-    }
-
-    @FXML
-    public void showArchives() {
-        if (isAdmin()) {
-            loadPage("ArchivVolView.fxml");
-        }
-    }
-
-    @FXML
-    public void showListeAttente() {
-        if (isAdmin()) {
-            loadPage("PendingApprovals.fxml");
-        }
-    }
-
-    @FXML
-    public void showEquipages() {
-        if (isAdmin()) {
-            loadPage("ListeEquipages.fxml");
-        }
-    }
-
-    @FXML
-    public void showMembres() {
-        if (isAdmin()) {
-            loadPage("FXMLMembre.fxml");
-        }
     }
 
     @FXML
@@ -89,8 +43,8 @@ public class MainController {
     }
 
     @FXML
-    public void showParametres() {
-        System.out.println("Section paramètres en cours de développement.");
+    public void showPlanificationVols() {
+        loadPage("liste_vol.fxml");
     }
 
     private void loadPage(String fxmlFile) {
@@ -130,23 +84,8 @@ public class MainController {
         AuthService authService = new AuthService();
         User user = authService.getUserByEmail(SessionManager.getCurrentUser());
         if (user != null) {
-            userRoleLabel.setText(user.isAdmin() ? "Admin" : "Utilisateur");
+            userRoleLabel.setText(user.isAdmin() ? "Administrateur" : "Planificateur de vols");
             userEmailLabel.setText(user.getEmail());
-
-            // Hide admin-specific buttons for non-admins
-            if (!user.isAdmin()) {
-                menuVBox.getChildren().removeIf(node -> {
-                    if (node instanceof Button) {
-                        String text = ((Button) node).getText();
-                        return "Équipages".equals(text) ||
-                                "Pilotes - Membres".equals(text) ||
-                                "Gestion des Avions".equals(text) ||
-                                "Vols archivés".equals(text) ||
-                                "Liste d'attente".equals(text);
-                    }
-                    return false;
-                });
-            }
         }
     }
 }

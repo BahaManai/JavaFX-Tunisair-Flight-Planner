@@ -566,4 +566,48 @@ public class volDao {
         }
         return 0;
     }
+
+    public List<vol> getPendingFlights() throws SQLException {
+        List<vol> pendingFlights = new ArrayList<>();
+        String query = "SELECT * FROM Vol WHERE statutVol = 'En_attente'";
+        try (Connection conn = LaConnexion.seConnecter();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                vol flight = new vol();
+                flight.setIdVol(rs.getInt("id"));
+                flight.setNumeroVol(rs.getString("numVol"));
+                flight.setOrigine(rs.getString("origine")); // Ensure the column exists in the database
+                flight.setDestination(rs.getString("destination"));
+                flight.setHeureDepart(rs.getTimestamp("heure_depart"));
+                flight.setHeureArrivee(rs.getTimestamp("heure_arrivee"));
+                flight.setTypeTrajet(TypeTrajet.valueOf(rs.getString("type_trajet")));
+                flight.setStatut(StatutVol.valueOf(rs.getString("statutVol")));
+                // Load avion and equipage if needed
+                int avionId = rs.getInt("avion_id");
+                if (!rs.wasNull()) {
+                    DAOAvion daoAvion = new DAOAvion(conn);
+                    Avion avion = daoAvion.getAvionById(avionId);
+                    flight.setAvion(avion);
+                }
+                int equipageId = rs.getInt("equipage_id");
+                if (!rs.wasNull()) {
+                    EquipageDao equipageDao = new EquipageDao(conn);
+                    Equipage equipage = equipageDao.getEquipageById(equipageId);
+                    flight.setEquipage(equipage);
+                }
+                pendingFlights.add(flight);
+            }
+        }
+        return pendingFlights;
+    }
+
+    public void deleteVol(int volId) throws SQLException {
+        String query = "DELETE FROM Vol WHERE id = ?";
+        try (Connection conn = LaConnexion.seConnecter();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, volId);
+            stmt.executeUpdate();
+        }
+    }
 }

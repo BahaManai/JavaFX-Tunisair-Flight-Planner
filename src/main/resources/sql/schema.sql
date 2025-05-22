@@ -108,3 +108,4 @@ ADD COLUMN origine VARCHAR(255) DEFAULT '';
 
 -- à exécuter
 ALTER TABLE Membre MODIFY role ENUM('Pilote', 'Copilote', 'Chef_de_cabine', 'Hôtesse', 'Mécanicien', 'Agent_de_sécurité') NOT NULL;
+ALTER TABLE Vol MODIFY COLUMN statutVol ENUM('Planifié', 'Annulé', 'Terminé', 'En_attente') NOT NULL;

@@ -44,6 +44,16 @@ public class MainApp extends Application {
         primaryStage.setScene(new Scene(root, 1000, 700));
     }
 
+    public static void showPlannerHome() throws IOException {
+        if (primaryStage == null) {
+            throw new IllegalStateException("Primary stage is not initialized. Ensure the application has started.");
+        }
+        Parent root = FXMLLoader.load(MainApp.class.getResource("/com/beginsecure/tunisairaeroplan/View/PlannerHome.fxml"));
+        primaryStage.setTitle("Tunisair Aéroplan - Interface Planificateur");
+        primaryStage.setScene(new Scene(root));
+        primaryStage.show();
+    }
+
     public static void main(String[] args) {
         launch(args);
     }

@@ -2,5 +2,6 @@ package com.beginsecure.tunisairaeroplan.Model.enums;
 public enum StatutVol {
     Planifié,
     Annulé,
-    Terminé
+    Terminé,
+    En_attente
 }

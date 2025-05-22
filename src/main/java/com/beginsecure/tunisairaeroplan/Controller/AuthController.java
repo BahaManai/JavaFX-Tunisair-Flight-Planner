@@ -3,7 +3,7 @@ package com.beginsecure.tunisairaeroplan.Controller;
 import com.beginsecure.tunisairaeroplan.Model.User;
 import com.beginsecure.tunisairaeroplan.Services.AuthService;
 import com.beginsecure.tunisairaeroplan.utilites.MainApp;
-import com.beginsecure.tunisairaeroplan.utilites.testRegistration;
+import com.beginsecure.tunisairaeroplan.utils.SessionManager;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -90,14 +90,15 @@ public class AuthController implements Initializable {
 
         User user = authService.authenticate(email, password);
         if (user != null) {
+            SessionManager.login(email); // Store the logged-in user
             try {
                 if (user.isAdmin()) {
                     MainApp.showAdminDashboard();
                 } else {
-                    MainApp.showUserDashboard();
+                    MainApp.showPlannerHome();
                 }
             } catch (IOException e) {
-                showError("Erreur lors de la navigation");
+                showError("Erreur lors de la navigation: " + e.getMessage());
                 e.printStackTrace();
             }
         } else {
@@ -177,6 +178,7 @@ public class AuthController implements Initializable {
     @FXML
     private void handleLogout() {
         try {
+            SessionManager.logout();
             Parent root = FXMLLoader.load(getClass().getResource("/com/beginsecure/tunisairaeroplan/View/Accueil.fxml"));
             Stage stage = (Stage) rootVBox.getScene().getWindow();
             stage.setScene(new Scene(root));

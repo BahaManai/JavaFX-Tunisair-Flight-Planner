@@ -1,10 +1,12 @@
 package com.beginsecure.tunisairaeroplan.Controller;
 
+import com.beginsecure.tunisairaeroplan.Model.User;
 import com.beginsecure.tunisairaeroplan.Model.enums.StatutVol;
 import com.beginsecure.tunisairaeroplan.Model.enums.TypeTrajet;
 import com.beginsecure.tunisairaeroplan.Model.vol;
+import com.beginsecure.tunisairaeroplan.Services.AuthService;
 import com.beginsecure.tunisairaeroplan.dao.volDao;
-import com.beginsecure.tunisairaeroplan.utilites.LaConnexion;
+import com.beginsecure.tunisairaeroplan.utils.SessionManager;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,7 +23,6 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -41,31 +42,34 @@ public class ListeVolController {
     @FXML private TableColumn<vol, Void> colActions;
     @FXML private TextField searchField;
     @FXML private Label searchLabel;
+    @FXML private Button btnVoirArchive;
     @FXML private ComboBox<StatutVol> statutFilterComboBox;
     @FXML private ComboBox<TypeTrajet> typeTrajetFilterComboBox;
+
     private volDao dao;
+    private AuthService authService;
     private ObservableList<vol> volList = FXCollections.observableArrayList();
     private FilteredList<vol> filteredVolList;
+    private boolean isAdmin;
 
     @FXML
     public void initialize() {
         dao = new volDao();
+        authService = new AuthService();
+        isAdmin = isAdmin();
+
         try {
             dao.updatePastFlightsStatus();
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Database Error", "Failed to update flight statuses: " + e.getMessage());
         }
-        try {
-            dao.updatePastFlightsStatus();
-        } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Database Error", "Failed to update flight statuses: " + e.getMessage());
-        }
+
         statutFilterComboBox.setItems(FXCollections.observableArrayList(StatutVol.values()));
         statutFilterComboBox.getSelectionModel().selectFirst();
 
-        typeTrajetFilterComboBox.setItems(FXCollections.observableArrayList(TypeTrajet.values()) );
+        typeTrajetFilterComboBox.setItems(FXCollections.observableArrayList(TypeTrajet.values()));
         typeTrajetFilterComboBox.getSelectionModel().selectFirst();
-        setupFilters();
+
         FontIcon searchIcon = new FontIcon(FontAwesomeSolid.SEARCH);
         searchIcon.setIconSize(16);
         searchIcon.setIconColor(javafx.scene.paint.Color.web("#333333"));
@@ -73,15 +77,20 @@ public class ListeVolController {
 
         setupTableColumns();
         loadVols();
+        setupFilters();
         setupSearchFilter();
         addActionButtons();
+
+        // Show "Voir archive Vol" button only for admins
+        btnVoirArchive.setVisible(isAdmin);
+        btnVoirArchive.setManaged(isAdmin);
     }
-    @FXML
-    private void resetFilters() {
-        statutFilterComboBox.getSelectionModel().selectFirst();
-        typeTrajetFilterComboBox.getSelectionModel().selectFirst();
-        searchField.clear();
+
+    private boolean isAdmin() {
+        User user = authService.getUserByEmail(SessionManager.getCurrentUser());
+        return user != null && user.isAdmin();
     }
+
     private void setupFilters() {
         statutFilterComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
             applyFilters();
@@ -124,18 +133,18 @@ public class ListeVolController {
         });
     }
 
+    @FXML
+    private void resetFilters() {
+        statutFilterComboBox.getSelectionModel().selectFirst();
+        typeTrajetFilterComboBox.getSelectionModel().selectFirst();
+        searchField.clear();
+        applyFilters(); // Ensure filters are reapplied after reset
+    }
 
     private void setupSearchFilter() {
         filteredVolList = new FilteredList<>(volList, p -> true);
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredVolList.setPredicate(vol -> {
-                if (newValue == null || newValue.trim().isEmpty()) return true;
-                String lowerCaseFilter = newValue.toLowerCase();
-                return vol.getNumVol().toLowerCase().contains(lowerCaseFilter) ||
-                        vol.getOrigine().toLowerCase().contains(lowerCaseFilter) ||
-                        vol.getDestination().toLowerCase().contains(lowerCaseFilter) ||
-                        vol.getStatut().toString().toLowerCase().contains(lowerCaseFilter);
-            });
+            applyFilters(); // Use applyFilters to combine with other filters
         });
         volTable.setItems(filteredVolList);
     }
@@ -145,32 +154,39 @@ public class ListeVolController {
             private final Button modifyBtn = new Button();
             private final Button archiveBtn = new Button();
             private final Button cancelBtn = new Button();
-            private final HBox hbox = new HBox(modifyBtn, archiveBtn, cancelBtn);
+            private final HBox hbox = new HBox();
 
             {
-                FontIcon modifyIcon = new FontIcon(FontAwesomeSolid.EDIT);
-                modifyIcon.setIconSize(16);
-                modifyIcon.setIconColor(javafx.scene.paint.Color.web("#2196F3"));
-                modifyBtn.setGraphic(modifyIcon);
-                modifyBtn.setStyle("-fx-background-color: transparent;");
-                modifyBtn.setTooltip(new Tooltip("Modifier"));
-                FontIcon archiveIcon = new FontIcon(FontAwesomeSolid.ARCHIVE);
-                archiveIcon.setIconSize(16);
-                archiveIcon.setIconColor(javafx.scene.paint.Color.web("#607D8B"));
-                archiveBtn.setGraphic(archiveIcon);
-                archiveBtn.setStyle("-fx-background-color: transparent;");
-                archiveBtn.setTooltip(new Tooltip("Archiver"));
-                FontIcon cancelIcon = new FontIcon(FontAwesomeSolid.TIMES);
-                cancelIcon.setIconSize(16);
-                cancelIcon.setIconColor(javafx.scene.paint.Color.web("#e74c3c"));
-                cancelBtn.setGraphic(cancelIcon);
-                cancelBtn.setStyle("-fx-background-color: transparent;");
-                cancelBtn.setTooltip(new Tooltip("Annuler"));
-                hbox.setSpacing(5);
-                hbox.setAlignment(javafx.geometry.Pos.CENTER);
-                modifyBtn.setOnAction(event -> ouvrirModifierVol(getTableView().getItems().get(getIndex())));
-                archiveBtn.setOnAction(event -> archiverVol(getTableView().getItems().get(getIndex())));
-                cancelBtn.setOnAction(event -> annulerVol(getTableView().getItems().get(getIndex())));
+                if (isAdmin) {
+                    FontIcon modifyIcon = new FontIcon(FontAwesomeSolid.EDIT);
+                    modifyIcon.setIconSize(16);
+                    modifyIcon.setIconColor(javafx.scene.paint.Color.web("#2196F3"));
+                    modifyBtn.setGraphic(modifyIcon);
+                    modifyBtn.setStyle("-fx-background-color: transparent;");
+                    modifyBtn.setTooltip(new Tooltip("Modifier"));
+
+                    FontIcon archiveIcon = new FontIcon(FontAwesomeSolid.ARCHIVE);
+                    archiveIcon.setIconSize(16);
+                    archiveIcon.setIconColor(javafx.scene.paint.Color.web("#607D8B"));
+                    archiveBtn.setGraphic(archiveIcon);
+                    archiveBtn.setStyle("-fx-background-color: transparent;");
+                    archiveBtn.setTooltip(new Tooltip("Archiver"));
+
+                    FontIcon cancelIcon = new FontIcon(FontAwesomeSolid.TIMES);
+                    cancelIcon.setIconSize(16);
+                    cancelIcon.setIconColor(javafx.scene.paint.Color.web("#e74c3c"));
+                    cancelBtn.setGraphic(cancelIcon);
+                    cancelBtn.setStyle("-fx-background-color: transparent;");
+                    cancelBtn.setTooltip(new Tooltip("Annuler"));
+
+                    hbox.getChildren().addAll(modifyBtn, archiveBtn, cancelBtn);
+                    hbox.setSpacing(5);
+                    hbox.setAlignment(javafx.geometry.Pos.CENTER);
+
+                    modifyBtn.setOnAction(event -> ouvrirModifierVol(getTableView().getItems().get(getIndex())));
+                    archiveBtn.setOnAction(event -> archiverVol(getTableView().getItems().get(getIndex())));
+                    cancelBtn.setOnAction(event -> annulerVol(getTableView().getItems().get(getIndex())));
+                }
             }
 
             @Override
@@ -178,10 +194,12 @@ public class ListeVolController {
                 super.updateItem(item, empty);
                 if (empty) {
                     setGraphic(null);
-                } else {
+                } else if (isAdmin) {
                     vol v = getTableView().getItems().get(getIndex());
                     cancelBtn.setVisible(v.getStatut() != StatutVol.Annulé);
                     setGraphic(hbox);
+                } else {
+                    setGraphic(null); // No actions for non-admins
                 }
             }
         });
@@ -240,7 +258,7 @@ public class ListeVolController {
             for (vol v : vols) {
                 LocalDateTime depart = v.getHeureDepart().toInstant()
                         .atZone(java.time.ZoneId.systemDefault()).toLocalDateTime();
-                if (v.getStatut() != StatutVol.Annulé && depart.isBefore(now)) {
+                if (v.getStatut() != StatutVol.Annulé && v.getStatut() != StatutVol.En_attente && depart.isBefore(now)) {
                     v.setStatut(StatutVol.Terminé);
                     dao.updateVol(v);
                 }
